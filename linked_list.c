@@ -57,8 +57,8 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 {
    if(src == NULL || dst == NULL)
       return 0;
-   if(src->next == NULL || src->prev == NULL)
-      return 0;
+   //if(src->next == NULL || src->prev == NULL)
+   //   return 0;
 
    dst->next = src->next;
    dst->prev = src->prev;
@@ -264,7 +264,7 @@ int LlistNodeFail(LlistNode* node)
 {
    if(node == NULL)
       return 1;
-   else if(node->root = 1)
+   else if(node->root == 1)
       return 1;
    else if(node->prev == NULL || node->next == NULL)
       return 1;
