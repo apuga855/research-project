@@ -45,14 +45,18 @@ int main()
    printf("\n\n\ngetting back the info from the void pointer\n");
    person* retPerson = (struct person*)testNode->data;
    printPerson(retPerson);
+   LlistNode* cpNode = NULL;
+   
    printf("Deleting the node\n"); 
    LlistNodeDel(testNode);
-   printPerson(retPerson);
-   if(testNode == NULL)
+   if(testNode->data == NULL)
       printf("Successfully deleted\n");
    else
       printf("Failed to delete\n");
-
+   testNode = NULL;    
+   
+   
+   
    return 0;
 }
 

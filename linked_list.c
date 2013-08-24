@@ -45,7 +45,6 @@ void LlistNodeDel(LlistNode *node)
    free(node->data);
    LlistNodeInit(node);
    free(node);
-   node = NULL;
    return;
 }
 
