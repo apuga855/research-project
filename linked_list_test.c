@@ -21,6 +21,17 @@ void printPerson(person* per)
    return;
 }
 
+void LlistNodeDataCpy(void* src, void* dst)
+{
+   person* srcStc = (struct person*)src;
+   person* dstStc = (struct person*)dst;
+   dst->age = src->age;
+   dst->id = src->id;
+   dst->name = src->name;
+   dst->lname = src->name;
+   return; 
+}
+
 int main()
 {
    LlistNode *testNode = NULL;
@@ -46,6 +57,9 @@ int main()
    person* retPerson = (struct person*)testNode->data;
    printPerson(retPerson);
    LlistNode* cpNode = NULL;
+   cpNode = LlistNodeAlloc(NULL);
+   LlistNodeCpy(testNode,cpNode,LlistNodeDataCpy); 
+   
    
    printf("Deleting the node\n"); 
    LlistNodeDel(testNode);
