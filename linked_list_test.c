@@ -1,5 +1,6 @@
 #include<stdlib.h>
 #include<stdio.h>
+#include<string.h>
 #include"linked_list.h"
 
 //This program attempts to test the basic functionality 
@@ -21,14 +22,14 @@ void printPerson(person* per)
    return;
 }
 
-void LlistNodeDataCpy(void* src, void* dst)
+void mycopy(void* src, void* dst)
 {
-   person* srcStc = (struct person*)src;
-   person* dstStc = (struct person*)dst;
+   person* srcStc = (person*)src;
+   person* dstStc = (person*)dst;
    dstStc->age = srcStc->age;
    dstStc->id = srcStc->id;
-   dstStc->name = srcStc->name;
-   dstStc->lname = srcStc->name;
+   strcpy(dstStc->name, srcStc->name);
+   strcpy(dstStc->lname, srcStc->name);
    return; 
 }
 
@@ -54,11 +55,11 @@ int main()
    info = (void*)test0;
    testNode = LlistNodeAlloc(info);
    printf("\n\n\ngetting back the info from the void pointer\n");
-   person* retPerson = (struct person*)testNode->data;
+   person* retPerson = (person*)testNode->data;
    printPerson(retPerson);
    LlistNode* cpNode = NULL;
    cpNode = LlistNodeAlloc(NULL);
-   LlistNodeCpy(testNode,cpNode,LlistNodeDataCpy); 
+   LlistNodeCpy(testNode,cpNode,mycopy); 
    
    
    printf("Deleting the node\n"); 
