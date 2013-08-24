@@ -25,10 +25,10 @@ void LlistNodeDataCpy(void* src, void* dst)
 {
    person* srcStc = (struct person*)src;
    person* dstStc = (struct person*)dst;
-   dst->age = src->age;
-   dst->id = src->id;
-   dst->name = src->name;
-   dst->lname = src->name;
+   dstStc->age = srcStc->age;
+   dstStc->id = srcStc->id;
+   dstStc->name = srcStc->name;
+   dstStc->lname = srcStc->name;
    return; 
 }
 
