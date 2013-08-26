@@ -49,7 +49,7 @@ Llist * LlistAlloc(int);
 //list's length, so all usable nodes are filled
 //each member of the data array must be dynamically
 //allocated in order for the code to be consistent
-int LlistPopulate(Llist *, void**);
+int LlistPopulate(Llist *, void**, int);
 //initializes list
 int LlistInit(Llist *);
 //deletes the entire list

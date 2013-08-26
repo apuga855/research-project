@@ -92,16 +92,20 @@ Llist * LlistAlloc(int size)
 //of the void array in the list, the entire
 //data array shoudl have used malloc to create
 //the data
-int LlistPopulate(Llist *list, void** dataArr)
+int LlistPopulate(Llist *list, void** dataArr, int arrLen)
 {
    if(LlistFail(list))
-      return 0;
-   int remaining = list->length -2;
+      return 1;
+   if(arrLen > list->length) 
+      return 1;
+
    int i = 0;
-   while(i < remaining)
+   LlistNode* target = list->head->next;   
+   while(i < arrLen)
    {
-      LlistInsNode(list, dataArr[i]);
+      target->data = dataArr[i];
       i++;
+      target = target->next;
    }
    
    return 1; 
@@ -118,7 +122,7 @@ int LlistInit(Llist *list)
    list->head->next = list->head;
    list->head->prev = list->head;
    list->head->root = 1;
-   list->length = 1;
+   list->length = 0;
    return 1; 
 }
 
