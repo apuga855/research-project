@@ -82,36 +82,48 @@ int main()
    Llist* group1 = NULL;
    int len = 0;
    printf("How long do you want the list?\n");
-   scanf("%d",&(len));
+   scanf("%d",&len);
    group1 = LlistAlloc(len);
+   if(group1 == NULL)
+   {
+      printf("The list did not get allocated\n\n");
+      return 0;
+   }
+
+   printf("The list should have been alocated\n");
    printf("The number of allocated nodes is %d",group1->length);   
   
    printf("\n\npopulating the list with 3 premade people\n");
     
-   scans("%d",&(test0->id));
    void* input[3];
-   person* persGrp = malloc(3*sizeof(person));
+   person* personGrp = malloc(3*sizeof(person));
    personGrp[0].id = 1;
    personGrp[0].age = 12;
-   strncpy("joan",personGrp[0].name,4);
-   strncpy("floam",personGrp[0].lname,5);
-   
+   strncpy(personGrp[0].name,"joan",4);
+   strncpy(personGrp[0].lname,"floam",5);
+   printPerson(&personGrp[0]);
+   printf("\n\n");
+    
    personGrp[1].id = 2;
    personGrp[1].age = 22;
-   strncpy("dave",personGrp[1].name,4);
-   strncpy("gave",personGrp[1].lname,4);
+   strncpy(personGrp[1].name,"dave",4);
+   strncpy(personGrp[1].lname,"gave",4);
+   printPerson(&personGrp[1]);
+   printf("\n\n");
    
    personGrp[2].id = 1;
    personGrp[2].age = 12;
-   strncpy("cup",personGrp[2].name,3);
-   strncpy("pup",personGrp[2].lname,3);
+   strncpy(personGrp[2].name,"cup",3);
+   strncpy(personGrp[2].lname,"pup",3);
+   printPerson(&personGrp[2]);
+   printf("\n\n");
    
    input[0] = (void*) &personGrp[0];
    input[1] = (void*) &personGrp[1];
    input[2] = (void*) &personGrp[2];
    
    printf("\n\nattempting to populate\n");
-   if(LlistPupulate(group1, input, 3) > 0)
+   if(LlistPopulate(group1, input, 3) == 0)
       printf("Failed to populate\n");
    
    

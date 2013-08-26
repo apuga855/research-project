@@ -15,6 +15,8 @@
 //the node
 #pragma once
 #include"linked_list.h"
+#include<stdio.h>
+
 LlistNode * LlistNodeAlloc(void* data)
 {
    LlistNode * nNode = NULL;
@@ -72,16 +74,30 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 Llist * LlistAlloc(int size)
 {
    if(size <= 0)
+   {
+      printf("size was less than or equal to 0\n\n");
       return NULL;
-   int i = 1;
+   }
+   int i = 0;
    Llist* nList = malloc(sizeof(Llist));
-   LlistInit(nList);
+   nList->head = malloc(sizeof(LlistNode));
+   if(LlistInit(nList))
+      printf("List was correctly initialized\n");
+   else
+      printf("List failed to be correctly initialized\n");   
+
    while(i < size)
    {
       if(LlistInsNode(nList, NULL))
+      {
+         printf("List added a node correctly\n\n");
          i++;
+      }
       else
+      {
+         printf("List FAILED to add a node correctly\n\n");
          return NULL;
+      }
    }
    
    nList->length = size;
@@ -95,10 +111,16 @@ Llist * LlistAlloc(int size)
 int LlistPopulate(Llist *list, void** dataArr, int arrLen)
 {
    if(LlistFail(list))
-      return 1;
+   {
+      printf("list failed the test\n\n");
+      return 0;
+   }
    if(arrLen > list->length) 
-      return 1;
-
+   {
+      printf("The input length was longer than the available nodes\n\n");
+      return 0;
+   }
+ 
    int i = 0;
    LlistNode* target = list->head->next;   
    while(i < arrLen)
@@ -117,7 +139,10 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
 int LlistInit(Llist *list)
 {
    if(list->head == NULL)
+   {
+      printf("failed at list init, head is null\n\n");
       return 0;
+   }
    LlistNodeInit(list->head);
    list->head->next = list->head;
    list->head->prev = list->head;
@@ -157,19 +182,30 @@ int LlistDel(Llist *list)
 int LlistInsNode(Llist *list, void * nData)
 {
    if(LlistFail(list)) 
+   {
+      printf("the list failed test at insert node\n\n");
       return 0;
+   }
    LlistNode * nNode = NULL;
    LlistNode * prev = NULL;
    nNode = malloc(sizeof(LlistNode));
    if(nNode == NULL)
+   {
+      printf("node allocation fail at insert node\n\n");
       return 0;
+   }
    LlistNodeInit(nNode);
    nNode->data = nData;
-   prev = list->head->prev;
-   list->head->prev = nNode;
-   nNode->next = list->head;
-   nNode->prev = prev;
-   prev->next = nNode;
+   prev = list->head->next;
+   list->head->next = nNode;
+   nNode->next = prev;
+   nNode->prev = list->head;
+   prev->prev = nNode;
+   //prev = list->head->prev;
+   //list->head->prev = nNode;
+   //nNode->next = list->head;
+   //nNode->prev = prev;
+   //prev->next = nNode;
    list->length++;
    return 1;
 }
@@ -254,10 +290,10 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp)
          dstC = next;
       } while(srcC != src->head);
    
-      return 1;
+      return 0;
    }
 
-   return 0;
+   return 1;
 }
 
 //if the node is null, if the node is a root
@@ -267,13 +303,13 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp)
 int LlistNodeFail(LlistNode* node)
 {
    if(node == NULL)
-      return 1;
-   else if(node->root == 1)
-      return 1;
-   else if(node->prev == NULL || node->next == NULL)
-      return 1;
-   else
       return 0;
+   else if(node->root == 1)
+      return 0;
+   else if(node->prev == NULL || node->next == NULL)
+      return 0;
+   else
+      return 1;
 
 }
 
@@ -284,17 +320,35 @@ int LlistNodeFail(LlistNode* node)
 int LlistFail(Llist *list)
 {
    if(list == NULL)
+   {
+      printf("list was null\n\n");
       return 1;
+   }
    else if(list->head == NULL)
+   {
+      printf("list head was null\n\n");
       return 1;
-   else if(list->length == 0)
+   }
+   else if(list->length < 0)
+   {
+      printf("list length was less than 0\n\n");
       return 1;
+   }
    else if(list->head->root != 1)
+   {
+      printf("list head root was not 1\n\n");
       return 1;
+   }
    else if(list->head->next == NULL ||
            list->head->prev == NULL)
+   {
+      printf("list head did not point to anything else\n\n");
       return 1;
+   }
    else
+   {
+      printf("The List passed the test\n\n");
       return 0;
+   }
 }
 
