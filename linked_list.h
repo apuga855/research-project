@@ -95,6 +95,8 @@ int LlistCpySize(Llist *, Llist *);
 int LlistCpy(Llist *, Llist *, void *);
 //checks for list failure
 int LlistFail(Llist *);
+//print all members of the list
+void LlistPrint(Llist *, void*);
 //function for user to make a sorted insert
 //implementation is up to the user
 typedef void(*LlistSortIns)(Llist*);

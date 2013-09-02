@@ -71,11 +71,14 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 void LlistNodePrint(LlistNode* node, void* dataprint)
 {  
    if(node->root == 1)
-      printf("\n\nThe node is the head\n");
+      printf("\n\nThe node is the head");
    if(node->root == 0)
       printf("\n\nThe node is not the head");
    printf("\nThe next pointer points to %p",node->next);
-   printf("\nThe previous pointer points to%p",node->prev);
+   printf("\nThe previous pointer points to %p",node->prev);
+   if(node->root == 1)
+      return;
+   
    LlistNodePrintData func = dataprint;
    func(node->data);
    return;
@@ -363,4 +366,31 @@ int LlistFail(Llist *list)
       return 0;
    }
 }
+//printing all members of the list
+void LlistPrint(Llist* list, void* printNode)
+{
+   if(LlistFail(list))
+   {
+      printf("list failed the test at print\n");
+      return;
+   }   
+   
+   printf("\nUsing print function to print each node\n");
+   
+   int i = 0;
+   LlistNode* traverse = NULL;
+   traverse = list->head;
+   printf("\nstarting at the head\n");
+   LlistNodePrint(traverse, printNode);
+   while(i < list->length)
+   { 
+      traverse = traverse->next;
+      LlistNodePrint(traverse, printNode);
+      i++;
+   }
+   traverse = traverse->next;
+   if(traverse->root == 1)
+      printf("\n\nBack at the head node\n");
 
+   return;
+}

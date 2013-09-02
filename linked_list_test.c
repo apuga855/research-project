@@ -19,17 +19,18 @@ typedef LlistNode*(*LlistSearch)(Llist list);		X		0
 
 
 Llist related functions
-Llist * LlistAlloc(int);
-int LlistPopulate(Llist *, void**, int);
-int LlistInit(Llist *);
-int LlistDel(Llist *);
-int LlistInsNode(Llist *, void *);
-int LlistDelNode(LlistNode *,Llist*);
-int LlistCpySize(Llist *, Llist *);
-int LlistCpy(Llist *, Llist *, void *);
-int LlistFail(Llist *);
-typedef void(*LlistSortIns)(Llist*);
-typedef void(*LlistSort)(Llist*);
+Llist * LlistAlloc(int);				X		0
+int LlistPopulate(Llist *, void**, int);		X		0
+int LlistInit(Llist *);					X		0
+int LlistDel(Llist *);					
+int LlistInsNode(Llist *, void *);			X		0
+int LlistDelNode(LlistNode *,Llist*);			
+int LlistCpySize(Llist *, Llist *);			
+int LlistCpy(Llist *, Llist *, void *);			
+int LlistFail(Llist *);					
+void LlistPrint(Llist*, void*);				X		0
+typedef void(*LlistSortIns)(Llist*);			
+typedef void(*LlistSort)(Llist*);			
 
 */
 //This program attempts to test the basic functionality 
@@ -111,6 +112,8 @@ int main()
    
    testNode = NULL;    
    
+
+
    Llist* group1 = NULL;
    int len = 0;
    printf("\n\n\nHow long do you want the list?\n");
@@ -157,8 +160,14 @@ int main()
    printf("\n\nattempting to populate\n");
    if(LlistPopulate(group1, input, 3) == 0)
       printf("Failed to populate\n");
+ 
+   LlistPrint(group1, printPerson);
+   if(LlistDel(group1))
+      printf("List was deleted correctly\n");
+   else
+      printf("Failed to print list\n");
    
-   
+       
 
    return 0;
 }
