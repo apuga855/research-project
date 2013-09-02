@@ -30,6 +30,8 @@ void LlistNodeDel(LlistNode *);
 int LlistNodeCpy(LlistNode *, LlistNode *, void *);
 //check fo rfailure
 int LlistNodeFail(LlistNode*);
+//default printing function
+void LlistNodePrint(LlistNode*, void*);
    
 //list contains a length, useful for user defined callback functions
 //keeps track of head only, rest is available by coursing through 
@@ -64,6 +66,9 @@ int LlistCpySize(Llist *, Llist *);
 int LlistCpy(Llist *, Llist *, void *);
 //checks for list failure
 int LlistFail(Llist *);
+
+//user defined print function for printing nodes
+typedef void*(*LlistNodePrintData)(void*);
 
 //search function to be implemented by user
 //since we dont know how his/her data works, its

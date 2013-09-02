@@ -16,10 +16,10 @@ typedef struct _person
 void printPerson(person* per)
 {
    if(per == NULL) return; 
-   printf("Id entered is: %d\n",per->id); 
-   printf("Age entered is: %d\n",per->age); 
-   printf("Name entered is: %s\n",per->name); 
-   printf("Last name entered is: %s\n",per->lname); 
+   printf("\nId entered is: %d",per->id); 
+   printf("\nAge entered is: %d",per->age); 
+   printf("\nName entered is: %s",per->name); 
+   printf("\nLast name entered is: %s\n",per->lname); 
    return;
 }
 
@@ -31,7 +31,7 @@ void mycopy(void* src, void* dst)
    dstStc->age = srcStc->age;
    dstStc->id = srcStc->id;
    strncpy(dstStc->name, srcStc->name,20);
-   strncpy(dstStc->lname, srcStc->name,20);
+   strncpy(dstStc->lname, srcStc->lname,20);
    return; 
 }
 
@@ -69,6 +69,10 @@ int main()
    LlistNodeCpy(testNode,cpNode,mycopy); 
    printf("\n\n\nprinting copied person\n"); 
    printPerson((person *)(cpNode->data));
+   
+   printf("\n\n\nUsing the print function to print the copied node");
+   LlistNodePrint(cpNode, printPerson);
+   
    printf("Deleting the node\n\n\n"); 
    
    LlistNodeDel(testNode);

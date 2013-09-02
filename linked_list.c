@@ -69,6 +69,20 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
    return 1; 
 }
 
+//default printing function, they provide how to print the data
+void LlistNodePrint(LlistNode* node, void* dataprint)
+{  
+   if(node->root == 1)
+      printf("\n\nThe node is the head\n");
+   if(node->root == 0)
+      printf("\n\nThe node is not the head");
+   printf("\nThe next pointer points to %p",node->next);
+   printf("\nThe previous pointer points to%p",node->prev);
+   LlistNodePrintData func = dataprint;
+   func(node->data);
+   return;
+}
+
 //allocates a size amount of nodes, minimum number
 //has to be 1 for the head node
 Llist * LlistAlloc(int size)
