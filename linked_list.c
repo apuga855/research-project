@@ -57,10 +57,8 @@ void LlistNodeDel(LlistNode *node)
 //part of a list we fail
 int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 {
-   if(src == NULL || dst == NULL)
+   if(src == NULL || dst == NULL || datacp == NULL)
       return 0;
-   //if(src->next == NULL || src->prev == NULL)
-   //   return 0;
 
    dst->next = src->next;
    dst->prev = src->prev;

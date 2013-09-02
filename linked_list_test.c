@@ -2,7 +2,36 @@
 #include<stdio.h>
 #include<string.h>
 #include"linked_list.h"
+/*
+List of functions					works		doesnt work
 
+LlistNode related functions
+
+LlistNode* LlistNodeAlloc(void*)			X		0	
+void LlistNodeInit (LlistNode *);			X		0
+void LlistNodeDel(LlistNode *);				
+int LlistNodeCpy(LlistNode *, LlistNode *, void *);	
+int LlistNodeFail(LlistNode*);				
+void LlistNodePrint(LlistNode*, void*);			
+typedef void*(*LlistNodePrintData)(void*);		
+typedef void(*LlistNodeDAtaCpy)(void*, void*);		
+typedef LlistNode*(*LlistSearch)(Llist list);
+
+
+Llist related functions
+Llist * LlistAlloc(int);
+int LlistPopulate(Llist *, void**, int);
+int LlistInit(Llist *);
+int LlistDel(Llist *);
+int LlistInsNode(Llist *, void *);
+int LlistDelNode(LlistNode *,Llist*);
+int LlistCpySize(Llist *, Llist *);
+int LlistCpy(Llist *, Llist *, void *);
+int LlistFail(Llist *);
+typedef void(*LlistSortIns)(Llist*);
+typedef void(*LlistSort)(Llist*);
+
+*/
 //This program attempts to test the basic functionality 
 //of the linked list header file
 typedef struct _person
@@ -38,40 +67,39 @@ void mycopy(void* src, void* dst)
 int main()
 {
    LlistNode *testNode = NULL;
-   person *test0 = NULL;
+   person *orgPer = NULL;
    void* info = NULL;
 
    printf("\n\n\nTesting LlistNodeAlloc\n");
-   test0 = malloc(sizeof(person));
+   orgPer = malloc(sizeof(person));
    printf("Please enter the id of the person\n");
-   scanf("%d",&(test0->id));
-   printf("Id entered is: %d\n",test0->id); 
+   scanf("%d",&(orgPer->id));
+   printf("Id entered is: %d\n",orgPer->id); 
    printf("Please enter the age of the person\n");
-   scanf("%d",&(test0->age));
-   printf("Age entered is: %d\n",test0->age); 
+   scanf("%d",&(orgPer->age));
+   printf("Age entered is: %d\n",orgPer->age); 
    printf("Please enter the name of the person\n");
-   scanf("%s",test0->name);
-   printf("Name entered is: %s\n",test0->name); 
+   scanf("%s",orgPer->name);
+   printf("Name entered is: %s\n",orgPer->name); 
    printf("Please enter the last name of the person\n");
-   scanf("%s",test0->lname);
-   printf("Last name entered is: %s\n",test0->lname); 
-   info = (void*)test0;
+   scanf("%s",orgPer->lname);
+   printf("Last name entered is: %s\n",orgPer->lname); 
+   info = (void*)orgPer;
    testNode = LlistNodeAlloc(info);
    
 
    printf("\n\n\ngetting back the info from the void pointer\n");
-   person* retPerson = (person*)testNode->data;
+   person* retiPerson = (person*)testNode->data;
    printPerson(retPerson);
+   printf("\n\n\nusing the node print function on original node\n");
+   LlistNodePrint(testNode,printPerson);
 
    LlistNode* cpNode = NULL;
-   person *test1 = malloc(sizeof(person));
-   cpNode = LlistNodeAlloc((void*)test1);
+   person *nullPer = malloc(sizeof(person));
+   cpNode = LlistNodeAlloc((void*)nullPer);
    LlistNodeCpy(testNode,cpNode,mycopy); 
-   printf("\n\n\nprinting copied person\n"); 
-   printPerson((person *)(cpNode->data));
-   
-   printf("\n\n\nUsing the print function to print the copied node");
-   LlistNodePrint(cpNode, printPerson);
+   printf("\n\n\nprinting copied person using print function\n"); 
+   LlistNodePrint(cpNode,printPerson);
    
    printf("Deleting the node\n\n\n"); 
    
@@ -81,6 +109,7 @@ int main()
    else
       printf("Failed to delete\n");
    
+   free(testNode); 
    testNode = NULL;    
    
    Llist* group1 = NULL;

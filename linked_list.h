@@ -32,7 +32,35 @@ int LlistNodeCpy(LlistNode *, LlistNode *, void *);
 int LlistNodeFail(LlistNode*);
 //default printing function
 void LlistNodePrint(LlistNode*, void*);
-   
+//user defined print function for printing nodes
+typedef void*(*LlistNodePrintData)(void*);
+//-----------------------------------------------//
+//this function is necessary for the copy function 
+//ince we dont know how the structure is set up we
+//let the user define his/her own and make it work
+typedef void(*LlistNodeDataCpy)(void*,void*);
+/*
+example of LlistNodeDataCpy callback function:
+void LlistNodeDataCpy(void* src, void* dst)
+{
+  foo * fooSrc = (foo) src;
+  foo * fooDst = (foo) dst;
+  fooDst->member1 = fooDst->member1;
+  fooDst->member2 = fooDst->member2;
+  fooDst->member3 = fooDst->member3;
+  ...
+  fooDst->memberX = fooSrc->memberX;
+  return
+}*/
+//-------------------------------------------------//
+//search function to be implemented by user
+//since we dont know how his/her data works, its
+//up to them to get it to work, the function
+//returns a LlistNode pointer so it can be used
+//in conjunction with LlistDelNode(LlistNode, Llist)
+typedef LlistNode*(*LlistSearch)(Llist list);
+
+
 //list contains a length, useful for user defined callback functions
 //keeps track of head only, rest is available by coursing through 
 //the linked list
@@ -66,41 +94,11 @@ int LlistCpySize(Llist *, Llist *);
 int LlistCpy(Llist *, Llist *, void *);
 //checks for list failure
 int LlistFail(Llist *);
-
-//user defined print function for printing nodes
-typedef void*(*LlistNodePrintData)(void*);
-
-//search function to be implemented by user
-//since we dont know how his/her data works, its
-//up to them to get it to work, the function
-//returns a LlistNode pointer so it can be used
-//in conjunction with LlistDelNode(LlistNode, Llist)
-typedef LlistNode*(*LlistSearch)(Llist list);
-
 //function for user to make a sorted insert
 //implementation is up to the user
 typedef void(*LlistSortIns)(Llist*);
-
+//--------------------------------------------//
 //much like the sorted insert, the user needs to
 //define their sorting method for the list
 typedef void(*LlistSort)(Llist*);
 
-//this function is necessary for the copy function 
-//ince we dont know how the structure is set up we
-//let the user define his/her own and make it work
-typedef void(*LlistNodeDataCpy)(void*,void*);
-/*
-example of LlistNodeDataCpy callback function:
-void LlistNodeDataCpy(void* src, void* dst)
-{
-  foo * fooSrc = (foo) src;
-  foo * fooDst = (foo) dst;
-  fooDst->member1 = fooDst->member1;
-  fooDst->member2 = fooDst->member2;
-  fooDst->member3 = fooDst->member3;
-  ...
-  fooDst->memberX = fooSrc->memberX;
-  return
-}
-
-*/
