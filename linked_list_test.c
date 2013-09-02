@@ -9,13 +9,13 @@ LlistNode related functions
 
 LlistNode* LlistNodeAlloc(void*)			X		0	
 void LlistNodeInit (LlistNode *);			X		0
-void LlistNodeDel(LlistNode *);				
-int LlistNodeCpy(LlistNode *, LlistNode *, void *);	
-int LlistNodeFail(LlistNode*);				
-void LlistNodePrint(LlistNode*, void*);			
-typedef void*(*LlistNodePrintData)(void*);		
-typedef void(*LlistNodeDAtaCpy)(void*, void*);		
-typedef LlistNode*(*LlistSearch)(Llist list);
+void LlistNodeDel(LlistNode *);			        X		0	
+int LlistNodeCpy(LlistNode *, LlistNode *, void *);	X		0
+int LlistNodeFail(LlistNode*);				X		0	
+void LlistNodePrint(LlistNode*, void*);			X		0
+typedef void*(*LlistNodePrintData)(void*);		X		0
+typedef void(*LlistNodeDataCpy)(void*, void*);		X		0
+typedef LlistNode*(*LlistSearch)(Llist list);		X		0
 
 
 Llist related functions
@@ -89,7 +89,7 @@ int main()
    
 
    printf("\n\n\ngetting back the info from the void pointer\n");
-   person* retiPerson = (person*)testNode->data;
+   person* retPerson = (person*)testNode->data;
    printPerson(retPerson);
    printf("\n\n\nusing the node print function on original node\n");
    LlistNodePrint(testNode,printPerson);
@@ -101,7 +101,7 @@ int main()
    printf("\n\n\nprinting copied person using print function\n"); 
    LlistNodePrint(cpNode,printPerson);
    
-   printf("Deleting the node\n\n\n"); 
+   printf("\n\n\nDeleting the node\n"); 
    
    LlistNodeDel(testNode);
    if(testNode->data == NULL)
@@ -109,12 +109,11 @@ int main()
    else
       printf("Failed to delete\n");
    
-   free(testNode); 
    testNode = NULL;    
    
    Llist* group1 = NULL;
    int len = 0;
-   printf("How long do you want the list?\n");
+   printf("\n\n\nHow long do you want the list?\n");
    scanf("%d",&len);
    group1 = LlistAlloc(len);
    if(group1 == NULL)

@@ -315,13 +315,13 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp)
 int LlistNodeFail(LlistNode* node)
 {
    if(node == NULL)
-      return 0;
-   else if(node->root == 1)
-      return 0;
-   else if(node->prev == NULL || node->next == NULL)
-      return 0;
-   else
       return 1;
+   else if(node->root == 1)
+      return 1;
+   else if(node->prev == NULL || node->next == NULL)
+      return 1;
+   else
+      return 0;
 
 }
 

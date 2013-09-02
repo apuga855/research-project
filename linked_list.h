@@ -19,6 +19,17 @@ typedef struct _LlistNode
   void * data;
  
 }LlistNode;
+
+//list contains a length, useful for user defined callback functions
+//keeps track of head only, rest is available by coursing through 
+//the linked list
+typedef struct _Llist
+{
+   LlistNode *head;
+   int length;
+   
+}Llist;
+
    
 //returns an allocated node
 LlistNode * LlistNodeAlloc(void*);
@@ -58,18 +69,8 @@ void LlistNodeDataCpy(void* src, void* dst)
 //up to them to get it to work, the function
 //returns a LlistNode pointer so it can be used
 //in conjunction with LlistDelNode(LlistNode, Llist)
-typedef LlistNode*(*LlistSearch)(Llist list);
+typedef LlistNode*(*LlistSearch)(Llist *list);
 
-
-//list contains a length, useful for user defined callback functions
-//keeps track of head only, rest is available by coursing through 
-//the linked list
-typedef struct _Llist
-{
-   LlistNode *head;
-   int length;
-   
-}Llist;
 
 //allocates a set amount of nodes for a list
 //returns the list with that many nodes, minimum
