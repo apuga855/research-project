@@ -22,12 +22,14 @@ Llist related functions
 Llist * LlistAlloc(int);				X		0
 int LlistPopulate(Llist *, void**, int);		X		0
 int LlistInit(Llist *);					X		0
-int LlistDel(Llist *);					
+int LlistDel(Llist *);					X
 int LlistInsNode(Llist *, void *);			X		0
-int LlistDelNode(LlistNode *,Llist*);			
+int LlistDelNode(Llist*, void*);			
+int LlistDelNodeTarget(LlistNode *,Llist*);			
 int LlistCpySize(Llist *, Llist *);			
 int LlistCpy(Llist *, Llist *, void *);			
-int LlistFail(Llist *);					
+int LlistFail(Llist *);					X		0
+LlistNode* LlistSearchNode(Llist*, void*);
 void LlistPrint(Llist*, void*);				X		0
 typedef void(*LlistSortIns)(Llist*);			
 typedef void(*LlistSort)(Llist*);			

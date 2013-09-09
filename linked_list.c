@@ -230,7 +230,7 @@ int LlistInsNode(Llist *list, void * nData)
 //to delete fails the node test, then we exit failure
 //otherwise the node is deleted and the chain is fixed
 //accordingly
-int LlistDelNode(LlistNode *node,Llist *list)
+int LlistDelNodeTarget(LlistNode *node,Llist *list)
 {
    if(LlistFail(list))
       return 0;
@@ -393,4 +393,123 @@ void LlistPrint(Llist* list, void* printNode)
       printf("\n\nBack at the head node\n");
 
    return;
+}
+
+LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
+{
+   int i = -1;
+   if(list == NULL)
+   {
+      printf("The List passed was NULL\n");
+      return NULL;
+   }
+   
+   i = override;
+   if(override == 0)
+   {
+      printf("Do you want to enter the node number or use your own search?\n");
+      printf("1 for entering a number 2 for your own search\n");
+      scanf(&i,%d);
+   }
+  
+   if(i == 1)
+   {
+      LlistNode* current = list->head;
+      int loc;
+      printf("Please enter node# (aka node 1, node 2, etc, there is no node 0)\n");
+      scanf(&loc,%d);
+      if(loc > list->size)
+      {
+         printf("The location entered is beyond the bounds of the list\n");
+         return NULL;
+      }
+      while(loc != 0 && current != list->head)
+      {
+         current = current->next;
+         if(current == list->head)
+         {
+            printf("The number entered made us go past or to the head node, returning NULL\n")
+            return NULL;
+         }
+         loc--;
+      }
+      
+      return current;
+   }
+   
+   if(i == 2)
+   {
+      if(searchFunc == NULL)
+      {
+         printf("You did not pass a function\n");
+         return NULL;
+      }
+
+      printf("using your search function\n");
+      LlistSearch func = searchFunc; 
+      return searchFunc(list);      
+   }
+
+   else
+   {
+      printf("You picked an unsupported option\n");
+      return NULL:
+   }
+}
+
+int LlistDelNode(Llist* list, void* func, int override)
+{
+   int i = override;
+   if(override == 0)
+   {
+      printf("====================NodeDeletionMenu=================\n"
+             "1. Use an iteger to delete a node\n"
+             "2. Use a user defined search function to delete a node\n"
+             "3. Traverse the linked list, delete if wanted\n"
+             "0/else. exit\n\n\n"
+            );
+      scanf(&i,%d);
+   }
+   
+   switch(i)
+   {
+      case 1:
+             return LlistDelNodeTarget(LlistSearchNode(list,NULL,1),list);
+             break;
+      case 2:
+             if(func == NULL)
+             {
+                printf("You did not pass a function to use\n");
+                return 0;
+             }
+             return LlistDelNodeTarget(LlistSearchNode(list,func,2), list);
+             break;
+      case 3:
+             LlistNode* target = list->head->next;
+             char c = 'n';
+             if(target == list->head)
+             {
+                printf("The list has no nodes to delete\n");
+                return 0;
+             }
+
+             while(target != list->head)
+             {
+                LlistPrintNode(target);
+                printf("Would you like to delete this node? y/n\n")
+                scanf(c,%c);
+                if(c == 'y')
+                {
+                   LlistDelNodeTarget(target, list);
+                   return 1;
+                }
+             }
+             printf("Back at the head, since you didn't delete anything, failed to delete\n");
+             return 0;
+             break;
+      case default:
+             printf("nothing selected, quitting\n\n");
+             return 0;
+             break;
+   }
 }

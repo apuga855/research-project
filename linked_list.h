@@ -88,13 +88,17 @@ int LlistDel(Llist *);
 //insert node into the list
 int LlistInsNode(Llist *, void *);
 //Deleting node
-int LlistDelNode(LlistNode *,Llist*);
+int LlistDelNode(Llist*, void*);
+//Deleting target node
+int LlistDelNodeTarget(LlistNode *,Llist*);
 //copy size
 int LlistCpySize(Llist *, Llist *);
 //copies entire list
 int LlistCpy(Llist *, Llist *, void *);
 //checks for list failure
 int LlistFail(Llist *);
+//search for a node
+LlistNode * LlistSearchNode(void*);
 //print all members of the list
 void LlistPrint(Llist *, void*);
 //function for user to make a sorted insert
@@ -104,4 +108,5 @@ typedef void(*LlistSortIns)(Llist*);
 //much like the sorted insert, the user needs to
 //define their sorting method for the list
 typedef void(*LlistSort)(Llist*);
-
+//if they want to search for the node with their own function
+typedef LlistNode*(*LlistSearch)(Llist*);
