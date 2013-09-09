@@ -131,31 +131,36 @@ int main()
    printf("\n\npopulating the list with 3 premade people\n");
     
    void* input[3];
-   person* personGrp = malloc(3*sizeof(person));
-   personGrp[0].id = 1;
-   personGrp[0].age = 12;
-   strncpy(personGrp[0].name,"joan",4);
-   strncpy(personGrp[0].lname,"floam",5);
-   printPerson(&personGrp[0]);
+   person* personGrp0 = malloc(sizeof(person));
+   person* personGrp1 = malloc(sizeof(person));
+   person* personGrp2 = malloc(sizeof(person));
+   input[0] = personGrp0;
+   input[1] = personGrp1;
+   input[2] = personGrp2;
+   personGrp0->id = 1;
+   personGrp0->age = 12;
+   strncpy(personGrp0->name,"joan",4);
+   strncpy(personGrp0->lname,"floam",5);
+   printPerson(personGrp0);
    printf("\n\n");
     
-   personGrp[1].id = 2;
-   personGrp[1].age = 22;
-   strncpy(personGrp[1].name,"dave",4);
-   strncpy(personGrp[1].lname,"gave",4);
-   printPerson(&personGrp[1]);
+   personGrp1->id = 2;
+   personGrp1->age = 22;
+   strncpy(personGrp1->name,"dave",4);
+   strncpy(personGrp1->lname,"gave",4);
+   printPerson(personGrp1);
    printf("\n\n");
    
-   personGrp[2].id = 1;
-   personGrp[2].age = 12;
-   strncpy(personGrp[2].name,"cup",3);
-   strncpy(personGrp[2].lname,"pup",3);
-   printPerson(&personGrp[2]);
+   personGrp2->id = 1;
+   personGrp2->age = 12;
+   strncpy(personGrp2->name,"cup",3);
+   strncpy(personGrp2->lname,"pup",3);
+   printPerson(personGrp2);
    printf("\n\n");
    
-   input[0] = (void*) &personGrp[0];
-   input[1] = (void*) &personGrp[1];
-   input[2] = (void*) &personGrp[2];
+   input[0] = (void*) personGrp0;
+   input[1] = (void*) personGrp1;
+   input[2] = (void*) personGrp2;
    
    printf("\n\nattempting to populate\n");
    if(LlistPopulate(group1, input, 3) == 0)
