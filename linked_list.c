@@ -78,8 +78,10 @@ void LlistNodeInit (LlistNode *node)
 }
 
 //parameters: LlistNode* "node"
+//returns nothing
 //============================
-//deletes an allocated node
+//deletes an allocated node, assumes that the data was dynamically
+//allocated, if not there will ne ab error
 void LlistNodeDel(LlistNode *node)
 {
    if(node == NULL)
@@ -88,8 +90,10 @@ void LlistNodeDel(LlistNode *node)
       return 0;
    }
    free(node->data);
+   code->data = NULL;
    LlistNodeInit(node);
    free(node);
+   node = NULL;
    return;
 }
 
@@ -196,7 +200,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
 //		void** "dataArr" array of void pointers pointing
 //				 to data you want in your Llist
 //		int "arrLen"  length of your array
-//returns: 	1 if successful, 0 if failed
+//returns: 	1 if successfull, 0 if failed
 //=============================================================
 //populates list sequentially by placing members
 //of the void array in the list, the entire
@@ -228,7 +232,7 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
    return 1; 
 }
 //parameters:	Llist* "list" pointing to an allocated list
-//returns:	1 if successful, 0 if failed
+//returns:	1 if successfull, 0 if failed
 //==========================================================
 //initializes the list, we check for a head node, if this
 //was not allocated we fail, otherwise we initialize the head
@@ -248,6 +252,9 @@ int LlistInit(Llist *list)
    return 1; 
 }
 
+//parameters: Llist* "list"  pointing to an allocated list
+//returns: 1 if successfull, 0 if failed
+//==============================================================
 //deleting entire list, first checks for faillist, if it passess
 //we delete sequentially starting with deleting head's next until
 //we reach the head again, where we delete the head, delete the
@@ -272,10 +279,14 @@ int LlistDel(Llist *list)
    return 1;
 }
 
+//parameters:	Llist* "list" pointing to allocated list
+//		void* "nData" pointing to allocated data to add
+//returns: 1 if successfull, 0 if failed
+//===================================================================
 //inserting node into list by handing a void pointer of data
-//if we LlistFail is trye then we exit because the list was malformend
+//if LlistFail is true then we exit because the list was malformend
 //the payload will automatically be added to a node which is now 
-//the last node before the head node
+//the very next node to the head
 int LlistInsNode(Llist *list, void * nData)
 {
    if(LlistFail(list)) 
@@ -298,11 +309,6 @@ int LlistInsNode(Llist *list, void * nData)
    nNode->next = prev;
    nNode->prev = list->head;
    prev->prev = nNode;
-   //prev = list->head->prev;
-   //list->head->prev = nNode;
-   //nNode->next = list->head;
-   //nNode->prev = prev;
-   //prev->next = nNode;
    list->length++;
    return 1;
 }
