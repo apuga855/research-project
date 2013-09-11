@@ -31,8 +31,11 @@ typedef struct _Llist
 }Llist;
 
    
-//returns an allocated node
+//returns an allocated node, you pass the data
 LlistNode * LlistNodeAlloc(void*);
+//uses your allocator function to create a void pointer
+//to your datatype 
+LlistNode * LlistNodeSelfAlloc(void*);
 //initializes nodes to defaults
 void LlistNodeInit (LlistNode *);
 //deletes a node
@@ -63,6 +66,26 @@ void LlistNodeDataCpy(void* src, void* dst)
   fooDst->memberX = fooSrc->memberX;
   return
 }*/
+//-----------------------------------------------------//
+//function that returns a casted void pointer
+//that originally pointed to a structure of your datatype
+typedef void*(*LlistDataAlloc)(); 
+/*
+Example
+typedef struct _garbage
+{
+   int x;
+   char name[20];
+   ...
+   ...
+}garbage
+
+void * MyDataAllocator()
+{
+   return malloc(sizeof(garbage));
+}
+
+*/
 //-------------------------------------------------//
 //search function to be implemented by user
 //since we dont know how his/her data works, its
@@ -75,7 +98,7 @@ typedef LlistNode*(*LlistSearch)(Llist *list);
 //allocates a set amount of nodes for a list
 //returns the list with that many nodes, minimum
 //number of nodes is 1
-Llist * LlistAlloc(int);
+Llist * LlistAlloc(int, void*);
 //populates list, have to populate the entire linked 
 //list's length, so all usable nodes are filled
 //each member of the data array must be dynamically
@@ -88,17 +111,17 @@ int LlistDel(Llist *);
 //insert node into the list
 int LlistInsNode(Llist *, void *);
 //Deleting node
-int LlistDelNode(Llist*, void*);
+int LlistDelNode(Llist*, void*,void*, int);
 //Deleting target node
 int LlistDelNodeTarget(LlistNode *,Llist*);
 //copy size
-int LlistCpySize(Llist *, Llist *);
+int LlistCpySize(Llist *, Llist *, void*);
 //copies entire list
-int LlistCpy(Llist *, Llist *, void *);
+int LlistCpy(Llist *, Llist *, void *,void*);
 //checks for list failure
 int LlistFail(Llist *);
 //search for a node
-LlistNode * LlistSearchNode(void*);
+LlistNode * LlistSearchNode(Llist*,void*,int);
 //print all members of the list
 void LlistPrint(Llist *, void*);
 //function for user to make a sorted insert

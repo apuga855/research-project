@@ -17,6 +17,13 @@
 #include"linked_list.h"
 #include<stdio.h>
 
+//parameters:	void pointer "data" to allocated data of your type
+//returns: 	LlistNode pointer
+//================================================================
+//This function takes your data and sets the void pointer 
+//to be what you passed, the next pointer and prev pointer
+//are set to null, the node created by default will not be a
+//head node
 LlistNode * LlistNodeAlloc(void* data)
 {
    LlistNode * nNode = NULL;
@@ -28,12 +35,41 @@ LlistNode * LlistNodeAlloc(void* data)
    return nNode;
 }
 
-//initializes nodes to their respective 0 value
+//parameters:	void pointer "dataalloc" to your allocator function
+//returns: LlistNode pointer
+//======================================================================
+//This function takes in a pointer to a declared function that allocates
+//your data type, this function makes a node whose next pointer is null
+//previous pointer is also null, by default not the head node and the data
+// pointer points to whatever your function returned
+LlistNode * LlistNodeSelfAlloc(void* dataalloc)
+{
+   LlistNode * nNode = NULL;
+   void* data = NULL;
+   nNode = malloc(sizeof(LlistNode));
+   if(nNode == NULL)
+      return NULL;
+   LlistNodeInit(nNode);
+   LlistDataAlloc func dataalloc;
+   data = func();
+   nNode->data = data;
+   return nNode;
+}
+
+//parameters: LlistNode* "node" some allocated node
+//returns: nothing
+//======================================================
+//initializes allocated node to their respective 0 value
 //default behavior is to initialize the node to not
 //be a root, aka not the head
 void LlistNodeInit (LlistNode *node)
 {
-    
+   if(node == NULL)
+   {
+      printf("\nThe node passed was not allocated properly\n\n");
+      return;
+   }
+
    node->root = 0;
    node->next = NULL;
    node->prev = NULL;
@@ -41,33 +77,57 @@ void LlistNodeInit (LlistNode *node)
    return;
 }
 
-//deletes the node safely
+//parameters: LlistNode* "node"
+//============================
+//deletes an allocated node
 void LlistNodeDel(LlistNode *node)
 {
+   if(node == NULL)
+   {
+      printf("\nThe node passed was not allocated properly\n\n");
+      return 0;
+   }
    free(node->data);
    LlistNodeInit(node);
    free(node);
    return;
 }
 
+
+//parameters: LlistNode* "src" pointing to data you want to copy
+//			       to another node
+//	      LlistNode* "dst" pointing to an allocated node with
+//			       garbage information you dont mind losing
+//	      void* "datacp"   pointing to your data copy function
+//=====================================================================
 //copies src into dst using datacap callback function
 //the callback function passes two void pointers,
 //the src data is copied where dst pointer used to point to
 //if the src or dst are NULL we fail, if the source is not
 //part of a list we fail
+//please note that the src and dst must have their respective
+//data pointers pointing to something, otherwise you need to handle it
 int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 {
    if(src == NULL || dst == NULL || datacp == NULL)
       return 0;
+   if(src->data == NULL || dst->data == NULL)
+   {
+      printf("\none of the nodes did not have their data properly allocated\n");
+      return 0;
+   }
 
-   dst->next = src->next;
-   dst->prev = src->prev;
    LlistNodeDataCpy func = datacp;
    func(src->data,dst->data);
    return 1; 
 }
 
-//default printing function, they provide how to print the data
+//parameters: 	LlistNode* "node" pointing to allocated node
+//		void* "dataprint" pointing to your print function
+//returns:      nothing
+//=============================================================
+//default printing function, you provide how to print your data
+//via the void* datapring function
 void LlistNodePrint(LlistNode* node, void* dataprint)
 {  
    if(node->root == 1)
@@ -84,45 +144,64 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
    return;
 }
 
-//allocates a size amount of nodes, minimum number
-//has to be 1 for the head node
-Llist * LlistAlloc(int size)
+//parameters:	 int "size" 	   how many nodes do you want
+//	       	 void* "dataalloc" pointing to a function
+//				   that allocates your datatype
+//returns:	  Llist*	   allocated using your parameters
+//==============================================================
+//allocates a size amount of nodes, minimum number is 0
+//the list allocates "size" nodes pointing to data allocated
+//with your dataalloc function, returns a pointer to the list
+//you do not have to pass the dataalloc function, but you have
+//to remember the node will just have a null pointer for data
+Llist * LlistAlloc(int size, void* dataalloc)
 {
-   if(size <= 0)
+   printf("the size is %d\n",size);
+   if(size < 0)
    {
-      printf("size was less than or equal to 0\n\n");
+      printf("\nsize was less than 0\n\n");
       return NULL;
    }
    int i = 0;
    Llist* nList = malloc(sizeof(Llist));
    nList->head = malloc(sizeof(LlistNode));
    if(LlistInit(nList))
-      printf("List was correctly initialized\n");
+      printf("\nList was correctly initialized\n");
    else
-      printf("List failed to be correctly initialized\n");   
+      printf("\nList failed to be correctly initialized\n");   
 
    while(i < size)
-   {
-      if(LlistInsNode(nList, NULL))
+   {  
+      LlistDataAlloc func = dataalloc;
+      void* data = NULL;
+      if(func != NULL)
+         data = func();
+      if(LlistInsNode(nList, data))
       {
-         printf("List added a node correctly\n\n");
+         printf("\nList added a node correctly\n\n");
          i++;
       }
       else
       {
-         printf("List FAILED to add a node correctly\n\n");
+         printf("\nList FAILED to add a node correctly\n\n");
          return NULL;
       }
    }
    
    nList->length = size;
+   printf("\nThe value of nlist->length is %d\n",nList->length);
    return nList;
 }
-
+//parameters:	Llist* "list" pointing to an allocated list
+//		void** "dataArr" array of void pointers pointing
+//				 to data you want in your Llist
+//		int "arrLen"  length of your array
+//returns: 	1 if successful, 0 if failed
+//=============================================================
 //populates list sequentially by placing members
 //of the void array in the list, the entire
-//data array shoudl have used malloc to create
-//the data
+//data array has to used malloc to create the data for each 
+//individual datatype it points to
 int LlistPopulate(Llist *list, void** dataArr, int arrLen)
 {
    if(LlistFail(list))
@@ -135,7 +214,7 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
       printf("The input length was longer than the available nodes\n\n");
       return 0;
    }
- 
+   printf("the array length at populate is %d the list length is %d\n\n",arrLen, list->length); 
    int i = 0;
    LlistNode* target = list->head->next;   
    while(i < arrLen)
@@ -145,9 +224,12 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
       target = target->next;
    }
    
+   
    return 1; 
 }
-
+//parameters:	Llist* "list" pointing to an allocated list
+//returns:	1 if successful, 0 if failed
+//==========================================================
 //initializes the list, we check for a head node, if this
 //was not allocated we fail, otherwise we initialize the head
 //node, flag and finally the length
@@ -249,34 +331,48 @@ int LlistDelNodeTarget(LlistNode *node,Llist *list)
 //it is assumed dst's data members are no longer
 //relevant so they are deleted without question
 //if either fail the list test then we exit failure
-int LlistCpySize(Llist *src, Llist *dst)
+int LlistCpySize(Llist *src, Llist *dst, void* dataalloc)
 {
+   printf("starting to copy size\n");
    if(LlistFail(src)|| LlistFail(dst))   
       return 0;
    
-   int diff = src->length - dst->length;
-   if(diff < 0)
+   printf("src length = %d dst length = %d\n",src->length, dst->length);
+   if(src->length < dst->length)
    {
-      while(dst->length > diff)
+      printf("dst is bigger\n");
+      while(src->length < dst->length)
       {
-         if(LlistDelNode(dst->head->prev, dst))
-            diff++;
+         if(LlistDelNodeTarget(dst->head->prev, dst))
+            continue;
          else
+         {
+            printf("error deleting the node\n");
             return 0;
+         }
       }
    }
 
-   else if(diff > 0)
+   else if(src->length > dst->length)
    {
-      while(dst->length < diff)
-      {
-         if(LlistInsNode(src,NULL))
-            diff--;
-         
-         else
-            return 0;
+      printf("src is bigger\n");
+      while(src->length > dst->length)
+      { 
+         LlistDataAlloc func = dataalloc;
+         void * data = NULL;
+         data = func();
+         if(data == NULL)
+	 {
+	    printf("data incorrectly initialized\n");
+	    return 0;
+	 }
+        
+	 LlistInsNode(dst,data);         
+         printf("diff is now %d\n",(src->length - dst->length));
+	 
       }   
    }
+   printf("finished copying size\n\n");
    
    return 1;
 }
@@ -285,30 +381,39 @@ int LlistCpySize(Llist *src, Llist *dst)
 //correctly, then we loop one by one and copy each
 //node onto the dst list, if list fail for either then
 //we exit failure
-int LlistCpy(Llist *src, Llist *dst, void *datacp)
+int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
 {
+   printf("starting LlistCpy\n");
    if(LlistFail(src)|| LlistFail(dst))   
       return 0;
    
-   if(LlistCpySize(src,dst))
+   if(LlistCpySize(src,dst,dataalloc))
    {
       LlistNode *srcC = NULL;
       LlistNode *dstC = NULL;
-      LlistNode *next = NULL;
-      srcC = src->head;
-      dstC = dst->head;
-      do
+      //LlistNode *nextCp = NULL;
+      //LlistNode *next = NULL;
+      srcC = src->head->next;
+      dstC = dst->head->next;
+      //do
+      while(srcC != src->head)
       {
-         next = dstC->next;
+         //srcC = srcC->next;
+         //dstC = dstC->next;
+         //nextCp = dstC->next;
+         //next = srcC->next;
+         printf("src pointer is %p dst pointer is %p",srcC,dstC);
          LlistNodeCpy(srcC, dstC, datacp);
          srcC = srcC->next;
-         dstC = next;
-      } while(srcC != src->head);
+         dstC = dstC->next;
+      }// while(srcC != src->head);
    
-      return 0;
+      printf("finishing LlistCpy\n");
+   
+      return 1;
    }
 
-   return 1;
+   return 0;
 }
 
 //if the node is null, if the node is a root
@@ -395,7 +500,7 @@ void LlistPrint(Llist* list, void* printNode)
    return;
 }
 
-LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
+LlistNode* LlistSearchNode(Llist* list, void* func, int override)
 {
    int i = -1;
    if(list == NULL)
@@ -409,7 +514,7 @@ LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
    {
       printf("Do you want to enter the node number or use your own search?\n");
       printf("1 for entering a number 2 for your own search\n");
-      scanf(&i,%d);
+      scanf("%d",&i);
    }
   
    if(i == 1)
@@ -417,8 +522,8 @@ LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
       LlistNode* current = list->head;
       int loc;
       printf("Please enter node# (aka node 1, node 2, etc, there is no node 0)\n");
-      scanf(&loc,%d);
-      if(loc > list->size)
+      scanf("%d",&loc);
+      if(loc > list->length)
       {
          printf("The location entered is beyond the bounds of the list\n");
          return NULL;
@@ -428,7 +533,7 @@ LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
          current = current->next;
          if(current == list->head)
          {
-            printf("The number entered made us go past or to the head node, returning NULL\n")
+            printf("The number entered made us go past or to the head node, returning NULL\n");
             return NULL;
          }
          loc--;
@@ -439,25 +544,25 @@ LlistNode* LlistSearchNode(Llist* list, void* searchFunc, int override)
    
    if(i == 2)
    {
-      if(searchFunc == NULL)
+      if(func == NULL)
       {
          printf("You did not pass a function\n");
          return NULL;
       }
 
       printf("using your search function\n");
-      LlistSearch func = searchFunc; 
+      LlistSearch searchFunc = func; 
       return searchFunc(list);      
    }
 
    else
    {
       printf("You picked an unsupported option\n");
-      return NULL:
+      return NULL;
    }
 }
 
-int LlistDelNode(Llist* list, void* func, int override)
+int LlistDelNode(Llist* list, void* func,void* printfunc, int override)
 {
    int i = override;
    if(override == 0)
@@ -468,15 +573,18 @@ int LlistDelNode(Llist* list, void* func, int override)
              "3. Traverse the linked list, delete if wanted\n"
              "0/else. exit\n\n\n"
             );
-      scanf(&i,%d);
+      scanf("%d",&i);
    }
    
    switch(i)
    {
       case 1:
+      {
              return LlistDelNodeTarget(LlistSearchNode(list,NULL,1),list);
              break;
+      }
       case 2:
+      {
              if(func == NULL)
              {
                 printf("You did not pass a function to use\n");
@@ -484,8 +592,16 @@ int LlistDelNode(Llist* list, void* func, int override)
              }
              return LlistDelNodeTarget(LlistSearchNode(list,func,2), list);
              break;
+      }
       case 3:
-             LlistNode* target = list->head->next;
+      {
+             if(printfunc == NULL)
+             {
+                printf("No print function available\n");
+                return 0;
+             }
+             LlistNode* target = NULL;
+             target = list->head->next;
              char c = 'n';
              if(target == list->head)
              {
@@ -495,9 +611,9 @@ int LlistDelNode(Llist* list, void* func, int override)
 
              while(target != list->head)
              {
-                LlistPrintNode(target);
-                printf("Would you like to delete this node? y/n\n")
-                scanf(c,%c);
+                LlistNodePrint(target,printfunc);
+                printf("Would you like to delete this node? y/n\n");
+                scanf("%c",&c);
                 if(c == 'y')
                 {
                    LlistDelNodeTarget(target, list);
@@ -507,9 +623,12 @@ int LlistDelNode(Llist* list, void* func, int override)
              printf("Back at the head, since you didn't delete anything, failed to delete\n");
              return 0;
              break;
-      case default:
+      }
+      default:
+      {
              printf("nothing selected, quitting\n\n");
              return 0;
              break;
+      }
    }
 }

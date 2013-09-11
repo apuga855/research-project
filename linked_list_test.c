@@ -22,12 +22,12 @@ Llist related functions
 Llist * LlistAlloc(int);				X		0
 int LlistPopulate(Llist *, void**, int);		X		0
 int LlistInit(Llist *);					X		0
-int LlistDel(Llist *);					X
+int LlistDel(Llist *);					X		0
 int LlistInsNode(Llist *, void *);			X		0
-int LlistDelNode(Llist*, void*);			
-int LlistDelNodeTarget(LlistNode *,Llist*);			
-int LlistCpySize(Llist *, Llist *);			
-int LlistCpy(Llist *, Llist *, void *);			
+int LlistDelNode(Llist*, void*, void*, int);		X		0	
+int LlistDelNodeTarget(LlistNode *,Llist*);		X		0
+int LlistCpySize(Llist *, Llist *);			X		0
+int LlistCpy(Llist *, Llist *, void *);			X		0
 int LlistFail(Llist *);					X		0
 LlistNode* LlistSearchNode(Llist*, void*);
 void LlistPrint(Llist*, void*);				X		0
@@ -58,13 +58,24 @@ void printPerson(person* per)
 void mycopy(void* src, void* dst)
 {
    printf("\ninside of function mycopy\n");
+   printf("\nsrc address is %p\n",src);
+   printf("\ndst address is %p\n",dst);
    person* srcStc = (person*)src;
    person* dstStc = (person*)dst;
+   printPerson(srcStc);
    dstStc->age = srcStc->age;
    dstStc->id = srcStc->id;
    strncpy(dstStc->name, srcStc->name,20);
    strncpy(dstStc->lname, srcStc->lname,20);
+   printf("\nfinished function mycopy\n");
+   printPerson(dstStc);
    return; 
+}
+
+void* mydataalloc()
+{
+   person* data =  malloc(sizeof(person));
+   return (void*) data;
 }
 
 int main()
@@ -120,7 +131,8 @@ int main()
    int len = 0;
    printf("\n\n\nHow long do you want the list?\n");
    scanf("%d",&len);
-   group1 = LlistAlloc(len);
+   printf("The value of len is %d\n",len);
+   group1 = LlistAlloc(len, mydataalloc);
    if(group1 == NULL)
    {
       printf("The list did not get allocated\n\n");
@@ -169,12 +181,19 @@ int main()
       printf("Failed to populate\n");
  
    LlistPrint(group1, printPerson);
-   if(LlistDel(group1))
-      printf("List was deleted correctly\n");
-   else
-      printf("Failed to print list\n");
    
-       
+   printf("\n\nNow testing the LlistCpy function with the LlistCpySize\n\n");
+   Llist* listCpy = LlistAlloc(0, NULL);
+   LlistCpy(group1, listCpy,mycopy,mydataalloc); 
+   printf("\n\nPrinting the source\n\n");
+   LlistPrint(group1, printPerson);
+   printf("\n\nPrinting the destination\n\n");
+   LlistPrint(listCpy, printPerson);
+        
+   //if(LlistDel(group1))
+   //   printf("List was deleted correctly\n");
+   //else
+   //   printf("Failed to print list\n");
 
    return 0;
 }
