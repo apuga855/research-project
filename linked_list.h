@@ -39,7 +39,7 @@ LlistNode * LlistNodeSelfAlloc(void*);
 //initializes nodes to defaults
 void LlistNodeInit (LlistNode *);
 //deletes a node
-void LlistNodeDel(LlistNode *);
+int LlistNodeDel(LlistNode *);
 //list copy
 int LlistNodeCpy(LlistNode *, LlistNode *, void *);
 //check fo rfailure
@@ -92,9 +92,7 @@ void * MyDataAllocator()
 //up to them to get it to work, the function
 //returns a LlistNode pointer so it can be used
 //in conjunction with LlistDelNode(LlistNode, Llist)
-typedef LlistNode*(*LlistSearch)(Llist *list);
-
-
+//-------------------------------------------------//
 //allocates a set amount of nodes for a list
 //returns the list with that many nodes, minimum
 //number of nodes is 1
@@ -111,7 +109,7 @@ int LlistDel(Llist *);
 //insert node into the list
 int LlistInsNode(Llist *, void *);
 //Deleting node
-int LlistDelNode(Llist*, void*,void*, int);
+int LlistDelNode(Llist*, void*,void*,void*, int);
 //Deleting target node
 int LlistDelNodeTarget(LlistNode *,Llist*);
 //copy size
@@ -121,7 +119,7 @@ int LlistCpy(Llist *, Llist *, void *,void*);
 //checks for list failure
 int LlistFail(Llist *);
 //search for a node
-LlistNode * LlistSearchNode(Llist*,void*,int);
+LlistNode * LlistSearchNode(Llist*,void*, void*, int);
 //print all members of the list
 void LlistPrint(Llist *, void*);
 //function for user to make a sorted insert
@@ -132,4 +130,4 @@ typedef void(*LlistSortIns)(Llist*);
 //define their sorting method for the list
 typedef void(*LlistSort)(Llist*);
 //if they want to search for the node with their own function
-typedef LlistNode*(*LlistSearch)(Llist*);
+typedef LlistNode*(*LlistSearch)(Llist*, void*);

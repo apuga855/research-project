@@ -50,7 +50,7 @@ LlistNode * LlistNodeSelfAlloc(void* dataalloc)
    if(nNode == NULL)
       return NULL;
    LlistNodeInit(nNode);
-   LlistDataAlloc func dataalloc;
+   LlistDataAlloc func = dataalloc;
    data = func();
    nNode->data = data;
    return nNode;
@@ -82,19 +82,20 @@ void LlistNodeInit (LlistNode *node)
 //============================
 //deletes an allocated node, assumes that the data was dynamically
 //allocated, if not there will ne ab error
-void LlistNodeDel(LlistNode *node)
+int LlistNodeDel(LlistNode *node)
 {
    if(node == NULL)
    {
       printf("\nThe node passed was not allocated properly\n\n");
       return 0;
    }
-   free(node->data);
-   code->data = NULL;
+
+   if(node->data != NULL)
+      free(node->data);
    LlistNodeInit(node);
    free(node);
    node = NULL;
-   return;
+   return 1;
 }
 
 
@@ -115,6 +116,7 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 {
    if(src == NULL || dst == NULL || datacp == NULL)
       return 0;
+   
    if(src->data == NULL || dst->data == NULL)
    {
       printf("\none of the nodes did not have their data properly allocated\n");
@@ -268,15 +270,25 @@ int LlistDel(Llist *list)
    while(start != current)
    {
       start->next = current->next;
-      LlistNodeDel(current);
-      current = start->next;
+      if(LlistNodeDel(current))
+         current = start->next;
+      else
+      {
+         printf("\nThere was an error deleting\n");
+         return 0;
+      }
    }
    
-   LlistNodeDel(start);
-   list->head = NULL;
-   free(list);
-   list = NULL;
-   return 1;
+   if(LlistNodeDel(start))
+   {
+      list->head = NULL;
+      free(list);
+      list = NULL;
+      return 1;
+   }
+    
+   else
+      return 0;
 }
 
 //parameters:	Llist* "list" pointing to allocated list
@@ -313,6 +325,10 @@ int LlistInsNode(Llist *list, void * nData)
    return 1;
 }
 
+//parameters: LlistNode* "node" to an allocated node to delete
+//	      Llist* "list" pointing to an allocated list
+//returns: 1 if successfull 0 otherwise
+//============================================================
 //deleting node from list, first we check if LlistFail,
 //if so we exit failure, if the node that we are trying
 //to delete fails the node test, then we exit failure
@@ -326,12 +342,21 @@ int LlistDelNodeTarget(LlistNode *node,Llist *list)
       return 0;
    node->prev->next = node->next;
    node->next->prev = node->prev;
-   LlistNodeDel(node);
-   list->length--;
-   return 1; 
-  
+   if(LlistNodeDel(node))
+   {
+      list->length--;
+      return 1; 
+   }
+   
+   else
+      return 0;
 }
 
+//parameters: Llist* "src" to allocated list we do not want to change
+//	      Llist* "dst" to allocated list we will change
+//	      void* "dataalloc" to function that allocates a datatype
+//returns: 1 if successfull, 0 otherwise
+//===================================================================
 //making two lists have same size, size use is src
 //diff is used to properly add or remove nodes,
 //it is assumed dst's data members are no longer
@@ -506,7 +531,7 @@ void LlistPrint(Llist* list, void* printNode)
    return;
 }
 
-LlistNode* LlistSearchNode(Llist* list, void* func, int override)
+LlistNode* LlistSearchNode(Llist* list, void* searchFunc, void* payload, int override)
 {
    int i = -1;
    if(list == NULL)
@@ -550,15 +575,15 @@ LlistNode* LlistSearchNode(Llist* list, void* func, int override)
    
    if(i == 2)
    {
-      if(func == NULL)
+      if(searchFunc == NULL)
       {
          printf("You did not pass a function\n");
          return NULL;
       }
 
       printf("using your search function\n");
-      LlistSearch searchFunc = func; 
-      return searchFunc(list);      
+      LlistSearch func = searchFunc; 
+      return func(list,payload);      
    }
 
    else
@@ -568,7 +593,7 @@ LlistNode* LlistSearchNode(Llist* list, void* func, int override)
    }
 }
 
-int LlistDelNode(Llist* list, void* func,void* printfunc, int override)
+int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int override)
 {
    int i = override;
    if(override == 0)
@@ -586,7 +611,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, int override)
    {
       case 1:
       {
-             return LlistDelNodeTarget(LlistSearchNode(list,NULL,1),list);
+             return LlistDelNodeTarget(LlistSearchNode(list,NULL,NULL,1),list);
              break;
       }
       case 2:
@@ -596,7 +621,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, int override)
                 printf("You did not pass a function to use\n");
                 return 0;
              }
-             return LlistDelNodeTarget(LlistSearchNode(list,func,2), list);
+             return LlistDelNodeTarget(LlistSearchNode(list,func,payload,2), list);
              break;
       }
       case 3:

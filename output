@@ -1,0 +1,9 @@
+- ... 0 1 0 0 0 0 0 0 0 0 0 0 0
+/index.html ........GET 1.1 11 0 0 0 0 0 0 0 0 0 0 0
+localhost:2000 Host: 0 15 0 0 0 0 0 0 0 0 0 0 0
+Mozilla/5.0 User-Agent: 0 11 0 0 0 0 0 0 0 0 0 0 0
+text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 Accept: 0 64 0 0 0 1 0 0 0 0 0 0 0
+en-us,en;q=0.5 Accept-Language: 0 15 0 0 0 0 0 0 0 0 0 0 0
+gzip, Accept-Encoding: 0 5 0 0 0 0 0 0 0 0 0 0 0
+ISO-8859-1,utf-8;q=0.7,*;q=0.7 Accept-Charset: 0 31 0 0 0 0 0 0 0 0 0 0 0
+keep-alive Connection: 0 11 0 0 0 0 0 0 0 0 0 0 0

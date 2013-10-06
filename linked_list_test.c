@@ -8,32 +8,33 @@ List of functions					works		doesnt work
 LlistNode related functions
 
 LlistNode* LlistNodeAlloc(void*)			X		0	
+LlistNode* LlistNodeSelfAlloc(void*)			X		0	
 void LlistNodeInit (LlistNode *);			X		0
-void LlistNodeDel(LlistNode *);			        X		0	
+int LlistNodeDel(LlistNode *);			        X		0	
 int LlistNodeCpy(LlistNode *, LlistNode *, void *);	X		0
 int LlistNodeFail(LlistNode*);				X		0	
 void LlistNodePrint(LlistNode*, void*);			X		0
 typedef void*(*LlistNodePrintData)(void*);		X		0
 typedef void(*LlistNodeDataCpy)(void*, void*);		X		0
 typedef LlistNode*(*LlistSearch)(Llist list);		X		0
-
+typedef void*(LlistDataAlloc);				X		0
 
 Llist related functions
-Llist * LlistAlloc(int);				X		0
+Llist * LlistAlloc(int, void*);				X		0
 int LlistPopulate(Llist *, void**, int);		X		0
 int LlistInit(Llist *);					X		0
 int LlistDel(Llist *);					X		0
 int LlistInsNode(Llist *, void *);			X		0
 int LlistDelNode(Llist*, void*, void*, int);		X		0	
 int LlistDelNodeTarget(LlistNode *,Llist*);		X		0
-int LlistCpySize(Llist *, Llist *);			X		0
-int LlistCpy(Llist *, Llist *, void *);			X		0
+int LlistCpySize(Llist *, Llist *, void*);		X		0
+int LlistCpy(Llist *, Llist *, void *, void*);		X		0
 int LlistFail(Llist *);					X		0
 LlistNode* LlistSearchNode(Llist*, void*);
 void LlistPrint(Llist*, void*);				X		0
 typedef void(*LlistSortIns)(Llist*);			
 typedef void(*LlistSort)(Llist*);			
-
+typedef LlistNode*(*LlistSearch)(Llist*, void*);	
 */
 //This program attempts to test the basic functionality 
 //of the linked list header file
@@ -77,6 +78,48 @@ void* mydataalloc()
    person* data =  malloc(sizeof(person));
    return (void*) data;
 }
+
+void* MyPayloadCreate()
+{
+   person* payload = NULL;
+   payload = malloc(sizeof(person));
+   printf("Enter the name of who you are looking for\n");
+   scanf("%s",payload->name);
+   printf("Enter the last name of who you are looking for\n");
+   scanf("%s",payload->lname);
+   return (void*) payload;
+}
+
+
+LlistNode* MySearch(Llist* list, void* payload)
+{
+   person* currentPerson = NULL;
+   person* target = (person)payload;
+   LlistNode* current = NULL;
+   current = list->head->next;
+   while(current != list->head)
+   {
+      currentPerson = (person)current->data;
+      if(strncmp(currentPerson->name,target->name,20)   &&
+         strncmp(currentPerson->lname,target->lname,20) == 0)
+        {
+           int i = 0;
+           printf("Found:\n")
+           printPerson(currentPerson);
+           printf("\nIs this the correct person or would you like to keep looking?\n"
+                   "Press 0 to quit and 1 to keep looking\n");
+           scanf("%d",&i);
+           if(i == 1)
+              continue;
+           else
+              return currentPerson;           
+        } 
+   }
+   
+   printf("No hits with the given payload\n\n");
+   return NULL;
+}
+
 
 int main()
 {
