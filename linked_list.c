@@ -195,6 +195,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
    }
    
    nList->length = size;
+   nList->used = 0;
    printf("\nThe value of nlist->length is %d\n",nList->length);
    return nList;
 }
@@ -230,7 +231,7 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
       target = target->next;
    }
    
-   
+   list->used = arrLen;  
    return 1; 
 }
 //parameters:	Llist* "list" pointing to an allocated list
@@ -251,6 +252,7 @@ int LlistInit(Llist *list)
    list->head->prev = list->head;
    list->head->root = 1;
    list->length = 0;
+   list->used = 0;
    return 1; 
 }
 
@@ -284,6 +286,7 @@ int LlistDel(Llist *list)
       list->head = NULL;
       free(list);
       list = NULL;
+      list->used--;
       return 1;
    }
     
@@ -322,6 +325,7 @@ int LlistInsNode(Llist *list, void * nData)
    nNode->prev = list->head;
    prev->prev = nNode;
    list->length++;
+   list->used++;
    return 1;
 }
 
@@ -345,12 +349,60 @@ int LlistDelNodeTarget(LlistNode *node,Llist *list)
    if(LlistNodeDel(node))
    {
       list->length--;
+      list->used--;
       return 1; 
    }
    
    else
       return 0;
 }
+
+int LlistInsData(Llist* list, void* data)
+{
+   if(LlistFail(list))
+      return 0;
+   if(LlistNodeFail(node)) 
+      return 0;
+   if(list->used >= list->length)
+   {
+      LlistInsNode(list,data);
+      return 1;
+   }
+   
+   int i = 0;
+   LlistNode* ptr = list->head->next;
+   while(i < used)
+   {
+      ptr = ptr->next;
+      i++;
+   }
+
+   ptr->data = data;
+   list->used++;
+   return 1;
+}
+
+int LlistDelData(Llist* list, void* nullify)
+{
+   LlistNode* ptr = list->head->next;
+   while(ptr != list->head)
+   {
+      LlistUsrDataDel func = nullify;
+      if(func(list->data))
+         continue;
+      else 
+      {
+         printf("\nerror nullying data\n")
+         return 0;
+      }
+   }
+   
+   list->used = 0;
+   return 1;
+}
+
+
+
 
 //parameters: Llist* "src" to allocated list we do not want to change
 //	      Llist* "dst" to allocated list we will change
@@ -438,9 +490,11 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
          srcC = srcC->next;
          dstC = dstC->next;
       }// while(srcC != src->head);
-   
+      
+      dst->length = src->length;
+      dst->used = src->used;
       printf("finishing LlistCpy\n");
-   
+     
       return 1;
    }
 

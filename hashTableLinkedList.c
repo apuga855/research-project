@@ -1,7 +1,6 @@
 #pragma once
-#include"hashTable.h"
-#include<stdio.h>
-LHN_hashNode* HashNodeAlloc(void* data)
+#include"hashTableLinkedList.h"
+LHN_hashNode* HashNodeAlloc()
 {
    LHN_hashNode* nHNode = NULL;
    nHNode = malloc(sizeof(hashNode));
@@ -9,11 +8,23 @@ LHN_hashNode* HashNodeAlloc(void* data)
       return NULL;
    
    LHN_HashNodeInit(nHnode);
-   nHNode->LHN_hashData = data;
+   nHNode->LHN_list = LlistAlloc(0,NULL);
    return nHNode;
 }
 
-LHH_hashNode* HashNodeSelfAlloc(void* dataalloc)
+LHN_hashNode* LHN_HAShNodeDataAlloc(int size, void* dataalloc)
+{
+   LHN_hashNode* nHNode = NULL;
+   nHNode = malloc(sizeof(hashNode));
+   if(nHNode == NULL)
+      return NULL;
+   
+   LHN_HashNodeInit(nHnode);
+   nHNode->LHN_list = LlistAlloc(size,dataalloc);
+   return nHNode;
+}
+
+LHH_hashNode* HashNodeSelfAlloc(void* dataalloc, void**dataArr, int arrLen)
 {
    hashNode* nHNode = NULL;
    nHNode = malloc(sizeof(hashNode));
@@ -21,67 +32,68 @@ LHH_hashNode* HashNodeSelfAlloc(void* dataalloc)
       return NULL;
    
    LHN_HashNodeInit(nHnode);
-   LHN_HashNodeDataAlloc func = dataalloc;
-   nHNode->LHN_hashData = func();
-   return nHNode;
-}
-
-void LHN_HashNodeData(LHN_hashNode* hNode, void* dataalloc)
-{
-   if(hNode->hashData != NULL)
+   nHnode->LHN_list = LlistAlloc(arrLen, dataalloc);
+   if(LlistPopulate(nhNode->LHN_list,dataArr,arrLen))
+      return nHNode;
+   else
    {
-      free(hNode->LHN_hashData);
-      hNode->LHN_hashData = NULL
+      printf("\nThere was a problem with the allocation\n");
+      return NULL;
    }
-
-   LHN_HashNodeDataAlloc func = dataalloc;
-   hNode->LHN_hashData = func();
-   return;
 }
 
-int LHN_HashNodeDataSet(LHN_hashNode* hNode, void* data)
+int LHN_HashNodeDel(LHN_hashNode* hNode)
 {
-   if(data == NULL || hNode == NULL )
+  if(hNode != NULL)
+  {
+     if(LlistDel(hNode->LHN_list))
+     {
+        LHN_hashNodeInit(nHnode);
+        free(nHnode);
+        nHnode = NULL;
+        return 1;
+     }
+     else
+        return 0;
+  } 
+  
+  else
+     return 1;
+}  
+
+int LHN_HashNodeIns(LHN_hashNode* hNode, void* data)
+{
+   if(LlistInsNode(hNod->LHN_list,data))
+      return 1;
+   else 
       return 0;
-   hNode->LHN_hashData = data;
-   return 0;
 }
 
 void LHN_HashNodeInit(hashNode* hNode)
 {
    hNode->LHN_rubbish = 0;
-   hNode->LHN_hashData = NULL;
+   hNode->LHN_list = NULL;
 }
 
-int LHN_HashNodeDel(LHN_hashNode* hNode)
-{
-   if(hNode == NULL)
-   {
-      printf("\nThe node passed was not allocated\n");
-      return 0;
-   }
-
-   if(hNode->LHN_hashData != NULL)
-      free(hNode->LHN_hashData);
-   LHN_HasNodeInit(hNode);
-   free(hNode);
-   hNode = NULL;
-   return 1;
-}
-
-int LHN_HashNodeCpy(LHN_hashNode* src, LHN_hashNode* dst, void datacp)
+int LHN_HashNodeCpy(LHN_hashNode* src, LHN_hashNode* dst, void dataalloc)
 {
    if(src == NULL || dst == NULL || datacp == NULL)
       return 0;
-   if(src->hashData == NULL || dst->hashData == NULL)
+   if(src->LHN_list == NULL || dst->LHN_list == NULL || 
+      src->LHN_rubbish == 0 || dst->LHN_list)
    {
       printf("\nOne of the nodes did not have their data properly allocated\n");
       return 0;
    }
 
-   HashNodeDataCpy func = datacp;
-   func(src->LHN_data, dst->LHN_data);
-   return 1;
+   if(LlistCpy(src->LHN->list, dst->LHN_list, dataalloc))
+   {
+      dst->LHN_rubbish = dst->LHN_rubbish;
+      return 1;
+   }
+   else
+      return 0;
+   
 }
 
 void LHN_HashNodePrint(LHN_hashNode* hNode, void* dataprint)
@@ -98,24 +110,40 @@ void LHN_HashNodePrint(LHN_hashNode* hNode, void* dataprint)
       return;
    }
 
-   HashNodePrintData func = dataprint;
-   func(hNode->LHN_hashData);
+   LlistPrint(hNode->LHN_list, dataprint);
    return
 }
 
 LH_hashTable* LH_HashTableAlloc()
 {
-   LH_hashTable* table = malloc(sizeof(LH_hashTable));
-   LH_HashTableInit(table);
+   int i = 0;
+   LH_hashTable* hash = malloc(sizeof(LH_hashTable));
+   LH_HashTableInit(hash);
+   hash->LHN_rubbish = 0;
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * HASH_LENGTH);
+   while(i < HASH_LENGTH)
+   {
+      hash->table[i].LHN_list = LlistAlloc(0,NULL);
+      i++;
+   }
    return table;
 }
 
-LHN_hashNode* LH_HashTableNodeAlloc(long unsigned int size)
+
+LH_hashTable* LH_HashTableAllocBuff(void* dataalloc)
 {
-   return malloc(sizeof(LHN_hashNode)*size);
+   int i = 0;
+   LH_hashTable* hash = malloc(sizeof(LH_hashTable));
+   LH_HashTableInit(hash);
+   hash->LHN_rubbish = 0;
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * HASH_LENGTH);
+   while(i < HASH_LENGTH)
+   {
+      hash->table[i].LHN_list = LlistAlloc(BUFF_SIZE, dataalloc);
+      i++;
+   }
+   return table;
 }
-
-
 
 void LH_HashTableInit(LH_hashTable* hash)
 {
@@ -123,7 +151,6 @@ void LH_HashTableInit(LH_hashTable* hash)
    hash->LH_hashCapacity = 0;
    hash->LH_hashLoadFactor = 0;
    hash->LH_table = NULL:
-   hash->LH_hashGroupNodes = NULL;
 }
 
 unsigned long int LH_hash(LHN_hashNode* node, LH_hashTable* table)
@@ -131,13 +158,4 @@ unsigned long int LH_hash(LHN_hashNode* node, LH_hashTable* table)
    long double result = node->LHN_rubbish;
    unsigned long int key = rubbish % table->LH_capacity;
    return key;
-}
-
-LH_HashSet(LH_hashTable* hash, void* hashData, void* hashfunction)
-{
-   HashFunction func = hashfunction;
-   long double result = func(hashData);
-   long unsigned int key = result % hash->capacity;
-   hash->LH_table[key].rubbish = result;
-   hash->LH_table[key].LHN_hashData = hashData;  
 }

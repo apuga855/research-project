@@ -27,7 +27,7 @@ typedef struct _Llist
 {
    LlistNode *head;
    int length;
-   
+   int used;   
 }Llist;
 
    
@@ -108,10 +108,14 @@ int LlistInit(Llist *);
 int LlistDel(Llist *);
 //insert node into the list
 int LlistInsNode(Llist *, void *);
+//inserts data into an available node
+int LlistInsData(Llist*, void*);
 //Deleting node
 int LlistDelNode(Llist*, void*,void*,void*, int);
 //Deleting target node
 int LlistDelNodeTarget(LlistNode *,Llist*);
+//nullying all values of all data within the list
+int LlistDelDAta(Llist*, void*);
 //copy size
 int LlistCpySize(Llist *, Llist *, void*);
 //copies entire list
@@ -131,3 +135,5 @@ typedef void(*LlistSortIns)(Llist*);
 typedef void(*LlistSort)(Llist*);
 //if they want to search for the node with their own function
 typedef LlistNode*(*LlistSearch)(Llist*, void*);
+
+typedef void(*LlistUsrDataDel)(void*);
