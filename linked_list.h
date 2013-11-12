@@ -141,3 +141,4 @@ typedef void(*LlistSort)(Llist*);
 typedef LlistNode*(*LlistSearch)(Llist*, void*);
 //if they want to delete the data in a special way this will be used
 typedef int(*LlistUsrDataDel)(void*);
+

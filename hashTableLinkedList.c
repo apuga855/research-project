@@ -222,8 +222,8 @@ LH_hashTable* LH_HashTableAllocBuff(void* dataalloc)
    int i = 0;
    LH_hashTable* hash = malloc(sizeof(LH_hashTable));
    LH_HashTableInit(hash);
-   hash->LH_table = malloc(sizeof(LHN_hashNode) * HASH_LENGTH);
-   while(i < HASH_LENGTH)
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * hash->LH_capacity);
+   while(i < hash->LH_capacity)
    {
       hash->LH_table[i].LHN_list = LlistAlloc(BUFF_SIZE, dataalloc);
       i++;
@@ -238,11 +238,12 @@ LH_hashTable* LH_HashTableAllocBuff(void* dataalloc)
 void LH_HashTableInit(LH_hashTable* hash)
 {
    hash->LH_counter = 0;
-   hash->LH_capacity = 0;
-   hash->LH_loadFactor = 0;
+   hash->LH_capacity = 600;
+   hash->LH_loadFactor = 0.8;
    hash->LH_table = NULL;
    return;
 }
+
 
 int LH_HashTableDel(LH_hashTable* tab)
 {
@@ -261,11 +262,57 @@ int LH_HashTableDel(LH_hashTable* tab)
   return 1;
 }
 
-
-long int LH_hash(LHN_hashNode* node, LH_hashTable* table)
+//parameters: void* dataalloc
+//            int "cap" with capacity
+//returns:    LH_hashTable* of allocated data
+//=================================================
+//allocates a hashtable with a table with HASH_LENGTH amount
+//of nodes, each node contains a list with BUFF_SIZE nodes and
+//each node has a dynamically allocated data* created with the
+//dataalloc function
+LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 {
-   long int key;
-   return key;
+   int i = 0;
+   LH_hashTable* hash = malloc(sizeof(LH_hashTable));
+   LH_HashTableInit(hash);
+   hash->LH_capacity = cap;
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * hash->LH_capacity);
+   while(i < hash->LH_capacity)
+   {
+      hash->LH_table[i].LHN_list = LlistAlloc(BUFF_SIZE, dataalloc);
+      i++;
+   }
+   return hash;
 }
 
+int LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc)
+{
+   double result = (double)(hash->LH_counter / hash->LH_capacity); 
+   if(result > hash->LH_loadFactor)
+   {
+      int i = 0;
+      LH_hashTable* nhash = LH_HashTableAllocSetBuff(hash->LH_capacity * 2, dataalloc);
+      while(i < hash->LH_capacity)
+      {
+         if(LHN_HashNodeCpy(&(nhash->LH_table[i]),&(hash->LH_table[i]),datacp,dataalloc))
+            continue;
+         else
+            return 0;
+      }
+      nhash->LH_counter = hash->LH_counter;
+      return 1;
+   }
+   
+   else
+      return 0;
+}
 
+int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen)
+{
+   LH_keyGenerate func = keygen;
+   int key = func(hash,data);
+   if(LlistInsData(hash->LH_table[key].LHN_list, data))
+      return 1;
+   else
+       return 0;   
+}
