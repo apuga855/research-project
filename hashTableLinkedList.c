@@ -135,7 +135,6 @@ int LHN_HashNodeIns(LHN_hashNode* hNode, void* data)
 //initializes all values to its respective 0 value
 void LHN_HashNodeInit(LHN_hashNode* hNode)
 {
-   hNode->LHN_rubbish = 0;
    hNode->LHN_list = NULL;
 }
 
@@ -158,10 +157,7 @@ int LHN_HashNodeCpy(LHN_hashNode* src, LHN_hashNode* dst, void* datacp, void* da
    }
 
    if(LlistCpy(src->LHN_list, dst->LHN_list, datacp, dataalloc))
-   {
-      dst->LHN_rubbish = dst->LHN_rubbish;
       return 1;
-   }
    else
       return 0;
    
