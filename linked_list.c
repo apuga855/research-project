@@ -16,7 +16,6 @@
 #pragma once
 #include"linked_list.h"
 #include<stdio.h>
-
 //parameters:	void pointer "data" to allocated data of your type
 //returns: 	LlistNode pointer
 //================================================================
@@ -36,12 +35,15 @@ LlistNode * LlistNodeAlloc(void* data)
 }
 
 //parameters:	void pointer "dataalloc" to your allocator function
-//returns: LlistNode pointer
+//returns: 	LlistNode pointer
+//--------------------------------------------------------------------
+//LlistDataAlloc is a function with no parameters that returns a void*
+//               to the user defined structure
 //======================================================================
 //This function takes in a pointer to a declared function that allocates
 //your data type, this function makes a node whose next pointer is null
 //previous pointer is also null, by default not the head node and the data
-// pointer points to whatever your function returned
+//pointer points to whatever your function returned
 LlistNode * LlistNodeSelfAlloc(void* dataalloc)
 {
    LlistNode * nNode = NULL;
@@ -57,7 +59,7 @@ LlistNode * LlistNodeSelfAlloc(void* dataalloc)
 }
 
 //parameters: LlistNode* "node" some allocated node
-//returns: nothing
+//returns:    nothing
 //======================================================
 //initializes allocated node to their respective 0 value
 //default behavior is to initialize the node to not
@@ -78,10 +80,10 @@ void LlistNodeInit (LlistNode *node)
 }
 
 //parameters: LlistNode* "node"
-//returns nothing
-//============================
+//returns     1 if successful, 0 otherwise
+//================================================================
 //deletes an allocated node, assumes that the data was dynamically
-//allocated, if not there will ne ab error
+//allocated, if not there will be an error
 int LlistNodeDel(LlistNode *node)
 {
    if(node == NULL)
@@ -104,6 +106,10 @@ int LlistNodeDel(LlistNode *node)
 //	      LlistNode* "dst" pointing to an allocated node with
 //			       garbage information you dont mind losing
 //	      void* "datacp"   pointing to your data copy function
+//returns:    1 if successful, 0 otherwise
+//--------------------------------------------------------------------
+//LlistNodeDataCpy void function that takes in 2 void pointers and then
+//will cast and copy the correct values to the user defined structure
 //=====================================================================
 //copies src into dst using datacap callback function
 //the callback function passes two void pointers,
@@ -111,7 +117,8 @@ int LlistNodeDel(LlistNode *node)
 //if the src or dst are NULL we fail, if the source is not
 //part of a list we fail
 //please note that the src and dst must have their respective
-//data pointers pointing to something, otherwise you need to handle it
+//data pointers pointing to something dynamically allocated,
+//otherwise you need to handle it
 int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 {
    if(src == NULL || dst == NULL || datacp == NULL)
@@ -131,9 +138,13 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
 //parameters: 	LlistNode* "node" pointing to allocated node
 //		void* "dataprint" pointing to your print function
 //returns:      nothing
+//---------------------------------------------------------------
+//LlistNodePrintData is a void function that prints all printable
+//members of the user defined structure
 //=============================================================
 //default printing function, you provide how to print your data
-//via the void* datapring function
+//via the void* dataprint function pointer that gets casted to a
+//LlistNodePrintData
 void LlistNodePrint(LlistNode* node, void* dataprint)
 {  
    if(node->root == 1)
@@ -154,6 +165,9 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
 //	       	 void* "dataalloc" pointing to a function
 //				   that allocates your datatype
 //returns:	  Llist*	   allocated using your parameters
+//--------------------------------------------------------------------
+//LlistDataAlloc is a function with no parameters that returns a void*
+//               to the user defined structure
 //==============================================================
 //allocates a size amount of nodes, minimum number is 0
 //the list allocates "size" nodes pointing to data allocated
@@ -265,12 +279,14 @@ int LlistInit(Llist *list)
 //list and exit successfully
 int LlistDel(Llist *list)
 {
+   printf("\nInside of LlistDel\n");
    if(LlistFail(list))
       return 0;
    LlistNode * start = list->head;
    LlistNode * current = list->head->next;
    while(start != current)
    {
+      printf("\ndeleting a node\n");
       start->next = current->next;
       if(LlistNodeDel(current))
          current = start->next;
@@ -286,7 +302,6 @@ int LlistDel(Llist *list)
       list->head = NULL;
       free(list);
       list = NULL;
-      list->used--;
       return 1;
    }
     
@@ -361,8 +376,6 @@ int LlistInsData(Llist* list, void* data)
 {
    if(LlistFail(list))
       return 0;
-   if(LlistNodeFail(node)) 
-      return 0;
    if(list->used >= list->length)
    {
       LlistInsNode(list,data);
@@ -371,7 +384,7 @@ int LlistInsData(Llist* list, void* data)
    
    int i = 0;
    LlistNode* ptr = list->head->next;
-   while(i < used)
+   while(i < list->used)
    {
       ptr = ptr->next;
       i++;
@@ -382,17 +395,26 @@ int LlistInsData(Llist* list, void* data)
    return 1;
 }
 
+//parameters: Llist* "list" to a list
+//            void* function called nullify
+//returns:    1 if successful, 0 otherwise
+//--------------------------------------------------------------------
+//LlistUsrDataDel is a function with a void * as parameter, retuns 1 
+//if successful, 0 otherwise. The function nullifies all values in the
+//struct
+//==============================================================
+//nulls all data using the user function 
 int LlistDelData(Llist* list, void* nullify)
 {
    LlistNode* ptr = list->head->next;
+   LlistUsrDataDel func = nullify;
    while(ptr != list->head)
    {
-      LlistUsrDataDel func = nullify;
-      if(func(list->data))
+      if(func(ptr->data))
          continue;
       else 
       {
-         printf("\nerror nullying data\n")
+         printf("\nerror nullying data\n");
          return 0;
       }
    }
@@ -400,9 +422,6 @@ int LlistDelData(Llist* list, void* nullify)
    list->used = 0;
    return 1;
 }
-
-
-
 
 //parameters: Llist* "src" to allocated list we do not want to change
 //	      Llist* "dst" to allocated list we will change
@@ -460,6 +479,12 @@ int LlistCpySize(Llist *src, Llist *dst, void* dataalloc)
    return 1;
 }
 
+//parameters: Llist* "src" source list
+//            Llist* "dst" destination list
+//            void* "datacp" pointer to a function
+//            void* "dataalloc" pointer to a function
+//returns: 1 if successful, 0 otherwise
+//====================================================
 //copies entire list, first we resize so we can copy
 //correctly, then we loop one by one and copy each
 //node onto the dst list, if list fail for either then
@@ -474,22 +499,15 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
    {
       LlistNode *srcC = NULL;
       LlistNode *dstC = NULL;
-      //LlistNode *nextCp = NULL;
-      //LlistNode *next = NULL;
       srcC = src->head->next;
       dstC = dst->head->next;
-      //do
       while(srcC != src->head)
       {
-         //srcC = srcC->next;
-         //dstC = dstC->next;
-         //nextCp = dstC->next;
-         //next = srcC->next;
          printf("src pointer is %p dst pointer is %p",srcC,dstC);
          LlistNodeCpy(srcC, dstC, datacp);
          srcC = srcC->next;
          dstC = dstC->next;
-      }// while(srcC != src->head);
+      }
       
       dst->length = src->length;
       dst->used = src->used;
@@ -501,6 +519,9 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
    return 0;
 }
 
+//parameters: LlistNode* "node"
+//returns 1 if node failed, 0 if it did not fail
+//==============================================
 //if the node is null, if the node is a root
 //or if the node does not have a next or prev
 //pointer we fail the test so we return true we 
@@ -518,6 +539,9 @@ int LlistNodeFail(LlistNode* node)
 
 }
 
+//parameters: Llist* "list"
+//return: 1 if list failed, 0 if it did not fail
+//=======================================================
 //if our list is null, if the head is null, if the
 //head does not have the root flag set or if 
 //either the prev or next pointers are NULL for the head

@@ -3,14 +3,18 @@
 //implementing a linked list with unknown datatype structure
 //the list is dynamic, has a dummy head node, inserts before
 //the head each time by default, contains callback functions
-//to satisfy whatever the user needs
-   
-//node for the list, int root is 0 unless youa re at the head
+//to satisfy whatever the user needs   
+//node for the list, int root is 0 unless you are at the head
 //contains a previous and next pointer for linked list behavior
 //the void* stores whatever data the user needs
+//headnode is not used as a storage place 
 #pragma once
 #include<stdlib.h>
-   
+#include<stdio.h>   
+//LlistNode contains a root variavle that determines if you are
+//the dummy headnode or not, a next pointer for pointing to the next
+//node in the linked list, a prev pointer to point to the previous node
+//and finally a data void pointer for the user data
 typedef struct _LlistNode
 {
   int root;
@@ -47,7 +51,7 @@ int LlistNodeFail(LlistNode*);
 //default printing function
 void LlistNodePrint(LlistNode*, void*);
 //user defined print function for printing nodes
-typedef void*(*LlistNodePrintData)(void*);
+typedef void(*LlistNodePrintData)(void*);
 //-----------------------------------------------//
 //this function is necessary for the copy function 
 //ince we dont know how the structure is set up we
@@ -135,5 +139,5 @@ typedef void(*LlistSortIns)(Llist*);
 typedef void(*LlistSort)(Llist*);
 //if they want to search for the node with their own function
 typedef LlistNode*(*LlistSearch)(Llist*, void*);
-
-typedef void(*LlistUsrDataDel)(void*);
+//if they want to delete the data in a special way this will be used
+typedef int(*LlistUsrDataDel)(void*);
