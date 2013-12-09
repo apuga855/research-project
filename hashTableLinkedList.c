@@ -308,21 +308,35 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 }
 
 
-int LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc)
+int LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc, void * keygen)
 {
    double result = (double)(hash->LH_counter / hash->LH_capacity); 
    if(result > hash->LH_loadFactor)
    {
       int i = 0;
       LH_hashTable* nhash = LH_HashTableAllocSetBuff(hash->LH_capacity * 2, dataalloc);
+
       while(i < hash->LH_capacity)
       {
-         if(LHN_HashNodeCpy(&(nhash->LH_table[i]),&(hash->LH_table[i]),datacp,dataalloc))
+         if(LlistIsEmpty(hash->LH_table[i].LHN_list))
             continue;
-         else
-            return 0;
+
+         else       
+         {
+            LH_keyGenerate func = keygen;
+            int key = func(hash, LlistRetFirst(hash->LH_table[i].LHN_list));
+            if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
+               printf("\nSuccessful mapping\n");
+            else
+            {
+               printf("\nERROR UNSUCCESSFUL MAPPING\n");
+               return 0;
+            }
+         }   
       }
+
       nhash->LH_counter = hash->LH_counter;
+      
       return 1;
    }
    
@@ -336,7 +350,7 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
    if(result > hash->LH_loadFactor)
    {
       printf("\nRehashing\n");
-      if(LH_HashTableRehash(hash,datacp,dataalloc))
+      if(LH_HashTableRehash(hash,datacp,dataalloc,keygen))
          printf("\nRehashing SUCCESSFUL\n");
       else
       {
@@ -347,6 +361,7 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
    
    LH_keyGenerate func = keygen;
    int key = func(hash,data);
+   
    if(LlistInsData(hash->LH_table[key].LHN_list, data))
       return 1;
    else

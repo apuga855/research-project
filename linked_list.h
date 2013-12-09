@@ -128,6 +128,10 @@ int LlistCpy(Llist *, Llist *, void *,void*);
 int LlistFail(Llist *);
 //search for a node
 LlistNode * LlistSearchNode(Llist*,void*, void*, int);
+//check if the list is in use
+int LlistIsEmpty(Llist*);
+//returns first data member as a void*
+void * LlistRetFirst(Llist*);
 //print all members of the list
 void LlistPrint(Llist *, void*);
 //function for user to make a sorted insert

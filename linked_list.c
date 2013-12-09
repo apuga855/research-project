@@ -741,3 +741,22 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
       }
    }
 }
+
+
+int LlistIsEmpty(Llist* list)
+{
+   if(used > 0)
+      return 1;
+
+   else
+      return 0;
+}
+
+void* LlistRetFirst(Llist* list)
+{
+   if(list->head->next == head)
+      return NULL;
+
+   else
+      return list->head->next->data;
+}
