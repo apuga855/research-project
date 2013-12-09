@@ -198,7 +198,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
          data = func();
       if(LlistInsNode(nList, data))
       {
-         //printf("\nList added a node correctly\n\n");
+         printf("\nList added a node correctly\n\n");
          i++;
       }
       else
@@ -210,7 +210,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
    
    nList->length = size;
    nList->used = 0;
-   //printf("\nThe value of nlist->length is %d\n",nList->length);
+   printf("\nThe value of nlist->length is %d\n",nList->length);
    return nList;
 }
 //parameters:	Llist* "list" pointing to an allocated list
@@ -576,7 +576,7 @@ int LlistFail(Llist *list)
    }
    else
    {
-      //printf("The List passed the test\n\n");
+      printf("The List passed the test\n\n");
       return 0;
    }
 }

@@ -96,7 +96,7 @@ int LHN_HashNodeDel(LHN_hashNode* hNode)
      if(LlistDel(hNode->LHN_list))
      {
         LHN_HashNodeInit(hNode);
-        free(hNode);
+        //free(hNode);
         hNode = NULL;
         return 1;
      }
@@ -249,7 +249,7 @@ int LH_HashTableDel(LH_hashTable* tab)
   while(i < tab->LH_capacity)
   {
      printf("i = %d capacity = %lu\n",i,tab->LH_capacity);
-     if(LHN_HashNodeDel(&(tab->LH_table[i])))
+     if(LHN_HashNodeDel(&tab->LH_table[i]))
      {
         i++;
         continue;
@@ -262,6 +262,12 @@ int LH_HashTableDel(LH_hashTable* tab)
      }
   }
   
+  printf("\nFreeing the table\n");
+  free(tab->LH_table);
+  tab->LH_table = NULL;
+  printf("\nFreeing the structure\n");
+  free(tab);
+  tab = NULL; 
   return 1;
 }
 
