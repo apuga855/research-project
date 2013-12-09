@@ -1,7 +1,7 @@
 #pragma once
 #include<stdio.h>
 #include"linked_list.h"
-#define HASH_LENGTH 5
+#define HASH_LENGTH 10
 #define BUFF_SIZE 10
 //Node structure, will hold our sensor ready packets
 typedef struct _LHN_hashNode
