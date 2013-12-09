@@ -1,8 +1,8 @@
 #pragma once
 #include<stdio.h>
 #include"linked_list.h"
-#define HASH_LENGTH 10
-#define BUFF_SIZE 10
+#define HASH_LENGTH 607
+#define BUFF_SIZE 20
 //Node structure, will hold our sensor ready packets
 typedef struct _LHN_hashNode
 {
@@ -14,6 +14,7 @@ typedef struct _LHN_hashNode
 //stuff pointer
 typedef struct _LH_hashTable
 {
+   kprime * LH_primenums;
    unsigned long int LH_counter;
    unsigned long int LH_capacity;
    double LH_loadFactor;
@@ -56,6 +57,6 @@ int LH_HashTableDel(LH_hashTable*);
 int LH_HashTableRehash(LH_hashTable*, void*, void*);
 long int LH_hash(LHN_hashNode*,LH_hashTable*);
 void LH_HashSet(LH_hashTable*, void*, void*);
-int LH_hashFunc(LH_hashTable*, void *, void *);
+int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);
 //generates an index for the hashtable
 typedef int(*LH_keyGenerate)(LH_hashTable*, void*);

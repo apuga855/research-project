@@ -12,13 +12,13 @@ int LHN_HashNodeIns(hashNode*,void*);				X
 int LHN_HashNodeCpy(hashNode*, hashNode*, void*);		X
 void LHN_HashNodePrint(hashNode*,void*);			X
 
-typedef void*(*LHN_HashNodeDataAlloc)();
-typedef void*(*LHN_HashNodeDataCpy)(void*, void*);
-typedef void*(*LHN_HashNodePrintData)(void*);
-typedef long double (*LHN_HashFunction)(void*);
+typedef void*(*LHN_HashNodeDataAlloc)();			X
+typedef void*(*LHN_HashNodeDataCpy)(void*, void*);		X
+typedef void*(*LHN_HashNodePrintData)(void*);			X
+typedef long double (*LHN_HashFunction)(void*);			X
 
-LH_hashTable* LH_HashTableAlloc();
-LH_hashTable* LH_HashTableAllocBuff(void*);
+LH_hashTable* LH_HashTableAlloc();				X
+LH_hashTable* LH_HashTableAllocBuff(void*);			X
 
 LH_hashTable * LH_HashTableRehash(LH_hashTable *);
 LH_HashTableInit(LH_hashTable*);
@@ -233,7 +233,22 @@ int main()
    else
       printf("\nFAILURE AT LH_HASHTABLEDEL()\n"); 
    
+   printf("\n\n\n\n\n");
+   printf("\nTesting LH_HashTableAllocSetBuff()\n");
+   printf("\nPlease enter the size\n");
+   long unsigned int szb;
+   scanf("%lu", &szb);
+   hashtable = LH_HashTableAllocSetBuff(szb,mydataalloc);
+   if(hashtable != NULL)
+      printf("\nSUCCESS AT LH_HASHTABLEALLOCSETBUFF()\n");
+   else
+      printf("\nFAILURE AT LH_HASHTABLEALLOCSETBUFF()\n");
    
+   printf("\nTesting LH_HashTableDel after the set buff alloc\n");
+   if(LH_HashTableDel(hashtable))
+      printf("\nSUCCESS AT LH_HASHTABLEDEL()\n");
+   else
+      printf("\nFAILURE AT LH_HASHTABLEDEL()\n"); 
 
    return 0;
 }
