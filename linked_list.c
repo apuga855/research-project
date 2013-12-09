@@ -376,7 +376,7 @@ int LlistInsData(Llist* list, void* data)
 {
    if(LlistFail(list))
       return 0;
-   if(list->used >= list->length)
+   if(list->used == list->length)//>=
    {
       LlistInsNode(list,data);
       return 1;
@@ -745,16 +745,16 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
 
 int LlistIsEmpty(Llist* list)
 {
-   if(used > 0)
-      return 1;
+   if(list->used > 0)
+      return 0;
 
    else
-      return 0;
+      return 1;
 }
 
 void* LlistRetFirst(Llist* list)
 {
-   if(list->head->next == head)
+   if(list->head->next == list->head)
       return NULL;
 
    else

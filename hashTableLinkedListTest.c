@@ -81,6 +81,29 @@ void* MyPayloadCreate()
    scanf("%s",payload->lname);
    return (void*) payload;
 }
+int myhashfunc(LH_hashTable* table, void * data)
+{
+   int slot = 0;
+   int rslot = 0;
+   int i = 1;
+   person* p = (person*) data;
+   slot = (p->id) % (kprimeCap(table->LH_primenums));
+   
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
+      return slot;
+   
+   else
+   {
+      rslot = (p->id) % (kprimehash2(table->LH_primenums));
+      do
+      {
+         slot = (slot + (i * rslot)) % (table->LH_capacity);   
+         i++;          
+      }while(!(LlistIsEmpty(table->LH_table[slot].LHN_list)));
+   }
+   return slot;
+}
+
 
 LlistNode* MySearch(Llist* list, void* payload)
 {

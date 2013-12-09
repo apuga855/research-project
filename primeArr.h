@@ -1023,12 +1023,18 @@ void kprimeInit(kprime* pr)
    return;
 }
 
+void kprimeFindhash2(kprime* pr)
+{
+   pr->hash2 = (pr->capslot) / 2; 
+   return;
+}
+
 int kprimeFindCap(int cap, kprime* pr)
 {
    if(cap > pr->maxnum)
    {
       printf("\nCapacity bigger than calculated primes, cannot continue\n");
-      return -1
+      return -1;
    }
    
     
@@ -1039,9 +1045,3 @@ int kprimeFindCap(int cap, kprime* pr)
    return pArr[pr->capslot];
 }
 
-void kprimeFindhash2(kprime* pr)
-{
-   int halfcap = pArr[pr->capslot]/3;
-   pr->hash2 = kprimeFindCap(halfcap,pr);    
-   return;
-}

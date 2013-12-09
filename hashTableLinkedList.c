@@ -199,14 +199,13 @@ LH_hashTable* LH_HashTableAlloc()
    hash->LH_primenums = kprimeAlloc();
    kprimeInit(hash->LH_primenums);
    kprimeFindCap(HASH_LENGTH, hash->LH_primenums);
-   hash->LH_capacity = kprimeCap(hash->primenums);
-   hash->LH_table = malloc(sizeof(LHN_hashNode) * LH_capacity);
-   while(i < kprimeCap(primenums))
+   hash->LH_capacity = kprimeCap(hash->LH_primenums);
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * hash->LH_capacity);
+   while(i < hash->LH_capacity)
    {
       hash->LH_table[i].LHN_list = LlistAlloc(BUFF_SIZE,NULL);
       i++;
    }
-   hash->LH_capacity = HASH_LENGTH;
    return hash;
 }
 
@@ -225,8 +224,8 @@ LH_hashTable* LH_HashTableAllocBuff(void* dataalloc)
    hash->LH_primenums = kprimeAlloc();
    kprimeInit(hash->LH_primenums);
    kprimeFindCap(HASH_LENGTH, hash->LH_primenums);
-   hash->LH_capacity = kprimeCap(hash->primenums);
-   hash->LH_table = malloc(sizeof(LHN_hashNode) * LH_capacity);
+   hash->LH_capacity = kprimeCap(hash->LH_primenums);
+   hash->LH_table = malloc(sizeof(LHN_hashNode) * hash->LH_capacity);
    while(i < hash->LH_capacity)
    {
       hash->LH_table[i].LHN_list = LlistAlloc(BUFF_SIZE, dataalloc);
@@ -273,8 +272,8 @@ int LH_HashTableDel(LH_hashTable* tab)
   free(tab->LH_table);
   tab->LH_table = NULL;
   printf("\nFreeing the primenums struct\n");
-  free(tab->primenums);
-  tab->primenums = NULL;
+  free(tab->LH_primenums);
+  tab->LH_primenums = NULL;
   printf("\nFreeing the structure\n");
   free(tab);
   tab = NULL; 
@@ -297,7 +296,7 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
    hash->LH_primenums = kprimeAlloc();
    kprimeInit(hash->LH_primenums);
    kprimeFindCap(cap, hash->LH_primenums);
-   hash->LH_capacity = kprimeCap(hash->primenums);
+   hash->LH_capacity = kprimeCap(hash->LH_primenums);
    hash->LH_table = malloc(sizeof(LHN_hashNode) * hash->LH_capacity);
    while(i < hash->LH_capacity)
    {
