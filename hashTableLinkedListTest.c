@@ -272,6 +272,63 @@ int main()
       printf("\nSUCCESS AT LH_HASHTABLEDEL()\n");
    else
       printf("\nFAILURE AT LH_HASHTABLEDEL()\n"); 
-
+   
+   person *e = malloc(sizeof(person));
+   e->age = 11;
+   e->id = 451;
+   strncpy(e->name,"steve",20);
+   strncpy(e->lname,"kk",20);
+   
+   
+   person *f = malloc(sizeof(person));
+   f->age = 42;
+   f->id = 626;
+   strncpy(f->name,"cirno",20);
+   strncpy(f->lname,"tohou",20);
+   
+   person *g = malloc(sizeof(person));
+   g->age = 31;
+   g->id = 124;
+   strncpy(g->name,"harry",20);
+   strncpy(g->lname,"potter",20);
+   
+   person *h = malloc(sizeof(person));
+   h->age = 10;
+   h->id = 2;
+   strncpy(h->name,"yes",20);
+   strncpy(h->lname,"no",20);
+   
+   person *i = malloc(sizeof(person));
+   i->age = 50;
+   i->id = 333;
+   strncpy(i->name,"jackie",20);
+   strncpy(i->lname,"chan",20);
+   
+   person *j = malloc(sizeof(person));
+   j->age = 21;
+   j->id = 511;
+   strncpy(j->name,"john",20);
+   strncpy(j->lname,"van dam",20);
+   
+   person *k = malloc(sizeof(person));
+   k->age = 30;
+   k->id = 420;
+   strncpy(k->name,"snoop",20);
+   strncpy(k->lname,"dogg",20);
+   
+   szb = 10;
+   hashtable = LH_HashTableAllocSetBuff(szb, mydataalloc);
+   LH_hashFunc(hashtable, a, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, b, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, c, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, d, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, e, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, f, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, g, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, h, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, i, myhashfunc, mycopy,mydataalloc); 
+   LH_hashFunc(hashtable, j, myhashfunc, mycopy,mydataalloc);
+   LH_hashFunc(hashtable, k, myhashfunc, mycopy,mydataalloc);
+   
    return 0;
 }

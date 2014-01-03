@@ -181,6 +181,7 @@ void LHN_HashNodePrint(LHN_hashNode* hNode, void* dataprint)
       return;
    }
 
+   
    LlistPrint(hNode->LHN_list, dataprint);
    return;
 }
@@ -342,7 +343,7 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
             LH_keyGenerate func = keygen;
             int key = func(*hash, LlistRetFirst((*hash)->LH_table[i].LHN_list));
 //          if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
-            if(LHN_HashNodeCpy((*hash)->LH_table[i], nhash->LH_table[key], datacp, dataalloc))
+            if(LHN_HashNodeCpy((&((*hash)->LH_table[i])), (&(nhash->LH_table[key])), datacp, dataalloc))
                printf("\nSuccessful mapping\n");
             else
             {
@@ -363,7 +364,7 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
    }
    
    else
-      return NULL;
+      return 0;
 }
 
 //parameters: LH_hashTable* "hash"
