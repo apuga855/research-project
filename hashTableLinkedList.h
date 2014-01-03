@@ -55,7 +55,7 @@ void LH_HashTableInit(LH_hashTable*);
 //deletes the the entire hash table
 int LH_HashTableDel(LH_hashTable*);
 //rehash function for when we run out of space
-int LH_HashTableRehash(LH_hashTable*, void*, void*,void*);
+int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);
 long int LH_hash(LHN_hashNode*,LH_hashTable*);
 void LH_HashSet(LH_hashTable*, void*, void*, void*);
 int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);

@@ -248,7 +248,12 @@ void LH_HashTableInit(LH_hashTable* hash)
    return;
 }
 
-
+//parameters: LH_hashTable pointer "tab"            
+//returns:    1 if successful, 0 otherwise
+//=================================================
+//This function deletes the entire hash tableone node at a time
+//then deleting the table, then deleting the primenums structure
+//and finally deleting the structure itself
 int LH_HashTableDel(LH_hashTable* tab)
 {
   int i = 0;
@@ -306,25 +311,38 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
    return hash;
 }
 
-
-int LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc, void * keygen)
+//parameters: LH_hashTable** "hash"
+//            void* "datacp"
+//            void* "dataalloc"
+//            void* "keygen"
+//returns:    a pointer to a rehashed table or NULL otherwise
+//======================================================================================
+//this function is in charge of rehashing the elements in the structure. First it checks
+//the loading factor to figure out if the rehashing is even needed. If so, a new
+//hashtable is allocated with capacity being twice as much as the previous one using
+//the LH_HashTableAllocSetBuff function using the user defined dataalloc function.
+//Then the function loops from the first node to the last node rehashing every single element
+//using the keygen user defined function pointer. The function returns a slot, the slot
+//is then used to copy the hashnode 
+int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void * keygen)
 {
-   double result = (double)(hash->LH_counter / hash->LH_capacity); 
-   if(result > hash->LH_loadFactor)
+   double result = (double)((*hash)->LH_counter / (*hash)->LH_capacity); 
+   if(result > (*hash)->LH_loadFactor)
    {
       int i = 0;
-      LH_hashTable* nhash = LH_HashTableAllocSetBuff(hash->LH_capacity * 2, dataalloc);
-
-      while(i < hash->LH_capacity)
+      LH_hashTable* nhash = LH_HashTableAllocSetBuff((*hash)->LH_capacity * 2, dataalloc);
+      
+      while(i < (*hash)->LH_capacity)
       {
-         if(LlistIsEmpty(hash->LH_table[i].LHN_list))
+         if(LlistIsEmpty((*hash)->LH_table[i].LHN_list))
             continue;
 
          else       
          {
             LH_keyGenerate func = keygen;
-            int key = func(hash, LlistRetFirst(hash->LH_table[i].LHN_list));
-            if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
+            int key = func(*hash, LlistRetFirst((*hash)->LH_table[i].LHN_list));
+//          if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
+            if(LHN_HashNodeCpy((*hash)->LH_table[i], nhash->LH_table[key], datacp, dataalloc))
                printf("\nSuccessful mapping\n");
             else
             {
@@ -334,22 +352,37 @@ int LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc, void *
          }   
       }
 
-      nhash->LH_counter = hash->LH_counter;
-      
+      nhash->LH_counter = (*hash)->LH_counter;
+      if(LH_HashTableDel(*hash))
+         printf("\nSUCCESS DELETING OLD HASH TABLE\n");
+      else
+         printf("\nThere was a problem deleting the old hash table\n");
+
+      *hash = nhash;
       return 1;
    }
    
    else
-      return 0;
+      return NULL;
 }
 
+//parameters: LH_hashTable* "hash"
+//            void* "data"
+//            void* "keygen"
+//            void* "datacp"
+//            void "dataalloc"
+//returns:    1 if true, 0 if false
+//======================================================================================
+//this function is in charge of calling the hashing function created by the user and then
+//inserting data in the correct slot using the slot obtained by the keygen function
+//if needing to rehash it rehashes.
 int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, void * dataalloc)
 {
    double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
    if(result > hash->LH_loadFactor)
    {
       printf("\nRehashing\n");
-      if(LH_HashTableRehash(hash,datacp,dataalloc,keygen))
+      if(LH_HashTableRehash(&hash,datacp,dataalloc,keygen))
          printf("\nRehashing SUCCESSFUL\n");
       else
       {
@@ -358,11 +391,14 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
       }
    }
    
-   LH_keyGenerate func = keygen;
-   int key = func(hash,data);
-   
-   if(LlistInsData(hash->LH_table[key].LHN_list, data))
-      return 1;
    else
-       return 0;   
+   {
+      LH_keyGenerate func = keygen;
+      int key = func(hash,data);
+   
+      if(LlistInsData(hash->LH_table[key].LHN_list, data))
+         return 1;
+      else
+         return 0;   
+   }
 }

@@ -1002,11 +1002,28 @@ int pArr[] = {2,3,5,7,11,13,17,19,23,29,
 104549,104551,104561,104579,104593,104597,104623,104639,104651,104659,
 104677,104681,104683,104693,104701,104707,104711,104717,104723,104729};
 
+//parameters: Nothing
+//returns: kprime pointer
+//=================================================================
+//allocates a kprime structure
 kprime* kprimeAlloc(){return ((kprime*)(malloc(sizeof(kprime))));}
+
+//parameters: kprime pointer "pr"
+//returns: prime number in the structure called capslot
+//=================================================================
+//returns the prime number corresponding to the capslot index
 int kprimeCap(kprime* pr){return pArr[pr->capslot];}
+
+//parameters: kprime pointer "pr"
+//returns: prime number in the structure called hash2
+//=================================================================
+//returns the corresponding prime number for the hash2 index
 int kprimehash2(kprime* pr){return pArr[pr->hash2];}
 
-
+//parameters: kprime pointer "pr"
+//returns: Nothing
+//=================================================================
+//initializes the kprime structure
 void kprimeInit(kprime* pr)
 {
    pr->maxnum = 104729;
@@ -1015,12 +1032,24 @@ void kprimeInit(kprime* pr)
    return;
 }
 
+//parameters: kprime pointer "pr"
+//returns: Nothing
+//=================================================================
+//find the hash2 slot dividing the capslot by 2
 void kprimeFindhash2(kprime* pr)
-{
+{  
+   if(pr->capslot == 0)
+      return;
+
    pr->hash2 = (pr->capslot) / 2; 
    return;
 }
 
+//parameters: int "cap"
+//	      kprime pointer "pr"
+//returns: returns prime number, -1 otherwise
+//=================================================================
+//finds the closest prime number corresponding to the desired capacity
 int kprimeFindCap(int cap, kprime* pr)
 {
    if(cap > pr->maxnum)

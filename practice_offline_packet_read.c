@@ -24,8 +24,8 @@
 //need to typedef it knows its a type
 typedef struct _sensorRdyPckt
 {
-   int SRD_pld_len;			//payload length
-   int SRD_hdr_len;			//header length
+   unsigned int SRD_pld_len;			//payload length
+   unsigned int SRD_hdr_len;			//header length
    int SRD_id;				//I am probably going to place the parsed packets in a hash table, so I am placing an ID just in case
    uint32_t SRD_sqnsnum;		//sequence number
    uint32_t SRD_src_addr;		//source address	
