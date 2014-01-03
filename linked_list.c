@@ -16,6 +16,7 @@
 #pragma once
 #include"linked_list.h"
 #include<stdio.h>
+
 //parameters:	void pointer "data" to allocated data of your type
 //returns: 	LlistNode pointer
 //================================================================
@@ -99,7 +100,6 @@ int LlistNodeDel(LlistNode *node)
    node = NULL;
    return 1;
 }
-
 
 //parameters: LlistNode* "src" pointing to data you want to copy
 //			       to another node
@@ -213,6 +213,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
    printf("\nThe value of nlist->length is %d\n",nList->length);
    return nList;
 }
+
 //parameters:	Llist* "list" pointing to an allocated list
 //		void** "dataArr" array of void pointers pointing
 //				 to data you want in your Llist
@@ -248,6 +249,7 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
    list->used = arrLen;  
    return 1; 
 }
+
 //parameters:	Llist* "list" pointing to an allocated list
 //returns:	1 if successfull, 0 if failed
 //==========================================================
@@ -372,6 +374,11 @@ int LlistDelNodeTarget(LlistNode *node,Llist *list)
       return 0;
 }
 
+//parameters: Llist* "list"
+//	      void* "data"
+//returns: 1 if successfull 0 otherwise
+//============================================================
+//inserts data into the list using the "used" variable
 int LlistInsData(Llist* list, void* data)
 {
    if(LlistFail(list))
@@ -580,7 +587,13 @@ int LlistFail(Llist *list)
       return 0;
    }
 }
-//printing all members of the list
+
+//parameters: Llist* "list"
+//            void* "printNode"
+//return: Nothing
+//=======================================================
+//prints the list using the printNode function pointer, uses
+//it in every single node in the list
 void LlistPrint(Llist* list, void* printNode)
 {
    if(LlistFail(list))
@@ -609,6 +622,15 @@ void LlistPrint(Llist* list, void* printNode)
    return;
 }
 
+//parameters: Llist* "list"
+//            void* "searchFunc"
+//            void* "payload"
+//	      int "override"
+//return: LlistNode* of list wanted, NULL otherwise
+//=======================================================
+//searches the list using a set of predefined patterns or overrides going directly
+//to the search method. Override 0 shows the searches, override 1 searches based on 
+//an entered number, override 2 searches using a function that you created 
 LlistNode* LlistSearchNode(Llist* list, void* searchFunc, void* payload, int override)
 {
    int i = -1;
@@ -671,6 +693,16 @@ LlistNode* LlistSearchNode(Llist* list, void* searchFunc, void* payload, int ove
    }
 }
 
+//parameters: Llist* "list"
+//            void* "func"
+//            void* "printfunc"
+//	      void* "payload"
+//            int "override"
+//return: 1 if list failed, 0 if it did not fail
+//=======================================================
+//This function deletes members of the list, override 0 shows menu, override 1
+//uses an integer entered to delete a node, override 2 uses a defined search function,
+//override 3 traverses the list one by one, deletes node on demand, 0 is to exit;
 int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int override)
 {
    int i = override;
@@ -680,7 +712,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
              "1. Use an iteger to delete a node\n"
              "2. Use a user defined search function to delete a node\n"
              "3. Traverse the linked list, delete if wanted\n"
-             "0/else. exit\n\n\n"
+             "0. Exit\n\n\n"
             );
       scanf("%d",&i);
    }
@@ -742,7 +774,10 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
    }
 }
 
-
+//parameters: Llist* "list"
+//return: 1 if true, 0 if false
+//=======================================================
+//checks if list is empty
 int LlistIsEmpty(Llist* list)
 {
    if(list->used > 0)
@@ -752,6 +787,10 @@ int LlistIsEmpty(Llist* list)
       return 1;
 }
 
+//parameters: Llist* "list"
+//return: void*
+//=======================================================
+//returns the first element in the list, for rehashing purposes
 void* LlistRetFirst(Llist* list)
 {
    if(list->head->next == list->head)
