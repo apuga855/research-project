@@ -156,6 +156,9 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
    if(node->root == 1)
       return;
    
+   if(node->data == NULL)
+      return;
+    
    LlistNodePrintData func = dataprint;
    func(node->data);
    return;
@@ -176,7 +179,7 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
 //to remember the node will just have a null pointer for data
 Llist * LlistAlloc(int size, void* dataalloc)
 {
-   printf("the size is %d\n",size);
+   //printf("the size is %d\n",size);
    if(size < 0)
    {
       printf("\nsize was less than 0\n\n");
@@ -185,10 +188,16 @@ Llist * LlistAlloc(int size, void* dataalloc)
    int i = 0;
    Llist* nList = malloc(sizeof(Llist));
    nList->head = malloc(sizeof(LlistNode));
+   
+   //this was added 
+   LlistInit(nList);
+
+   /*
    if(LlistInit(nList))
       printf("\nList was correctly initialized\n");
    else
       printf("\nList failed to be correctly initialized\n");   
+   */
 
    while(i < size)
    {  
@@ -198,7 +207,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
          data = func();
       if(LlistInsNode(nList, data))
       {
-         printf("\nList added a node correctly\n\n");
+         //printf("\nList added a node correctly\n\n");
          i++;
       }
       else
@@ -210,7 +219,7 @@ Llist * LlistAlloc(int size, void* dataalloc)
    
    nList->length = size;
    nList->used = 0;
-   printf("\nThe value of nlist->length is %d\n",nList->length);
+   //printf("\nThe value of nlist->length is %d\n",nList->length);
    return nList;
 }
 
@@ -281,14 +290,14 @@ int LlistInit(Llist *list)
 //list and exit successfully
 int LlistDel(Llist *list)
 {
-   printf("\nInside of LlistDel\n");
+   //printf("\nInside of LlistDel\n");
    if(LlistFail(list))
       return 0;
    LlistNode * start = list->head;
    LlistNode * current = list->head->next;
    while(start != current)
    {
-      printf("\ndeleting a node\n");
+      //printf("\ndeleting a node\n");
       start->next = current->next;
       if(LlistNodeDel(current))
          current = start->next;
@@ -583,7 +592,7 @@ int LlistFail(Llist *list)
    }
    else
    {
-      printf("The List passed the test\n\n");
+      //printf("The List passed the test\n\n");
       return 0;
    }
 }
@@ -609,7 +618,7 @@ void LlistPrint(Llist* list, void* printNode)
    traverse = list->head;
    printf("\nstarting at the head\n");
    LlistNodePrint(traverse, printNode);
-   while(i < list->length)
+   while(i < list->length && list->used != 0 && list->used > 0 && list->used > i)
    { 
       traverse = traverse->next;
       LlistNodePrint(traverse, printNode);

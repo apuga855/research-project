@@ -334,7 +334,42 @@ int main()
    LH_hashFunc(hashtable, j, myhashfunc, mycopy,mydataalloc);
    LH_hashFunc(hashtable, k, myhashfunc, mycopy,mydataalloc);
    
+   LHN_hashNode* testarrcp = LHN_HashNodeDataAlloc(10,mydataalloc);
+   LHN_hashNode* testingnode = LHN_HashNodeDataAlloc(1,mydataalloc);
+   LHN_HashNodeIns(testarrcp, (void*)a);
+   LHN_HashNodeIns(testarrcp, (void*)b);
+   LHN_HashNodeIns(testarrcp, (void*)c);
+   LHN_HashNodeIns(testarrcp, (void*)d);
+   LHN_HashNodeIns(testarrcp, (void*)e);
+   LHN_HashNodeIns(testarrcp, (void*)f);
+   LHN_HashNodeIns(testarrcp, (void*)g);
+   LHN_HashNodeIns(testarrcp, (void*)h);
+   LHN_HashNodeIns(testarrcp, (void*)i);
+   LHN_HashNodeIns(testarrcp, (void*)j);
+   LHN_HashNodeIns(testarrcp, (void*)k);
+
+   a->age = 22;
+   a->id = 11;
+   b->age = 33;
+   b->id = 22;
+   c->age = 44;
+   c->id = 33;
+   
    printf("\nprinting rehash\n");
    LH_HashTablePrint(hashtable,printPerson);
+   
+   printf("\nPrinting the source\n");
+   LHN_HashNodePrint(testarrcp,printPerson); 
+   printf("\nPrinting the testing node\n");
+   LHN_HashNodePrint(testingnode,printPerson); 
+   
+   LHN_HashNodeCpy(testarrcp, testingnode, mycopy,mydataalloc); 
+
+   printf("\nPrinting the source AFTER THE COPY\n");
+   LHN_HashNodePrint(testarrcp,printPerson); 
+   printf("\nPrinting the testing node AFTER THE COPY\n");
+   LHN_HashNodePrint(testingnode,printPerson); 
+   
+
    return 0;
 }

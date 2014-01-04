@@ -260,7 +260,7 @@ int LH_HashTableDel(LH_hashTable* tab)
   int i = 0;
   while(i < tab->LH_capacity)
   {
-     printf("i = %d capacity = %lu\n",i,tab->LH_capacity);
+     //printf("i = %d capacity = %lu\n",i,tab->LH_capacity);
      if(LHN_HashNodeDel(&tab->LH_table[i]))
      {
         i++;

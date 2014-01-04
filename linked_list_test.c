@@ -94,17 +94,17 @@ void* MyPayloadCreate()
 LlistNode* MySearch(Llist* list, void* payload)
 {
    person* currentPerson = NULL;
-   person* target = (person)payload;
+   person* target = (person*)payload;
    LlistNode* current = NULL;
    current = list->head->next;
    while(current != list->head)
    {
-      currentPerson = (person)current->data;
+      currentPerson = (person*)current->data;
       if(strncmp(currentPerson->name,target->name,20)   &&
          strncmp(currentPerson->lname,target->lname,20) == 0)
         {
            int i = 0;
-           printf("Found:\n")
+           printf("Found:\n");
            printPerson(currentPerson);
            printf("\nIs this the correct person or would you like to keep looking?\n"
                    "Press 0 to quit and 1 to keep looking\n");
