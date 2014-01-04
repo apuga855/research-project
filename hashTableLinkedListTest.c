@@ -50,9 +50,9 @@ void printPerson(person* per)
 
 void mycopy(void* src, void* dst)
 {
-   printf("\ninside of function mycopy\n");
-   printf("\nsrc address is %p\n",src);
-   printf("\ndst address is %p\n",dst);
+   //printf("\ninside of function mycopy\n");
+   //printf("\nsrc address is %p\n",src);
+   //printf("\ndst address is %p\n",dst);
    person* srcStc = (person*)src;
    person* dstStc = (person*)dst;
    printPerson(srcStc);
@@ -60,7 +60,7 @@ void mycopy(void* src, void* dst)
    dstStc->id = srcStc->id;
    strncpy(dstStc->name, srcStc->name,20);
    strncpy(dstStc->lname, srcStc->lname,20);
-   printf("\nfinished function mycopy\n");
+   //printf("\nfinished function mycopy\n");
    printPerson(dstStc);
    return;
 }
