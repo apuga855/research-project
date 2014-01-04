@@ -89,6 +89,8 @@ int myhashfunc(LH_hashTable* table, void * data)
    person* p = (person*) data;
    slot = (p->id) % (kprimeCap(table->LH_primenums));
    
+   printf("\nAttempting to hash %s\n",p->name);
+   
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
       return slot;
    
@@ -99,7 +101,7 @@ int myhashfunc(LH_hashTable* table, void * data)
       {
          slot = (slot + (i * rslot)) % (table->LH_capacity);   
          i++;          
-      }while(!(LlistIsEmpty(table->LH_table[slot].LHN_list)));
+      }while(LlistIsEmpty(table->LH_table[slot].LHN_list));
    }
    return slot;
 }
@@ -316,6 +318,8 @@ int main()
    strncpy(k->name,"snoop",20);
    strncpy(k->lname,"dogg",20);
    
+   printf("\nTesting rehash\n");
+   scanf("%lu", &szb);
    szb = 10;
    hashtable = LH_HashTableAllocSetBuff(szb, mydataalloc);
    LH_hashFunc(hashtable, a, myhashfunc, mycopy,mydataalloc); 
@@ -330,5 +334,7 @@ int main()
    LH_hashFunc(hashtable, j, myhashfunc, mycopy,mydataalloc);
    LH_hashFunc(hashtable, k, myhashfunc, mycopy,mydataalloc);
    
+   printf("\nprinting rehash\n");
+   LH_HashTablePrint(hashtable,printPerson);
    return 0;
 }

@@ -403,3 +403,21 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
          return 0;   
    }
 }
+
+void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
+{
+   if(dataprint == NULL)
+   {
+      printf("\nError passing the printing function\n");
+      return;
+   }
+   
+   int i = 0;
+   while(i < table->LH_capacity)
+   {
+      LHN_HashNodePrint(&(table->LH_table[i]), dataprint);
+      i++;
+   }
+   
+   return;
+}
