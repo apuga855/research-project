@@ -1,6 +1,3 @@
-
-
-
 //starting from here, is all necessary materials and tools for ---------------------
 //packet capture without reasembly
 //need to typedef it knows its a type
