@@ -1,3 +1,8 @@
+/*
+overlord thread launches
+overlord launches all other threads
+overlord resumes caller thread so all threads are ready to continue
+*/
 #include <pthread.h>
 #include <semaphore.h>
 #include <stdio.h>
@@ -17,6 +22,7 @@
 
 
 #define SEMAPHORE_NUM 1
+#define WORKER_NUM 10
 int semid;
 int semnum = 1;
 char pathname[200];
@@ -87,34 +93,101 @@ int main()
       
 }
 
+/*
+===================|
+Overlord Thread    |
+===================|
+-Overlord thread is passed a pointer to am array with two slots
+ 	slot 0 = id of calling process
+  	slot 1 = signal to send to calling process/thread as an integer
+		 will be processed to the correct signal in the thread
+
+-Caller process or thread suspends self waits for signal passed to overlord thread
+-Overlord launches workers, cleanup, packing thread and shared memory segment
+-After all threads are ready, the overlord sends the signal back to the 
+ main thread or process and notifies everything is ready
+
+COMMUNICATION BETWEEN THREADS
+---------------------------------
+THREAD |to|  THREAD  |  SIGNAL  |
+---------------------------------
+PACKING ->  OVERLORD =  SIGUSR1 |
+WORKER	->  CLEANUP  =  SIGUSR1 |      
+CLEANUP ->  OVERLORD =  SIGUSR2 |
+OVERLORD->  WORKER   =  SIGUSR1 |
+OVERLORD->  MAIN     =  SIGUSR2 |
+MAIN    -> OVERLORD  = "userdef"|
+---------------------------------
+
+
+
+*/
 void* overlord(void* msg)
 {
-   overlordID = getpid(); 
-   char overlordbuf[100];
-   
-   overlordfd = open("overlord.log", O_CREAT | O_WRONLY | O_TRUC, 0600);
-   if(overlordfd < 0)
+   int i = 0;
+   int * payloard = msg;		//array with pid of calling thread and 
+   overlordID = getpid();		//getting pid into the global pid variable 
+   char overlordbuf[100];		//creating a bugger
+   pthread_t packing;   		//packing thread
+   pthread_t cleanup;			//cleanup thread
+   pthread_t workers[WORKER_NUM];	//worker threads
+    
+   overlordfd = open("overlord.log", O_CREAT | O_WRONLY | O_TRUC, 0600);//opening file
+   if(overlordfd < 0)			//if file failed ot open
    {
-      perror("opening outfile for overlord\n");
+      perror("Failed opening outfile for overlord\n");
       exit(0);
    }
    
-   strcpy(overlordbuf,"Created overlord\n\n");
+   strcpy(overlordbuf,"Created overlord\n\n");	//printing out message		
    write(overlordfd, overlordbuf, strlen(overlordbuf));
    
-   getcwd(pathname,200);
+   getcwd(pathname,200);		//creating a key for the semaphores
    strcat(pathname, "foo/");
    ipckey = ftok(pathname,42);
-   semid = semget(ipckey, semnum, 0666 | IPC_CREAT); 
-   if(semid < 0)
+   semid = semget(ipckey, semnum, 0666 | IPC_CREAT);
+ 
+   if(semid < 0)			//checking if the semaphore id was created
    {
       perror("Failed creating the semaphore\n");
       _exit(1);
    }   
-   strcpy(overlordbuf,"Semaphores were correctly created\nGoing to sleep\n");
+
+   strcpy(overlordbuf,"Semaphores were correctly created\nLaunching other threads:\n");//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
    
-   kill(overlordID,SIGSTOP);
+   strcpy(overlordbuf,"Launching Packing Thread...\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
+   if(pthread_create(&packing, NULL, packing, NULL))	//launching packing thread
+   {
+      strcpy(overlordbuf,"***ERROR LAUNCHING PACKING THREAD***\n");//printing message
+      write(overlordfd, overlordbuf, strlen(overlordbuf));
+   }
+
+
+   strcpy(overlordbuf,"Launching Cleanup Thread...\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
+   if(pthread_create(&packing, NULL, cleanup, NULL))	//launching cleanup
+   {
+      strcpy(overlordbuf,"***ERROR LAUNCHING CLEANUP THREAD***\n");//printing message
+      write(overlordfd, overlordbuf, strlen(overlordbuf));
+   }
+
+
+   strcpy(overlordbuf,"Launching ALL Worker Threads...\n");//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));	
+   for(i = 0; i < WORKER_NUM; i++)			//launching worker thread
+   {
+      if(pthread_create(&packing, NULL, worker, NULL))
+      {
+         strcpy(overlordbuf,"***ERROR LAUNCHING ONE OF THE PACKING THREAD***\n");//printing message
+         write(overlordfd, overlordbuf, strlen(overlordbuf));
+      } 
+   }
+
+
+   kill(overlordID,SIGSTOP);	//stop self
+
    strcpy(overlordbuf,"Overlord woke up!\n\n");
    write(overlordfd, overlordbuf, strlen(overlordbuf)); 
 
