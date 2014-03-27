@@ -37,60 +37,84 @@ int overlordfd;
 int cleanupfd;
 int packingfd;
 
+void intToSigStrict(int, sigset_t *);
+void printSigStrict();
+
+typedef struct overlordPayload
+{
+   pid_t id;
+   sigset_t sig;
+}_overlordPayload;
 
 int main()
 {
-   pthread_t overlordThrd;
-   pthread_t cleanupThrd;
-   pthread_t packingThrd;
-   char mainbuf[100];
-   int check = 0; 
+   overlordPayload payload;
+   pthread_t overlord;
+   pid_t main = getpid();		//main pid
+   payload.id = main;
+   char mainbuf[100];			//main buffer
+   int check = 0;
+   int input = 0; 			
       
-   mainfd = open("main.log", O_CREAT | O_WRONLY | O_TRUC, 0600);
-   if(mainfd < 0)
+   mainfd = open("main.log", O_CREAT | O_WRONLY | O_TRUC, 0600);//opening up logfile
+   if(mainfd < 0)			//checking for success
    {
       perror("opening outfile for overlord\n");
-      exit(0);
+      EXIT_FAILURE;
    }
    
-   strcpy(mainbuf,"Starting the multithreading simulation\n\n");
+   strcpy(mainbuf,"Starting the multithreading simulation\n\n");//simulation starting
    write(mainfd, mainbuf, strlen(mainbuf));
    
-   strcpy(mainbuf,"Launching threads\n");
+   printSigStrict();   
+   strcpy(mainbuf,"Please enter the signal to wake the main process up\n");//simulation starting
    write(mainfd, mainbuf, strlen(mainbuf));
+   scanf("%d", &payload);
    
-   check = pthread_create(&overlordThrd, NULL, overlord, (void*)"Overlord launching");
-   if(check)
+   if(intToSigStrict(input, &payload))
    {
-      strcpy(mainbuf,"ERROR LAUNCHING OVERLORD\n");
+      strcpy(mainbuf,"Successful add of signal\n");//simulation starting
       write(mainfd, mainbuf, strlen(mainbuf));
-      exit(-1);
    }
+   
+   else
+   {
+      strcpy(mainbuf,"***ERROR ADDING SIGNAL***\n");//simulation starting
+      write(mainfd, mainbuf, strlen(mainbuf));
+      EXIT_FAILURE;
+   }
+   
+   strcpy(mainbuf,"Launching overlord thead...\n");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   
+//================overlord thread block=====================================
+   strcpy(mainbuf,"Overlord Packing Thread...\n");	//printing message
+   write(mainfd, mainbuf, strlen(mainbuf));
+   if(pthread_create(&overlord, NULL, overlord, NULL))	//launching packing thread
+   {
+      strcpy(mainbuf,"***ERROR LAUNCHING OVERLORD THREAD***\n");//printing message
+      write(mainfd, mainbuf, strlen(mainbuf));
+   }
+   strcpy(mainbuf,"SUCCESSFUL AT LAUNCHING OVERLORD THREAD\n");	//printing message
+   write(mainfd, mainbuf, strlen(mainbuf));
+//================end packing thread block=====================================
 
-   check = pthread_create(&cleanupThrd, NULL, overlord, (void*)"Cleanup launching");
-   if(check)
+   
+   if(close(mainfd))
    {
-      strcpy(mainbuf,"ERROR LAUNCHING CLEANUP \n");
-      write(mainfd, mainbuf, strlen(mainbuf));
-      exit(-1);
+      strcpy(mainbuf,"ERROR CLOSING\n");
+      write(stdin,mainbuf, strlen, mainbuf);
+      EXIT_FAILURE;
    }
-
-   check = pthread_create(&packingThrd, NULL, overlord, (void*)"Packing launching");
-   if(check)
+   
+   else
    {
-      strcpy(mainbuf,"ERROR LAUNCHING PACKING\n");
-      write(mainfd, mainbuf, strlen(mainbuf));
-      exit(-1);
+      strcpy(mainbuf,"SUCCESSFUL COMPLETION OF TEST\n");
+      write(stdin,mainbuf, strlen, mainbuf);
+      EXIT_SUCCESS;    
    }
-    
-   strcpy(mainbuf,"Finished launching threads, waking up overlord\n");
-   write(mainfd, mainbuf, strlen(mainbuf));
-   kill(overlordID, SIGCONT); 
-   strcpy(mainbuf,"Main thread going to sleep so the overlord can set up\n");
-   write(mainfd, mainbuf, strlen(mainbuf));
-   sleep(3);
-    
-      
+   
+   
 }
 
 /*
@@ -155,7 +179,8 @@ void* overlord(void* msg)
 
    strcpy(overlordbuf,"Semaphores were correctly created\nLaunching other threads:\n");//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
-   
+
+//================packing thread block=====================================
    strcpy(overlordbuf,"Launching Packing Thread...\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
    if(pthread_create(&packing, NULL, packing, NULL))	//launching packing thread
@@ -163,8 +188,11 @@ void* overlord(void* msg)
       strcpy(overlordbuf,"***ERROR LAUNCHING PACKING THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
    }
+   strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING PACKING THREAD\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
+//================end packing thread block=====================================
 
-
+//================cleanup thread block=====================================
    strcpy(overlordbuf,"Launching Cleanup Thread...\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
    if(pthread_create(&packing, NULL, cleanup, NULL))	//launching cleanup
@@ -172,8 +200,11 @@ void* overlord(void* msg)
       strcpy(overlordbuf,"***ERROR LAUNCHING CLEANUP THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
    }
+   strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
+//================end cleanup thread block=====================================
 
-
+//================worker thread block=====================================
    strcpy(overlordbuf,"Launching ALL Worker Threads...\n");//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));	
    for(i = 0; i < WORKER_NUM; i++)			//launching worker thread
@@ -184,7 +215,12 @@ void* overlord(void* msg)
          write(overlordfd, overlordbuf, strlen(overlordbuf));
       } 
    }
-
+   strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
+//================end worker thread block=====================================
+   
+   strcpy(overlordbuf,"All threads launched successfully\nSignaling caller\n");	//printing message
+   write(overlordfd, overlordbuf, strlen(overlordbuf));
 
    kill(overlordID,SIGSTOP);	//stop self
 
@@ -270,4 +306,73 @@ void * cleanup(void* msg)
    }
 
    
+}
+
+//only strict signals
+int intToSigAddStrict(int sig, sigset_t * mask)
+{
+   switch(sig)
+   {
+      case 1:
+         sigaddset(mask, SIGHUP);
+         break;
+      case 2:
+         sigaddset(mask, SIGINT);
+         break;
+      case 3:
+         sigaddset(mask, SIGQUIT);
+         break;
+      case 4:
+         sigaddset(mask, SIGILL);
+         break;
+      case 6:
+         sigaddset(mask, SIGABRT);
+         break;
+      case 8:
+         sigaddset(mask, SIGFPE);
+         break;
+      case 11:
+         sigaddset(mask, SIGSEGV);
+         break;
+      case 13:
+         sigaddset(mask, SIGPIPE);
+         break;
+      case 14:
+         sigaddset(mask, SIGALRM);
+         break;
+      case 15:
+         sigaddset(mask, SIGTERM);
+         break;
+      default:
+         return 0;
+   }
+   return 1;
+}
+
+void printSigStrict()
+{
+   printf("=======================\n");
+   printf("|SIGNAL NAME | NUMBER |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGHUP   |    1   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGINT   |    2   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGQUIT  |    3   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGILL   |    4   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGABRT  |    6   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGFPE   |    8   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGSEGV  |   11   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGPIPE  |   13   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGALRM  |   14   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGTERM  |   15   |\n");
+   printf("=======================\n");
+   return;
 }
