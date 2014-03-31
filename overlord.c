@@ -36,61 +36,115 @@ int mainfd;
 int overlordfd;
 int cleanupfd;
 int packingfd;
-
-void intToSigStrict(int, sigset_t *);
+int success;
+int MAINFD;
+int intToSigStrict(int,  sigset_t *);
 void printSigStrict();
+void successHandle(int);
+void failureHandle(int);
+char handlerbuf[100];			//main buffer
 
-typedef struct overlordPayload
+
+typedef struct _overlordPayload
 {
    pid_t id;
-   sigset_t sig;
-}_overlordPayload;
+   sigset_t sigS;
+   sigset_t sigF;
+} overlordPayload;
 
 int main()
 {
+   struct sigaction successAction;
+   struct sigaction failureAction;
    overlordPayload payload;
    pthread_t overlord;
    pid_t main = getpid();		//main pid
    payload.id = main;
    char mainbuf[100];			//main buffer
    int check = 0;
-   int input = 0; 			
-      
-   mainfd = open("main.log", O_CREAT | O_WRONLY | O_TRUC, 0600);//opening up logfile
+   int inputS = 0; 			
+   int inputF = 0; 			   
+   
+   mainfd = open("main.log", O_CREAT | O_WRONLY | O_TRUNC, 0600);//opening up logfile
    if(mainfd < 0)			//checking for success
    {
       perror("opening outfile for overlord\n");
       EXIT_FAILURE;
    }
-   
+   MAINFD = mainfd;
    strcpy(mainbuf,"Starting the multithreading simulation\n\n");//simulation starting
    write(mainfd, mainbuf, strlen(mainbuf));
    
-   printSigStrict();   
-   strcpy(mainbuf,"Please enter the signal to wake the main process up\n");//simulation starting
+   printSigStrict();
+   printf("Please enter the signal to wake the main process up with a SUCCESS\n");   
+   strcpy(mainbuf,"Please enter the signal to wake the main process up with a SUCCESS\n");//simulation starting
    write(mainfd, mainbuf, strlen(mainbuf));
-   scanf("%d", &payload);
-   
-   if(intToSigStrict(input, &payload))
+   scanf("%d", &inputS);
+   printSigStrict();   
+   printf("Please enter the signal to wake the main process up with a FAILURE\n");   
+   strcpy(mainbuf,"Please enter the signal to wake the main process up with a FAILURE\n");//simulation starting
+   write(mainfd, mainbuf, strlen(mainbuf));
+   scanf("%d", &inputF);
+   if(inputS == inputF)
    {
-      strcpy(mainbuf,"Successful add of signal\n");//simulation starting
+      strcpy(mainbuf,"Gave same signals for SUCCESS and FAILURE, exiting\n");//simulation starting
+      write(mainfd, mainbuf, strlen(mainbuf));
+      EXIT_FAILURE;
+   }
+      
+   if(intToSigAddStrict(inputS, &(payload.sigS)))
+   {
+      strcpy(mainbuf,"Successful addition of SUCCESS signal\n");
       write(mainfd, mainbuf, strlen(mainbuf));
    }
    
    else
    {
-      strcpy(mainbuf,"***ERROR ADDING SIGNAL***\n");//simulation starting
+      strcpy(mainbuf,"***ERROR ADDING SIGNAL***\n");
+      write(mainfd, mainbuf, strlen(mainbuf));
+      EXIT_FAILURE;
+   }
+
+   if(intToSigAddStrict(inputF, &(payload.sigF)))
+   {
+      strcpy(mainbuf,"Successful addition of FAILURE signal\n");
+      write(mainfd, mainbuf, strlen(mainbuf));
+   }
+   
+   else
+   {
+      strcpy(mainbuf,"***ERROR ADDING SIGNAL***\n");
       write(mainfd, mainbuf, strlen(mainbuf));
       EXIT_FAILURE;
    }
    
+   strcpy(mainbuf,"Creating the sigactions\n");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   strcpy(mainbuf,"Success Setup...");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   successAction.sa_handler = successHandle;
+   successAction.sa_flags = SA_RESTART;
+   successAction.sa_mask = payload.sigS;
+   strcpy(mainbuf,"finished\n");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   strcpy(mainbuf,"Failure Setup...");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   successAction.sa_handler = failureHandle;
+   successAction.sa_flags = SA_RESTART;
+   successAction.sa_mask = payload.sigF;
+   strcpy(mainbuf,"finished\n");
+   write(mainfd, mainbuf, strlen(mainbuf));
+   
+   
+   
    strcpy(mainbuf,"Launching overlord thead...\n");
    write(mainfd, mainbuf, strlen(mainbuf));
    
+/*   
 //================overlord thread block=====================================
-   strcpy(mainbuf,"Overlord Packing Thread...\n");	//printing message
+   strcpy(mainbuf,"Overlord Overlord Thread...\n");	//printing message
    write(mainfd, mainbuf, strlen(mainbuf));
-   if(pthread_create(&overlord, NULL, overlord, NULL))	//launching packing thread
+   if(pthread_create(&overlord, NULL, overlord, (void*)(&payload)))	//launching packing thread
    {
       strcpy(mainbuf,"***ERROR LAUNCHING OVERLORD THREAD***\n");//printing message
       write(mainfd, mainbuf, strlen(mainbuf));
@@ -98,25 +152,106 @@ int main()
    strcpy(mainbuf,"SUCCESSFUL AT LAUNCHING OVERLORD THREAD\n");	//printing message
    write(mainfd, mainbuf, strlen(mainbuf));
 //================end packing thread block=====================================
-
+   strcpy(mainbuf,"Suspending until all threads are initialized\n");	//printing message
+   write(mainfd, mainbuf, strlen(mainbuf));
+*/ 
    
    if(close(mainfd))
    {
-      strcpy(mainbuf,"ERROR CLOSING\n");
-      write(stdin,mainbuf, strlen, mainbuf);
+      printf("Failed to properly close the file");
       EXIT_FAILURE;
    }
    
    else
    {
-      strcpy(mainbuf,"SUCCESSFUL COMPLETION OF TEST\n");
-      write(stdin,mainbuf, strlen, mainbuf);
+      printf("File closed properly");
       EXIT_SUCCESS;    
    }
-   
-   
 }
 
+//only strict signals
+int intToSigAddStrict(int sig, sigset_t * mask)
+{
+   sigfillset(mask);
+   switch(sig)
+   {
+      case 1:
+         sigdelset(mask, SIGHUP);
+         break;
+      case 2:
+         sigdelset(mask, SIGINT);
+         break;
+      case 3:
+         sigdelset(mask, SIGQUIT);
+         break;
+      case 4:
+         sigdelset(mask, SIGILL);
+         break;
+      case 6:
+         sigdelset(mask, SIGABRT);
+         break;
+      case 8:
+         sigdelset(mask, SIGFPE);
+         break;
+      case 11:
+         sigdelset(mask, SIGSEGV);
+         break;
+      case 13:
+         sigdelset(mask, SIGPIPE);
+         break;
+      case 14:
+         sigdelset(mask, SIGALRM);
+         break;
+      case 15:
+         sigdelset(mask, SIGTERM);
+         break;
+      default:
+         return 0;
+   }
+   return 1;
+}
+
+void printSigStrict()
+{
+   printf("=======================\n");
+   printf("|SIGNAL NAME | NUMBER |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGHUP   |    1   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGINT   |    2   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGQUIT  |    3   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGILL   |    4   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGABRT  |    6   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGFPE   |    8   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGSEGV  |   11   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGPIPE  |   13   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGALRM  |   14   |\n");
+   printf("|---------------------|\n");
+   printf("|   SIGTERM  |   15   |\n");
+   printf("=======================\n");
+   return;
+}
+
+void successHandle(int signum)
+{
+   strcpy(handlerbuf,"SUCCESSFUL SETUP OF THREADS!\n\n");//simulation starting
+   write(MAINFD, handlerbuf, strlen(handlerbuf));
+   success = 1;  
+}
+
+void failureHandle(int signum)
+{
+   strcpy(handlerbuf,"***ERROR STARTING THREADS***\n\n");//simulation starting
+   write(MAINFD, handlerbuf, strlen(handlerbuf));
+   success = 0;   
+}
 /*
 ===================|
 Overlord Thread    |
@@ -146,10 +281,11 @@ MAIN    -> OVERLORD  = "userdef"|
 
 
 */
+/*
 void* overlord(void* msg)
 {
    int i = 0;
-   int * payloard = msg;		//array with pid of calling thread and 
+   overlordPayload payload = msg;		//array with pid of calling thread and 
    overlordID = getpid();		//getting pid into the global pid variable 
    char overlordbuf[100];		//creating a bugger
    pthread_t packing;   		//packing thread
@@ -187,6 +323,7 @@ void* overlord(void* msg)
    {
       strcpy(overlordbuf,"***ERROR LAUNCHING PACKING THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
+      EXIT_FAILURE;
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING PACKING THREAD\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
@@ -199,6 +336,7 @@ void* overlord(void* msg)
    {
       strcpy(overlordbuf,"***ERROR LAUNCHING CLEANUP THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
+      EXIT_FAILURE;
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
@@ -213,6 +351,7 @@ void* overlord(void* msg)
       {
          strcpy(overlordbuf,"***ERROR LAUNCHING ONE OF THE PACKING THREAD***\n");//printing message
          write(overlordfd, overlordbuf, strlen(overlordbuf));
+         EXIT_FAILURE;
       } 
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
@@ -307,72 +446,4 @@ void * cleanup(void* msg)
 
    
 }
-
-//only strict signals
-int intToSigAddStrict(int sig, sigset_t * mask)
-{
-   switch(sig)
-   {
-      case 1:
-         sigaddset(mask, SIGHUP);
-         break;
-      case 2:
-         sigaddset(mask, SIGINT);
-         break;
-      case 3:
-         sigaddset(mask, SIGQUIT);
-         break;
-      case 4:
-         sigaddset(mask, SIGILL);
-         break;
-      case 6:
-         sigaddset(mask, SIGABRT);
-         break;
-      case 8:
-         sigaddset(mask, SIGFPE);
-         break;
-      case 11:
-         sigaddset(mask, SIGSEGV);
-         break;
-      case 13:
-         sigaddset(mask, SIGPIPE);
-         break;
-      case 14:
-         sigaddset(mask, SIGALRM);
-         break;
-      case 15:
-         sigaddset(mask, SIGTERM);
-         break;
-      default:
-         return 0;
-   }
-   return 1;
-}
-
-void printSigStrict()
-{
-   printf("=======================\n");
-   printf("|SIGNAL NAME | NUMBER |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGHUP   |    1   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGINT   |    2   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGQUIT  |    3   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGILL   |    4   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGABRT  |    6   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGFPE   |    8   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGSEGV  |   11   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGPIPE  |   13   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGALRM  |   14   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGTERM  |   15   |\n");
-   printf("=======================\n");
-   return;
-}
+*/
