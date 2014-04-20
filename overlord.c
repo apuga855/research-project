@@ -56,10 +56,14 @@ int packingfd;			//packing log
 int success;			//trigger for success or failure			
 int MAINFD;			//global for main log
 
-void* overlordThread(void*);
-void printSigStrict();
+void * overlordThread(void*);
 void successHandle(int);
 void failureHandle(int);
+void overlordHandle(int);
+void * packingThread(void*);
+void * cleanupThread(void*);
+void* workerThread(void*);
+void packingHandle(int);
 char handlerbuf[100];			//main buffer
 sigset_t fullmask;		//all signals
 sigset_t emptymask;		//no signals
@@ -70,15 +74,15 @@ union semun {
     ushort *array;         /* used for GETALL and SETALL */
 };
 
+char mainbuf[100];			//main buffer
+struct sigaction successAction;	//success action when recieving signal from overlord
+struct sigaction failureAction;	//failure action when receiving signal from overlord
 
 int main()
 {
-   struct sigaction successAction;	//success action when recieving signal from overlord
-   struct sigaction failureAction;	//failure action when receiving signal from overlord
    pthread_t overlord;
    mainID = getpid();		//main pid
-   char mainbuf[100];			//main buffer
-   int check = 0;
+   //int check = 0;
    int S_F = 0; 			
    void* status;
    sigset_t mainMask;
@@ -89,7 +93,7 @@ int main()
    if(mainfd < 0)			//checking for success
    {
       perror("opening outfile for overlord\n");
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
    MAINFD = mainfd;
    strcpy(mainbuf,"Starting the multithreading simulation\n\n");//simulation starting
@@ -137,7 +141,7 @@ int main()
       strcpy(mainbuf,"FAILURE WAS CAUGHT IN ACTION!\n");
       write(mainfd, mainbuf, strlen(mainbuf));
       success = 0;
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
 //================sigaction Ready block=====================================
    if(sigprocmask(SIG_BLOCK,&fullmask, NULL ) < 0)
@@ -145,7 +149,7 @@ int main()
       strcpy(mainbuf,"***ERROR setting up sigprocmask for main***\n");
       write(mainfd, mainbuf, strlen(mainbuf));
       success = 0;
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
 
    else
@@ -195,13 +199,13 @@ int main()
    if(close(mainfd))
    {
       printf("Failed to properly close the file\n");
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
    
    else
    {
       printf("File closed properly\n");
-      EXIT_SUCCESS;    
+      exit(EXIT_SUCCESS);    
    }
 }
 
@@ -262,34 +266,6 @@ int intToSigAddStrict(int sig, sigset_t * mask, overlordPayload* pl, int trigger
 }
 */
 
-void printSigStrict()
-{
-   printf("=======================\n");
-   printf("|SIGNAL NAME | NUMBER |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGHUP   |    1   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGINT   |    2   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGQUIT  |    3   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGILL   |    4   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGABRT  |    6   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGFPE   |    8   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGSEGV  |   11   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGPIPE  |   13   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGALRM  |   14   |\n");
-   printf("|---------------------|\n");
-   printf("|   SIGTERM  |   15   |\n");
-   printf("=======================\n");
-   return;
-}
-
 void successHandle(int signum)
 {
    strcpy(handlerbuf,"handler: SUCCESSFUL SETUP OF THREADS!\n\n");//simulation starting
@@ -336,9 +312,9 @@ void* overlordThread(void* msg)
    overlordID = getpid();		//getting pid into the global pid variable 
    char overlordbuf[100];		//creating a bugger
    pthread_t packing;   		//packing thread
-   pthread_t cleanup;			//cleanup thread
-   pthread_t workers[WORKER_NUM];	//worker threads
-   struct sigaction terminateAction;	//terminates program
+   //pthread_t cleanup;			//cleanup thread
+   //pthread_t workers[WORKER_NUM];	//worker threads
+   //struct sigaction terminateAction;	//terminates program
    sigset_t overlordMask;
    
    overlordfd = open("overlord.log", O_CREAT | O_WRONLY | O_TRUNC, 0600);//opening file
@@ -355,14 +331,14 @@ void* overlordThread(void* msg)
       strcpy(mainbuf,"***ERROR setting up sigprocmask for main***\n");
       write(mainfd, mainbuf, strlen(mainbuf));
       success = 0;
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
    
    sigfillset(&overlordMask);
-   sigsetdel(SIGABRT, &overlordMask);
-   terminateAction.sa_handler = overlordHandle;
-   terminateAction.sa_mask = overlordMask;
-   terminateAction.sa_flags = SA_RESTART; 
+   sigdelset(&overlordMask, SIGABRT);
+   //terminateAction.sa_handler = overlordHandle;
+   //terminateAction.sa_mask = overlordMask;
+   //terminateAction.sa_flags = SA_RESTART; 
     
    
    strcpy(overlordbuf,"Overlord is running...\n\n");	//printing out message		
@@ -398,7 +374,7 @@ void* overlordThread(void* msg)
    {
       strcpy(overlordbuf,"***ERROR LAUNCHING PACKING THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING PACKING THREAD\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
@@ -411,7 +387,7 @@ void* overlordThread(void* msg)
    {
       strcpy(overlordbuf,"***ERROR LAUNCHING CLEANUP THREAD***\n");//printing message
       write(overlordfd, overlordbuf, strlen(overlordbuf));
-      EXIT_FAILURE;
+      exit(EXIT_FAILURE);
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
    write(overlordfd, overlordbuf, strlen(overlordbuf));
@@ -426,7 +402,7 @@ void* overlordThread(void* msg)
       {
          strcpy(overlordbuf,"***ERROR LAUNCHING ONE OF THE PACKING THREAD***\n");//printing message
          write(overlordfd, overlordbuf, strlen(overlordbuf));
-         EXIT_FAILURE;
+         exit(EXIT_FAILURE);
       } 
    }
    strcpy(overlordbuf,"SUCCESSFUL AT LAUNCHING CLEANUP THREAD\n");	//printing message
@@ -487,8 +463,8 @@ void * packingThread(void* msg)
    char packingbuf[100];		//creating a bugger
    struct sigaction packingAction;
    sigset_t packingMask;
-   sigsetfill(&packingMask);
-   sigsetdel(SIGUSR1, &packingMask);
+   sigfillset(&packingMask);
+   sigdelset(&packingMask, SIGUSR1);
  
    /*
    struct sembuf rlsPack;
@@ -506,7 +482,7 @@ void * packingThread(void* msg)
    grbPack[1].sem_flg = SEM_UNDO;
    */
    
-   packingfd = open("packing.log", O_CREAT | O_WRONLY | O_TRUC, 0600);
+   packingfd = open("packing.log", O_CREAT | O_WRONLY | O_TRUNC, 0600);
    if(packingfd < 0)
    {
       perror("opening outfile for packing\n");
@@ -538,19 +514,20 @@ void * packingThread(void* msg)
    }
 //================sigaction Ready block=====================================
    
-      
+   /* TODO: return something? */
+   return NULL;
 }
 
-void* packingHandle(void* msg)
+void packingHandle(int sig)
 {
-   char handlebuf[100];
-   
+   //char handlebuf[100];
 }
 
 void* workerThread(void* msg)
 {
-   int id = (int)(msg);
-   
+    //int id = (int)(msg);
+    /* TODO: WTF */
+    return NULL;
 }
 
 void * cleanupThread(void* msg)
@@ -575,11 +552,13 @@ void * cleanupThread(void* msg)
    */
    
    
-   cleanupfd = open("cleanup.log", O_CREAT | O_WRONLY | O_TRUC, 0600);
+   cleanupfd = open("cleanup.log", O_CREAT | O_WRONLY | O_TRUNC, 0600);
    if(cleanupfd < 0)
    {
       perror("opening outfile for packing\n");
       exit(0);
    }  
+
+   return NULL; /* TODO: or something else? */
 }
 
