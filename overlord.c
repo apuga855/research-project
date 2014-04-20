@@ -471,8 +471,8 @@ THREAD |to|  THREAD  |  SIGNAL  |
 ---------------------------------
 OVERLORD->  MAIN     =  SIGUSR1 |SUCCESS
 OVERLORD->  MAIN     =  SIGUSR2 |FAILURE
-MAIN    ->  OVERLORD  = SIGABRT |
 MAIN    ->  PACKING  =  SIGUSR1 |
+MAIN    ->  OVERLORD  = SIGABRT |
 PACKING ->  OVERLORD =  SIGUSR1 |
 CLEANUP ->  OVERLORD =  SIGUSR2 |
 WORKER	->  CLEANUP  =  SIGUSR1 |      
@@ -532,7 +532,7 @@ void * packingThread(void* msg)
 //================sigaction Ready block=====================================
    if(sigaction(SIGUSR1, &packingAction, NULL) == -1)
    {
-      strcpy(packingbuf,"FAILURE WAS CAUGHT IN ACTION!\n");
+      strcpy(packingbuf,"FAILURE WAS CAUGHT IN ACTION AT PACKING!\n");
       write(packingfd, packingbuf, strlen(packingbuf));
       success = 0;
    }
