@@ -328,6 +328,46 @@ int LlistDel(Llist *list)
 //if LlistFail is true then we exit because the list was malformend
 //the payload will automatically be added to a node which is now 
 //the very next node to the head
+int LlistInsNodeQ(Llist *list, void * nData)
+{
+   if(LlistFail(list)) 
+   {
+      printf("the list failed test at insert node\n\n");
+      return 0;
+   }
+   LlistNode * nNode = NULL;
+   LlistNode * cur = list->head->next;;
+   nNode = malloc(sizeof(LlistNode));
+   if(nNode == NULL)
+   {
+      printf("node allocation fail at insert node\n\n");
+      return 0;
+   }
+   LlistNodeInit(nNode);
+   nNode->data = nData;
+   int i = 0;
+   while(i < list->used)
+   {
+      cur = cur->next;
+      i++;
+   }
+   nNode->next = cur;
+   nNode->prev = cur->prev;
+   cur->prev = nNode;
+   list->length++;
+   list->used++;
+   return 1;
+}
+
+//parameters: LlistNode* "node" to an allocated node to delete
+//parameters:	Llist* "list" pointing to allocated list
+//		void* "nData" pointing to allocated data to add
+//returns: 1 if successfull, 0 if failed
+//===================================================================
+//inserting node into list by handing a void pointer of data
+//if LlistFail is true then we exit because the list was malformend
+//the payload will automatically be added to a node which is now 
+//the very next node to the head
 int LlistInsNode(Llist *list, void * nData)
 {
    if(LlistFail(list)) 
@@ -355,6 +395,41 @@ int LlistInsNode(Llist *list, void * nData)
    return 1;
 }
 
+//parameters: LlistNode* "node" to an allocated node to delete
+//	      Llist* "list" pointing to an allocated list
+//returns: 1 if successfull 0 otherwise
+//============================================================
+//deleting node from list, first we check if LlistFail,
+//if so we exit failure, if the node that we are trying
+//to delete fails the node test, then we exit failure
+//otherwise the node is deleted and the chain is fixed
+//accordingly
+void* LlistDelNodeTargetQ(LlistNode *node,Llist *list)
+{
+   if(LlistFail(list))
+      return 0;
+   if(LlistNodeFail(node)) 
+      return 0;
+   
+   node->prev->next = node->next;
+   node->next->prev = node->prev;
+   
+   if(node == NULL)
+   {
+      printf("\nThe node passed was not allocated properly\n\n");
+      return NULL;
+   }
+   
+   void* temp = node->data;
+   LlistNodeInit(node);
+   free(node);
+   node = NULL;
+   return temp;
+}
+
+//parameters: Llist* "list"
+//	      void* "data"
+//returns: 1 if successfull 0 otherwise
 //parameters: LlistNode* "node" to an allocated node to delete
 //	      Llist* "list" pointing to an allocated list
 //returns: 1 if successfull 0 otherwise
