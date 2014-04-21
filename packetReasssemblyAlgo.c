@@ -51,6 +51,11 @@ int main()
 {
    char* finished = NULL;
    char array[100];
+   memset(array, 'A', 20);
+   memset(array+20, 'B', 20);
+   memset(array+40, 'C', 20);
+   memset(array+60, 'D', 20);
+   memset(array+80, 'E', 20);
    uint16_t  sz = 100;
    Llist* list = LlistAlloc(5,dataalloc);
    printf("Creating test data\n");
@@ -62,10 +67,10 @@ int main()
    arr[1].dataSize = 20;
    arr[1].data = malloc(sizeof(char)*20);
    arr[1].derpFragOff = 20;
-   memcpy(arr[1].data, array + 20, 60);
+   memcpy(arr[1].data, array + 20, 20);
    arr[2].dataSize = 20;
    arr[2].data = malloc(sizeof(char)*20);
-   memcpy(arr[2].data, array + 40, 0);
+   memcpy(arr[2].data, array + 40, 20);
    arr[2].derpFragOff = 40;
    arr[3].dataSize = 20;
    arr[3].data = malloc(sizeof(char)*20);
@@ -84,7 +89,5 @@ int main()
       printf("Data from function%s\n",finished);
    }
    
-   else
-      return;
 }
 
