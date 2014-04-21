@@ -8,6 +8,8 @@
 #include<stdlib.h>
 #include<stdio.h>
 #include<pthread.h>
+#include"hashTableLinkedList.h"
+
 #define P_BUFF 100
 #define THREAD_ARRAY_SIZE 10
 #define THREAD_DEFAULT_TIMEOUT 1000
@@ -18,6 +20,12 @@
 #define ipLen  sizeof(struct ip)
 #define tcpLen  sizeof(struct tcphdr)
 #define fngPntLen 13
+
+typedef struct _fragment {
+    unsigned char *data;
+    uint16_t size;
+    uint16_t offset;
+} fragment;
 
 //starting from here, is all necessary materials and tools for ---------------------
 //packet capture without reasembly
@@ -99,6 +107,7 @@ rsmvPcktThrd *rsmvPcktThrdArr = NULL;
 sensorRdyPckt *rsmvPcktArr = NULL;
 
 
+LH_hashTable* hashtable;
 int h = 0;							//counter
 int thrdCnt = 0;
 //this structure is going to hold all information
@@ -135,6 +144,7 @@ int main(int argc, char **argv)
      fprintf(stderr, "Usage: %s <pcap file>\n", *argv);
      return 1;
    }
+   hashtable = LH_HashTableAlloc();
    pcap_t *file = NULL;		    //this will be the actual structure we use
    char errbuf[PCAP_ERRBUF_SIZE];   //required for the opening in offline mode, gives us error data
    char *inputName = argv[1]; //get filename from command line argument
@@ -181,6 +191,54 @@ int main(int argc, char **argv)
    printf("Done with main loop\n");
    free(pcktBuffer);
    return 0;
+}
+
+int myhashfunc(LH_hashTable* table, void * data)
+{
+   int slot = 0;
+   int rslot = 0;
+   int i = 1;
+   person* p = (person*) data;
+   slot = (p->id) % (kprimeCap(table->LH_primenums));
+   
+   printf("\nAttempting to hash %s\n",p->name);
+   
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
+      return slot;
+   
+   else
+   {
+      rslot = (p->id) % (kprimehash2(table->LH_primenums));
+      do
+      {
+         slot = (slot + (i * rslot)) % (table->LH_capacity);   
+         i++;          
+      }while(LlistIsEmpty(table->LH_table[slot].LHN_list));
+   }
+   return slot;
+}
+
+void mycopy(void* src, void* dst)
+{
+   //printf("\ninside of function mycopy\n");
+   //printf("\nsrc address is %p\n",src);
+   //printf("\ndst address is %p\n",dst);
+   person* srcStc = (person*)src;
+   person* dstStc = (person*)dst;
+   printPerson(srcStc);
+   dstStc->age = srcStc->age;
+   dstStc->id = srcStc->id;
+   strncpy(dstStc->name, srcStc->name,20);
+   strncpy(dstStc->lname, srcStc->lname,20);
+   //printf("\nfinished function mycopy\n");
+   printPerson(dstStc);
+   return;
+}
+
+void* mydataalloc()
+{
+   person* data =  malloc(sizeof(person));
+   return (void*) data;
 }
 
 //packet handling function with the requirements given to us by libcap
@@ -233,6 +291,15 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
           fragFlag = 1;
           printf("The flag was caught, the value for MF is %d The offset is %d",
                 (int) moreFrag, (int)ipHeader->ip_off);
+          /* TODO:
+           * 1. Calculate read offset from ipHeader->off.
+           * 2. Check hash table if an entry exists for current ipHeader->id.
+           * 3. If not, create and populate a new fragment struct, and insert 
+           *    that fragment into the hash table using ipHeader->id as the key.
+           * 4. Otherwise, check whether all the sizes add up ipHeader->tot_len.
+           * 5. If they do, then call the reassembly algorithm and process the
+           *    full packet. Otherwise, insert fragment struct into hash table.
+          LH_hashFunc(hashtable, HOW_THE_FUCK_DO_I_USE_YOUR_HASH_TABLE_PUGA)
        }
        
        SRD_pckt->SRD_src_addr = ntohl(ipHeader->ip_src.s_addr);//getting the source address in net to host endian mode, storing it into the SRD packet
