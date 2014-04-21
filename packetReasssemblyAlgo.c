@@ -36,7 +36,7 @@ char* reassemblyAlg(Llist* list, uint16_t size)
    printf("before the while\n");
    while(current != list->head)
    {
-      printf("Current loop = %d",i);
+   //   printf("Current loop = %d",i);
       curPack = (dummyPack*)(current->data);
       memcpy((dataReady + curPack->derpFragOff), curPack->data, curPack->dataSize);
       current = current->next;
@@ -59,34 +59,40 @@ int main()
    uint16_t  sz = 100;
    Llist* list = LlistAlloc(5,dataalloc);
    printf("Creating test data\n");
-   dummyPack * arr = malloc(sizeof(dummyPack) * 5);
-   arr[0].dataSize = 20;
-   arr[0].derpFragOff = 0;
-   arr[0].data = malloc(sizeof(char)*20);
-   memcpy(arr[0].data, array, 20);
-   arr[1].dataSize = 20;
-   arr[1].data = malloc(sizeof(char)*20);
-   arr[1].derpFragOff = 20;
-   memcpy(arr[1].data, array + 20, 20);
-   arr[2].dataSize = 20;
-   arr[2].data = malloc(sizeof(char)*20);
-   memcpy(arr[2].data, array + 40, 20);
-   arr[2].derpFragOff = 40;
-   arr[3].dataSize = 20;
-   arr[3].data = malloc(sizeof(char)*20);
-   memcpy(arr[3].data, array + 60, 20);
-   arr[3].derpFragOff = 60;
-   arr[4].dataSize = 20;
-   arr[4].data = malloc(sizeof(char)*20);
-   memcpy(arr[4].data, array + 80, 20);
-   arr[4].derpFragOff = 80;
+   dummyPack * arr[5];
+   int i = 0; 
+   while(i < 5)
+   {
+      arr[i] = malloc(sizeof(dummyPack));
+      i++;
+   }
+   arr[0]->dataSize = 20;
+   arr[0]->derpFragOff = 0;
+   arr[0]->data = malloc(sizeof(char)*20);
+   memcpy(arr[0]->data, array, 20);
+   arr[1]->dataSize = 20;
+   arr[1]->data = malloc(sizeof(char)*20);
+   arr[1]->derpFragOff = 20;
+   memcpy(arr[1]->data, array + 20, 20);
+   arr[2]->dataSize = 20;
+   arr[2]->data = malloc(sizeof(char)*20);
+   memcpy(arr[2]->data, array + 40, 20);
+   arr[2]->derpFragOff = 40;
+   arr[3]->dataSize = 20;
+   arr[3]->data = malloc(sizeof(char)*20);
+   memcpy(arr[3]->data, array + 60, 20);
+   arr[3]->derpFragOff = 60;
+   arr[4]->dataSize = 20;
+   arr[4]->data = malloc(sizeof(char)*20);
+   memcpy(arr[4]->data, array + 80, 20);
+   arr[4]->derpFragOff = 80;
    LlistPopulate(list, (void*) arr, 5);  
    finished = reassemblyAlg(list, sz);
    printf("after finished\n");
    if(finished != NULL)
    {
       printf("Original data %s\n",array);
-      printf("Data from function%s\n",finished);
+      printf("Data from function %s\n",finished);
    }
    
 }
