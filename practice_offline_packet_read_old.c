@@ -238,21 +238,21 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
     if (ntohs(ethernetHeader->ether_type) == ETHERTYPE_IP) 	
     {  
 
-       unsigned char moreFrag;			//checking for more fragments
+       u_char moreFrag;			//checking for more fragments
        moreFrag = *(pckt + etherLen + 6);		//getting the more fragment bit
        //moreFrag = *(pckt + etherLen + 50);		//getting the more fragment bit
        //this is assigning the address located at the target* address of the packet plust the size of the
        //structure that contained the ethernet header, since the packet is basivally just a gigantic
        //array of bytes, then all we have to do is parse through it like we would an array, which is
        //by offsets, theregore what we get, is the ipheader
-       int mask = 0x40;//get rid of all bits, except for the wanted one, aka MF bit 0x40 = 0100 0000 which is 1 byte which is the size of a unsigned character
+       u_char mask = 0x20;//get rid of all bits, except for the wanted one, aka MF bit 0x40 = 0100 0000 which is 1 byte which is the size of a unsigned character
        moreFrag = moreFrag & mask; 
        ipHeader = (struct ip*)(pckt + etherLen);
-       if((int)moreFrag != 0 || (int)ipHeader->ip_off != 0)//checking for fragmentation
+       if(moreFrag > 0 || ipHeader->ip_off != 0)//checking for fragmentation
        {
           fragFlag = 1;
           printf("The flag was caught, the value for MF is %d The offset is %d",
-                (int) moreFrag, (int)ipHeader->ip_off);
+                (int) fragFlag, (int)ipHeader->ip_off);
        }
 
        SRD_pckt->SRD_src_addr = ntohl(ipHeader->ip_src.s_addr);//getting the source address in net to host endian mode, storing it into the SRD packet
