@@ -224,5 +224,46 @@ int main()
    else
       printf("LlistInsNoed Error at inserting -----------------------------------\n");       
    
-    
+   
+   printf("\nLlistInsNodeTarget test ***************************************\n");
+   free(ins);
+   ins = NULL;
+   dummyStruct* insHead = malloc(sizeof(dummyStruct));
+   dummyStruct* insTail = malloc(sizeof(dummyStruct));
+   dummyStruct* insMid = malloc(sizeof(dummyStruct));
+   curID = 100;
+   curGarbage = 'H';
+   insHead->id = curID;
+   insHead->garbage = curGarbage;
+   curID = 199;
+   curGarbage = 'T';
+   insTail->id = curID;
+   insTail->garbage = curGarbage;
+   curID = 150;
+   curGarbage = 'M';
+   insMid->id = curID;
+   insMid->garbage = curGarbage;
+   
+   if(LlistInsNodeTarget(testList, (void*)insHead, 0))
+      printf("ListInsNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistInsNoed Error at inserting -----------------------------------\n");       
+   
+   
+   if(LlistInsNodeTarget(testList, (void*)insTail, 11))
+      printf("ListInsNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistInsNoed Error at inserting -----------------------------------\n");       
+   
+   
+   if(LlistInsNodeTarget(testList, (void*)insMid, 7))
+      printf("ListInsNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistInsNoed Error at inserting -----------------------------------\n");       
+   
+   printf("Printing after inserting at the head, read and finally the middle\n"); 
+   LlistPrint(testList, printDummy);
 }

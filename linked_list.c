@@ -389,6 +389,7 @@ int LlistInsNodeTarget(Llist *list, void * nData, int target)
    
    LlistNode * current = list->head;
    LlistNode * nNode = malloc(sizeof(LlistNode));
+   int flag = 0;
    if(nNode == NULL)
    {
       printf("node allocation fail at insert node\n\n");
@@ -396,24 +397,37 @@ int LlistInsNodeTarget(Llist *list, void * nData, int target)
    }
   
    if(target >= list->length)
-      current = head->prev; 
+      current = list->head->prev; 
 
    else if(target <= 0)
-      current = head;
+      current = list->head;
 
    else
    {
       int i = 1;
+      flag = 1;
       while(i < target)
       {
          current = current->next;
          i++;
       }
    }
+  /* 
+   if(flag)
+   {
+      if(current->next->data == NULL && !(current->next->root))
+      {
+         current->next->data = nData;
+         free(nNode);
+         nNode = NULL; 
+         list->used++;
+         return 1;
+      }
+   }
+*/
    
    LlistNodeInit(nNode);
    nNode->data = nData;
-
 
    nNode->prev = current;
    nNode->next = current->next;
