@@ -157,7 +157,7 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
       return;
    
    if(node->data == NULL)
-      printf("This node is empty\n"); 
+      printf("\nThis node is empty\n"); 
     
    LlistNodePrintData func = dataprint;
    func(node->data);
@@ -346,6 +346,7 @@ int LlistInsNode(Llist *list, void * nData)
    
    if(cur->next == list->head)
    {
+      printf("Maing a new node ==============================\n");
       LlistNode * nNode = malloc(sizeof(LlistNode));
       if(nNode == NULL)
       {
@@ -357,20 +358,13 @@ int LlistInsNode(Llist *list, void * nData)
       nNode->data = nData;
       nNode->next = cur->next;
       nNode->prev = cur;
+      nNode->next->prev = nNode;
       cur->next = nNode;
       list->length++;
    }
    
    else
-   {
-      //if(cur->data == NULL)
-         cur->data = nData;
-      //else
-      //{
-      //   printf("There was a problem with the list size or list used\n\n");
-      //   return 0;
-      //}
-   }
+      cur->next->data = nData;
 
    list->used++;
    return 1;
@@ -713,7 +707,8 @@ void LlistPrint(Llist* list, void* printNode)
    }   
    
    printf("\nUsing print function to print each node\n");
-   
+   printf("This list has %d length and a total of %d used", list->length, list->used);
+    
    int i = 0;
    LlistNode* traverse = NULL;
    traverse = list->head;

@@ -83,6 +83,8 @@ int main()
    printf("**************************ListNode section ***************************************\n");
    int curID = 0;
    char curGarbage = '!';
+   int i = 0;
+   void * payloadArr[10];
    dummyStruct * payload = malloc(sizeof(dummyStruct));
    payload->id = curID;
    payload->garbage = curGarbage;
@@ -151,8 +153,9 @@ int main()
    {
       printf("LlistAlloc successful+++++++++++++++++++++++++++++++++\n");
       printf("Populating the list\n");
-      void * payloadArr[10];
-      int i = 0;
+      i = 0;
+      curID = 0;
+      curGarbage = '!';
       while(i < 10)
       {
          payloadArr[i] = malloc(sizeof(dummyStruct));
@@ -205,19 +208,19 @@ int main()
       i++;
    } 
    
-   testList = LlistAlloc(10,dummyAlloc);
+   testList = LlistAlloc(11,dummyAlloc);
    LlistPopulate(testList, payloadArr, 10);
    LlistPrint(testList, printDummy);
-   printf("\nLlistAllocIns test ***************************************\n");
+   printf("\nLlistInsNode test ***************************************\n");
    dummyStruct* ins = malloc(sizeof(dummyStruct));
    ins->id = curID;
    ins->garbage = curGarbage;
-   if(LlistIns(testList, (void*)ins))
+   if(LlistInsNode(testList, (void*)ins))
    {
-      printf("ListDel successful ++++++++++++++++++++++++++++++++++\n");
-      
+      printf("ListInsNode successful ++++++++++++++++++++++++++++++++++\n");
+      LlistPrint(testList, printDummy);
    }
 
    else
-         
+      printf("LlistInsNoed Error at inserting -----------------------------------\n");        
 }
