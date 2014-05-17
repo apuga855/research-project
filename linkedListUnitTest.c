@@ -25,7 +25,7 @@ Llist:
 12 int LlistPopulate(Llist *, void**, int);				X
 13 int LlistInit(Llist *);						X
 14 int LlistDel(Llist *);						X
-15 int LlistInsNode(Llist *, void *);
+15 int LlistInsNode(Llist *, void *);					X
 16 int LlistInsData(Llist*, void*);
 17 int LlistDelNode(Llist*, void*,void*,void*, int);
 18 int LlistDelNodeTargetN(LlistNode *,Llist*);
@@ -208,7 +208,7 @@ int main()
       i++;
    } 
    
-   testList = LlistAlloc(11,dummyAlloc);
+   testList = LlistAlloc(11,dummyAlloc);//change size to 10 if you want to test the new node case, 11 if you want to test the other
    LlistPopulate(testList, payloadArr, 10);
    LlistPrint(testList, printDummy);
    printf("\nLlistInsNode test ***************************************\n");
@@ -222,5 +222,7 @@ int main()
    }
 
    else
-      printf("LlistInsNoed Error at inserting -----------------------------------\n");        
+      printf("LlistInsNoed Error at inserting -----------------------------------\n");       
+   
+    
 }
