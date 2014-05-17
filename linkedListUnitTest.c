@@ -8,16 +8,19 @@ Purpose: Unit testing for linked list, testing all functionalities under most co
 
 List of functions:							CHECK	
 
+LlistNode:
 1 LlistNode * LlistNodeAlloc(void*);					X
-2 LlistNode * LlistNodeSelfAlloc(void*);
-3 void LlistNodeInit (LlistNode *);
+2 LlistNode * LlistNodeSelfAlloc(void*);				X
+3 void LlistNodeInit (LlistNode *);					X
 4 int LlistNodeDel(LlistNode *);					X
-5 int LlistNodeCpy(LlistNode *, LlistNode *, void *);
-6 int LlistNodeFail(LlistNode*);
+5 int LlistNodeCpy(LlistNode *, LlistNode *, void *);			X
+6 int LlistNodeFail(LlistNode*);					X
 7 void LlistNodePrint(LlistNode*, void*);				X
-8 typedef void(*LlistNodePrintData)(void*);
-9 typedef void(*LlistNodeDataCpy)(void*,void*);
-10  typedef void*(*LlistDataAlloc)();
+8 typedef void(*LlistNodePrintData)(void*);				X
+9 typedef void(*LlistNodeDataCpy)(void*,void*);				X
+10  typedef void*(*LlistDataAlloc)();					X
+
+Llist:
 11 Llist * LlistAlloc(int, void*);
 12 int LlistPopulate(Llist *, void**, int);
 13 int LlistInit(Llist *);
@@ -66,10 +69,10 @@ void printDummy(dummyStruct* src)
 {
    if(src == NULL)
    {
-      printf("The struct was empty\n");
+      printf("The struct was empty\n\n");
       return;
    }
-   printf("Printing dummy struct:\n id = %d, garbage = %c\n", src->id, src->garbage);
+   printf("Printing dummy struct:\n id = %d, garbage = %c\n\n", src->id, src->garbage);
 }
 
 
@@ -77,7 +80,7 @@ void printDummy(dummyStruct* src)
 
 int main()
 {
-   printf("ListNode section ***************************************\n");
+   printf("**************************ListNode section ***************************************\n");
    int curID = 0;
    char curGarbage = '!';
    dummyStruct * payload = malloc(sizeof(dummyStruct));
@@ -115,9 +118,32 @@ int main()
    printf("\nLlistNodeInit test ***************************************\n");
    LlistNodeInit(test);
    LlistNodePrint(test, printDummy); 
-//1 LlistNode * LlistNodeAlloc(void*);
-//2 LlistNode * LlistNodeSelfAlloc(void*);
-//3 void LlistNodeInit (LlistNode *);
+   printf("Successful LlistNodeInit if the node was empty+++++++++++++++++++++++++++++++++\n");
+   printf("\nLlistNodeCpy test ***************************************\n");
+   payload = malloc(sizeof(dummyStruct));
+   payload->id = curID;
+   payload->garbage = curGarbage;
+   test = LlistNodeAlloc((void*) payload);
+   LlistNode* cpNode = LlistNodeSelfAlloc(dummyAlloc);
+   if(LlistNodeCpy(test, cpNode, dummyCpy))
+   {
+      printf("Successful LlistNodeCpy if the nodes are the same+++++++++++++++++++++++++++++++++\n");
+      printf("Original Node:\n");
+      LlistNodePrint(test,printDummy);
+      printf("Copied Node:\n");
+      LlistNodePrint(cpNode,printDummy);
+   } 
+
+   else
+      printf("LlistNodeCpy had an error------------------------------\n");
+    
+   LlistNodeDel(test);
+   LlistNodeDel(cpNode);
+   test = NULL;
+   cpNode = NULL;
+   
+   
+   printf("********************ListList section ***************************************\n");
 
     
 }
