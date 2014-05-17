@@ -157,7 +157,7 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
       return;
    
    if(node->data == NULL)
-      return;
+      printf("This node is empty\n"); 
     
    LlistNodePrintData func = dataprint;
    func(node->data);
@@ -328,33 +328,50 @@ int LlistDel(Llist *list)
 //if LlistFail is true then we exit because the list was malformend
 //the payload will automatically be added to a node which is now 
 //the very next node to the head
-int LlistInsNodeQ(Llist *list, void * nData)
+int LlistInsNode(Llist *list, void * nData)
 {
    if(LlistFail(list)) 
    {
       printf("the list failed test at insert node\n\n");
       return 0;
    }
-   LlistNode * nNode = NULL;
-   LlistNode * cur = list->head->next;;
-   nNode = malloc(sizeof(LlistNode));
-   if(nNode == NULL)
-   {
-      printf("node allocation fail at insert node\n\n");
-      return 0;
-   }
-   LlistNodeInit(nNode);
-   nNode->data = nData;
+
+   LlistNode * cur = list->head;
    int i = 0;
    while(i < list->used)
    {
       cur = cur->next;
       i++;
    }
-   nNode->next = cur;
-   nNode->prev = cur->prev;
-   cur->prev = nNode;
-   list->length++;
+   
+   if(cur->next == list->head)
+   {
+      LlistNode * nNode = malloc(sizeof(LlistNode));
+      if(nNode == NULL)
+      {
+         printf("node allocation fail at insert node\n\n");
+         return 0;
+      }
+
+      LlistNodeInit(nNode);
+      nNode->data = nData;
+      nNode->next = cur->next;
+      nNode->prev = cur;
+      cur->next = nNode;
+      list->length++;
+   }
+   
+   else
+   {
+      //if(cur->data == NULL)
+         cur->data = nData;
+      //else
+      //{
+      //   printf("There was a problem with the list size or list used\n\n");
+      //   return 0;
+      //}
+   }
+
    list->used++;
    return 1;
 }
@@ -368,28 +385,37 @@ int LlistInsNodeQ(Llist *list, void * nData)
 //if LlistFail is true then we exit because the list was malformend
 //the payload will automatically be added to a node which is now 
 //the very next node to the head
-int LlistInsNode(Llist *list, void * nData)
+int LlistInsNodeTarget(Llist *list, void * nData, int target)
 {
    if(LlistFail(list)) 
    {
       printf("the list failed test at insert node\n\n");
       return 0;
    }
-   LlistNode * nNode = NULL;
-   LlistNode * prev = NULL;
-   nNode = malloc(sizeof(LlistNode));
+   
+   LlistNode * current = list->head->next;
+   LlistNode * nNode = malloc(sizeof(LlistNode));
    if(nNode == NULL)
    {
       printf("node allocation fail at insert node\n\n");
       return 0;
    }
+
    LlistNodeInit(nNode);
    nNode->data = nData;
-   prev = list->head->next;
-   list->head->next = nNode;
-   nNode->next = prev;
-   nNode->prev = list->head;
-   prev->prev = nNode;
+   int i = 0;
+   while(i < target)
+   {
+      if(i > list->used)
+         return 0;
+      current = current->next;
+      i++; 
+   }
+
+   nNode->prev = current;
+   nNode->next = current->next;
+   nNode->next->prev = nNode;
+   current->next = nNode;
    list->length++;
    list->used++;
    return 1;
@@ -404,27 +430,27 @@ int LlistInsNode(Llist *list, void * nData)
 //to delete fails the node test, then we exit failure
 //otherwise the node is deleted and the chain is fixed
 //accordingly
-void* LlistDelNodeTargetQ(LlistNode *node,Llist *list)
+int LlistDelNodeTarget(Llist *list, int target)
 {
    if(LlistFail(list))
       return 0;
-   if(LlistNodeFail(node)) 
+   if(list->used < target) 
       return 0;
    
-   node->prev->next = node->next;
-   node->next->prev = node->prev;
+   LlistNode* current = list->head;
+   int i = 0;
+   while(i < target)
+      current = current->next;
    
-   if(node == NULL)
-   {
-      printf("\nThe node passed was not allocated properly\n\n");
-      return NULL;
-   }
-   
-   void* temp = node->data;
-   LlistNodeInit(node);
-   free(node);
-   node = NULL;
-   return temp;
+   current->prev->next = current->next;
+   current->next->prev = current->prev;
+   free(current->data);
+   LlistNodeInit(current);
+   free(current);
+   current = NULL;
+   list->used--;
+   list->length--;
+   return 1;
 }
 
 //parameters: Llist* "list"
@@ -439,7 +465,7 @@ void* LlistDelNodeTargetQ(LlistNode *node,Llist *list)
 //to delete fails the node test, then we exit failure
 //otherwise the node is deleted and the chain is fixed
 //accordingly
-int LlistDelNodeTarget(LlistNode *node,Llist *list)
+int LlistDelNodeTargetN(LlistNode *node,Llist *list)
 {
    if(LlistFail(list))
       return 0;
@@ -536,7 +562,7 @@ int LlistCpySize(Llist *src, Llist *dst, void* dataalloc)
       printf("dst is bigger\n");
       while(src->length < dst->length)
       {
-         if(LlistDelNodeTarget(dst->head->prev, dst))
+         if(LlistDelNodeTargetN(dst->head->prev, dst))
             continue;
          else
          {
@@ -805,7 +831,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
    {
       case 1:
       {
-             return LlistDelNodeTarget(LlistSearchNode(list,NULL,NULL,1),list);
+             return LlistDelNodeTargetN(LlistSearchNode(list,NULL,NULL,1),list);
              break;
       }
       case 2:
@@ -815,7 +841,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
                 printf("You did not pass a function to use\n");
                 return 0;
              }
-             return LlistDelNodeTarget(LlistSearchNode(list,func,payload,2), list);
+             return LlistDelNodeTargetN(LlistSearchNode(list,func,payload,2), list);
              break;
       }
       case 3:
@@ -841,7 +867,7 @@ int LlistDelNode(Llist* list, void* func,void* printfunc, void* payload, int ove
                 scanf("%c",&c);
                 if(c == 'y')
                 {
-                   LlistDelNodeTarget(target, list);
+                   LlistDelNodeTargetN(target, list);
                    return 1;
                 }
              }

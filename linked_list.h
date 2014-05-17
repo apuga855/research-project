@@ -20,8 +20,7 @@ typedef struct _LlistNode
   int root;
   struct _LlistNode * next;
   struct _LlistNode * prev;
-  void * data;
- 
+  void * data; 
 }LlistNode;
 
 //list contains a length, useful for user defined callback functions
@@ -31,7 +30,7 @@ typedef struct _Llist
 {
    LlistNode *head;
    int length;
-   int used;   
+   int used;
 }Llist;
 
    
@@ -82,7 +81,7 @@ typedef struct _garbage
    char name[20];
    ...
    ...
-}garbage
+}garbagei
 
 void * MyDataAllocator()
 {
@@ -117,8 +116,9 @@ int LlistInsData(Llist*, void*);
 //Deleting node
 int LlistDelNode(Llist*, void*,void*,void*, int);
 //Deleting target node
-int LlistDelNodeTarget(LlistNode *,Llist*);
-void* LlistDelNodeTargetQ(LlistNode *node,Llist *list);
+int LlistDelNodeTargetN(LlistNode *,Llist*);
+int LlistDelNodeTarget(Llist*,int);
+void* LlistDelNodeTargetQ(LlistNode ,Llist *);
 //nullying all values of all data within the list
 int LlistDelDAta(Llist*, void*);
 //copy size
@@ -146,4 +146,3 @@ typedef void(*LlistSort)(Llist*);
 typedef LlistNode*(*LlistSearch)(Llist*, void*);
 //if they want to delete the data in a special way this will be used
 typedef int(*LlistUsrDataDel)(void*);
-
