@@ -21,10 +21,10 @@ LlistNode:
 10  typedef void*(*LlistDataAlloc)();					X
 
 Llist:
-11 Llist * LlistAlloc(int, void*);
-12 int LlistPopulate(Llist *, void**, int);
-13 int LlistInit(Llist *);
-14 int LlistDel(Llist *);
+11 Llist * LlistAlloc(int, void*);					X
+12 int LlistPopulate(Llist *, void**, int);				X
+13 int LlistInit(Llist *);						X
+14 int LlistDel(Llist *);						X
 15 int LlistInsNode(Llist *, void *);
 16 int LlistInsData(Llist*, void*);
 17 int LlistDelNode(Llist*, void*,void*,void*, int);
@@ -38,7 +38,7 @@ Llist:
 25 LlistNode * LlistSearchNode(Llist*,void*, void*, int);
 26 int LlistIsEmpty(Llist*);
 27 void * LlistRetFirst(Llist*);
-28 void LlistPrint(Llist *, void*);
+28 void LlistPrint(Llist *, void*);					X
 29 typedef void(*LlistSortIns)(Llist*);
 30 typedef void(*LlistSort)(Llist*);
 31 typedef LlistNode*(*LlistSearch)(Llist*, void*);
@@ -72,7 +72,7 @@ void printDummy(dummyStruct* src)
       printf("The struct was empty\n\n");
       return;
    }
-   printf("Printing dummy struct:\n id = %d, garbage = %c\n\n", src->id, src->garbage);
+   printf("\nPrinting dummy struct:\n id = %d, garbage = %c\n\n", src->id, src->garbage);
 }
 
 
@@ -144,6 +144,80 @@ int main()
    
    
    printf("********************ListList section ***************************************\n");
+   Llist* testList = NULL;
+   printf("\nLlistAlloc test ***************************************\n");
+   testList = LlistAlloc(10,dummyAlloc);
+   if(testList != NULL)
+   {
+      printf("LlistAlloc successful+++++++++++++++++++++++++++++++++\n");
+      printf("Populating the list\n");
+      void * payloadArr[10];
+      int i = 0;
+      while(i < 10)
+      {
+         payloadArr[i] = malloc(sizeof(dummyStruct));
+         ((dummyStruct*)payloadArr[i])->id = curID;
+         ((dummyStruct*)payloadArr[i])->garbage = curGarbage;
+         curID++;
+         curGarbage++;
+         i++;
+      } 
 
-    
+      printf("\nLlistAllocPopulate test ***************************************\n");
+      if(LlistPopulate(testList, payloadArr, 10))
+      {
+         printf("LlistAlloc successful+++++++++++++++++++++++++++++++++\n");
+         printf("\nLlistAllocPrint test ***************************************\n");
+         LlistPrint(testList, printDummy);
+         printf("If Seen properly, populate worked+++++++++++++++++++++++++++++\n");
+         printf("Otherwise populate had an error-------------------------------\n");
+         
+         
+      }
+      
+      else 
+         printf("LlistNodeCpy had an error------------------------------\n");
+   }
+   else
+      printf("LlistNodeCpy had an error------------------------------\n");
+   
+   printf("\nLlistDel test ***************************************\n");
+   if(LlistDel(testList))
+   {
+      printf("ListDel successful ++++++++++++++++++++++++++++++++++\n");
+      testList = NULL;
+   }
+   else
+      printf("LlistDel failed at something -----------------------------------\n");
+   
+       
+   i = 0;
+   curID = 0;
+   curGarbage = '!';
+   
+   while(i < 10)
+   {
+      payloadArr[i] = malloc(sizeof(dummyStruct));
+      ((dummyStruct*)payloadArr[i])->id = curID;
+      ((dummyStruct*)payloadArr[i])->garbage = curGarbage;
+      curID++;
+      curGarbage++;
+      i++;
+   } 
+   
+   testList = LlistAlloc(10,dummyAlloc);
+   LlistPopulate(testList, payloadArr, 10);
+   LlistPrint(testList, printDummy);
+   printf("\nLlistAllocIns test ***************************************\n");
+   dummyStruct* ins = malloc(sizeof(dummyStruct));
+   ins->id = curID;
+   ins->garbage = curGarbage;
+   if(LlistIns(testList, (void*)ins))
+   {
+      printf("ListDel successful ++++++++++++++++++++++++++++++++++\n");
+      
+   }
+
+   else
+         
 }
