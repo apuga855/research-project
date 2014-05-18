@@ -412,19 +412,6 @@ int LlistInsNodeTarget(Llist *list, void * nData, int target)
          i++;
       }
    }
-  /* 
-   if(flag)
-   {
-      if(current->next->data == NULL && !(current->next->root))
-      {
-         current->next->data = nData;
-         free(nNode);
-         nNode = NULL; 
-         list->used++;
-         return 1;
-      }
-   }
-*/
    
    LlistNodeInit(nNode);
    nNode->data = nData;
@@ -456,16 +443,29 @@ int LlistDelNodeTarget(Llist *list, int target)
    
    LlistNode* current = list->head;
    int i = 0;
-   while(i < target)
-      current = current->next;
-   
+   if(target <=0)
+      current = list->head->next;
+   else if(target >= list->length)
+      current = list->head->prev;
+
+   else
+   {
+      while(i < target)
+      {
+         current = current->next; 
+         i++;
+      }
+   }
+
+   if(current == list->head)
+      return 0;
+   if(current->data != NULL)
+       list->used--;
    current->prev->next = current->next;
    current->next->prev = current->prev;
    free(current->data);
    LlistNodeInit(current);
-   free(current);
    current = NULL;
-   list->used--;
    list->length--;
    return 1;
 }

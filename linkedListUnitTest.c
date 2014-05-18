@@ -26,9 +26,9 @@ Llist:
 13 int LlistInit(Llist *);						X
 14 int LlistDel(Llist *);						X
 15 int LlistInsNode(Llist *, void *);					X
-16 int LlistInsData(Llist*, void*);
-17 int LlistDelNode(Llist*, void*,void*,void*, int);
-18 int LlistDelNodeTargetN(LlistNode *,Llist*);
+16 int LlistInsData(Llist*, void*);					X
+17 int LlistDelNode(Llist*, void*,void*,void*, int);			X
+18 int LlistDelNodeTargetN(LlistNode *,Llist*);				
 19 int LlistDelNodeTarget(Llist*,int);
 20 void* LlistDelNodeTargetQ(LlistNode ,Llist *);
 21 int LlistDelDAta(Llist*, void*);
@@ -250,7 +250,7 @@ int main()
       printf("LlistInsNoed Error at inserting -----------------------------------\n");       
    
    
-   if(LlistInsNodeTarget(testList, (void*)insTail, 11))
+   if(LlistInsNodeTarget(testList, (void*)insTail, 12))
       printf("ListInsNode successful ++++++++++++++++++++++++++++++++++\n");
 
    else
@@ -265,4 +265,34 @@ int main()
    
    printf("Printing after inserting at the head, read and finally the middle\n"); 
    LlistPrint(testList, printDummy);
+   printf("If everything looks good it worked\n"); 
+
+
+   printf("\nLlistDelNodeTarget test ***************************************\n");
+   printf("The list has 14 nodes and 14 used, deleting the head node, middle node and tail node\n");
+         
+   if(LlistDelNodeTarget(testList, 7))
+      printf("ListDelNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistDelNode Error at inserting -----------------------------------\n");       
+   
+   
+   if(LlistDelNodeTarget(testList, 13))
+      printf("ListDelNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistDelNodeError at inserting -----------------------------------\n");       
+   
+   
+   if(LlistDelNodeTarget(testList, 0))
+      printf("ListDelNode successful ++++++++++++++++++++++++++++++++++\n");
+
+   else
+      printf("LlistDelNode Error at inserting -----------------------------------\n");       
+   
+   printf("Printing after deleting mid, end and front\n"); 
+   LlistPrint(testList, printDummy);
+   printf("If everything looks good it worked\n"); 
+
 }
