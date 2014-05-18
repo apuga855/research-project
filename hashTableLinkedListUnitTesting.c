@@ -55,7 +55,7 @@ void printDummy(dummyStruct* src)
       printf("The struct was empty\n\n");
       return;
    }
-   printf("\nPrinting dummy struct:\n id = %d, garbage = %c\n\n", src->id, src->garbage);
+   printf("\nPrinting dummy struct:\n id = %d, garbage = %c", src->id, src->garbage);
 }
 
 int myhashfunc(LH_hashTable* table, void * data)
@@ -68,11 +68,11 @@ int myhashfunc(LH_hashTable* table, void * data)
 
    printf("\nAttempting to hash %c\n",p->garbage);
 
-   if(LlistIsEmpty(table->LH_table[slot].LHN_list) || LlistAtLeastOne(table->LH_table[slot].LHN_list))
-   {
-      if(((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id)
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list) || 
+      (LlistAtLeastOne(table->LH_table[slot].LHN_list) && 
+      ((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id))
          return slot;
-   }
+   
    else
    {
       rslot = (p->id) % (kprimehash2(table->LH_primenums));
