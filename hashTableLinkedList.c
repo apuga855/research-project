@@ -338,8 +338,12 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
       
       while(i < (*hash)->LH_capacity)
       {
+         //printf("doing stuff\n");
          if(LlistIsEmpty((*hash)->LH_table[i].LHN_list))
+         {  
+            i++;
             continue;
+         }
 
          else       
          {
@@ -353,17 +357,17 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
                printf("\nERROR UNSUCCESSFUL MAPPING\n");
                return 0;
             }
+            i++;  
          } 
-         i++;  
       }
 
-      nhash->LH_counter = (*hash)->LH_counter;
       if(LH_HashTableDel(*hash))
          printf("\nSUCCESS DELETING OLD HASH TABLE\n");
       else
          printf("\nThere was a problem deleting the old hash table\n");
 
       *hash = nhash;
+      printf("capacity after rehash:========================= %lu\n", (*hash)->LH_capacity);
       return 1;
    }
    
