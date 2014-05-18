@@ -517,7 +517,7 @@ int LlistInsData(Llist* list, void* data)
    }
    
    int i = 0;
-   LlistNode* ptr = list->head->next;
+   LlistNode* ptr = list->head;
    while(i < list->used)
    {
       ptr = ptr->next;
@@ -637,7 +637,7 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
       dstC = dst->head->next;
       while(srcC != src->head)
       {
-         printf("src pointer is %p dst pointer is %p",srcC,dstC);
+         //printf("src pointer is %p dst pointer is %p",srcC,dstC);
          LlistNodeCpy(srcC, dstC, datacp);
          srcC = srcC->next;
          dstC = dstC->next;
