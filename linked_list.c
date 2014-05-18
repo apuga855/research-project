@@ -346,7 +346,7 @@ int LlistInsNode(Llist *list, void * nData)
    
    if(cur->next == list->head)
    {
-      printf("Maing a new node ==============================\n");
+      //printf("Maing a new node ==============================\n");
       LlistNode * nNode = malloc(sizeof(LlistNode));
       if(nNode == NULL)
       {

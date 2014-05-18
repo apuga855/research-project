@@ -388,7 +388,7 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
       else
       {
          printf("\nERROR IN REHASHING UNSUCCESSFUL\n");
-         return 0;
+         return -1;
       }
    }
    else {

@@ -314,7 +314,7 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
 
      if (dataLength > 0)					//check if our packet was not empty, it could be, maybe 
      {
-        if(LH_hashFunc(sharedMemSeg,(void*)SRD_pckt, myhashfunc,SRDPcktCpy, pcktAlloc))
+        if(LH_hashFunc(sharedMemSeg,(void*)SRD_pckt, myhashfunc,SRDPcktCpy, pcktAlloc) != -1)
            printf("Successfully hashed\n");
         else
            printf("Problem hashing\n");
