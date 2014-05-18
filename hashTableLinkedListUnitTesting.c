@@ -15,18 +15,18 @@ int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	X
 void LHN_HashNodePrint(LHN_hashNode*,void*);				X
 void LHN_HashNodeInit(LHN_hashNode*);					X
 
-LH_hashTable Section							Check
-LH_hashTable* LH_HashTableAlloc();					
-LH_hashTable* LH_HashTableAllocBuff(void*);				
+LH_hashTable Section						        Check
+LH_hashTable* LH_HashTableAlloc();					X
+LH_hashTable* LH_HashTableAllocBuff(void*);				X
 LH_hashTable* LH_HashTableAllocSetBuff(int, void*);			
-void LH_HashTableInit(LH_hashTable*);					
-int LH_HashTableDel(LH_hashTable*);					
+void LH_HashTableInit(LH_hashTable*);					X
+int LH_HashTableDel(LH_hashTable*);					X
 int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);		
 long int LH_hash(LHN_hashNode*,LH_hashTable*);				
 void LH_HashSet(LH_hashTable*, void*, void*, void*);			
 int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);		
 void LH_HashTablePrint(LH_hashTable*, void*);				
-typedef int(*LH_keyGenerate)(LH_hashTable*, void*);			
+typedef int(*LH_keyGenerate)(LH_hashTable*, void*);			X
 
 */
 typedef struct _dummyStruct
@@ -94,6 +94,7 @@ int main()
    void * payloadArr[10];
 
    LHN_hashNode* tmp = NULL;
+   printf("****************************HashNodeSection*************************\n");
    printf("Success at HashNodeAlloc() Test\n");
    tmp = LHN_HashNodeAlloc();
    if(tmp != NULL)
@@ -156,8 +157,37 @@ int main()
    LHN_HashNodePrint(tmp, printDummy);
    printf("\nPrinting copy\n");
    LHN_HashNodePrint(cpy, printDummy);
-//int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	
+   LHN_HashNodeDel(tmp);
+   LHN_HashNodeDel(cpy);
+   tmp = NULL;
+   cpy = NULL;
+
    
+   
+
+   printf("\n\n****************************HashNodeSection*************************\n");
+   printf("Testing LH_HashTableAlloc() Test\n");
+   LH_hashTable* testTable = NULL;
+   testTable = LH_HashTableAlloc();
+   if(testTable != NULL) 
+      printf("Success at HashTablelloc()++++++++++++++++++++++++++\n");
+   else
+      printf("Failure at HasTableAlloc()--------------------------\n");
+   
+   printf("Testing LH_HashTableDel()\n");
+   if(LH_HashTableDel(testTable))
+      printf("Success at HashTableDel()++++++++++++++++++++++++++\n");
+   else
+      printf("Failure at HasTableDel()--------------------------\n");
+   
+   testTable = NULL;
+   testTable = LH_HashTableAllocBuff(dummyAlloc);
+   if(testTable != NULL)
+      printf("Success at LH_HashTableAllocBuff()++++++++++++++++++++++++++\n");
+   else
+      printf("Failure at LH_HashTableAllocBuff()--------------------------\n");
+   
+//int LH_HashTableDel(LH_hashTable*);					
 }
 
 
