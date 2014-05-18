@@ -19,6 +19,7 @@
 #define ipLen  sizeof(struct ip)
 #define tcpLen  sizeof(struct tcphdr)
 #define fngPntLen 13
+#define INET4_ADDRSTRLEN 16
 
 //starting from here, is all necessary materials and tools for ---------------------
 //packet capture without reasembly
@@ -313,7 +314,7 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
 
      if (dataLength > 0)					//check if our packet was not empty, it could be, maybe 
      {
-        if(LH_hashFunc(sharedMemSeg,(void*)SRD_pckt, myhashfunc,SRDPcktCpy, pcktAlloc))
+        if(LH_hashFunc(sharedMemSeg,(void*)SRD_pckt, myhashfunc,SRDPcktCpy, pcktAlloc) != -1)
            printf("Successfully hashed\n");
         else
            printf("Problem hashing\n");
@@ -340,10 +341,23 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
 
 //printing function
 
+
+
 void SRDPcktPrint(sensorRdyPckt *curPckt)
 {
-   printf("Printing packet #%u\nSource Address: %d\nDestination Address: %d\nSource Port: %d\nDestination Port: %d\n" 
-	  ,curPckt->SRD_id, curPckt->SRD_src_addr, curPckt->SRD_dst_addr, curPckt->SRD_src_prt, curPckt->SRD_dst_prt);
+    char src_addr[INET4_ADDRSTRLEN], dst_addr[INET4_ADDRSTRLEN];
+    struct in_addr s, d;
+    inet_ntop(AF_INET, &s, src_addr, sizeof(src_addr));
+    inet_ntop(AF_INET, &d, dst_addr, sizeof(dst_addr));
+
+    printf("Printing packet #%u\n"
+          "Source Address: %s\n"
+          "Destination Address: %s\n"
+          "Source Port: %d\n"
+          "Destination Port: %d\n",
+          curPckt->SRD_id,
+          src_addr, dst_addr,
+          curPckt->SRD_src_prt, curPckt->SRD_dst_prt);
 }
 
 
