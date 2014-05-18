@@ -410,6 +410,7 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
    int i = 0;
    while(i < table->LH_capacity)
    {
+      printf("\n\nPrinting node %d",i);
       LHN_HashNodePrint(&(table->LH_table[i]), dataprint);
       i++;
    }

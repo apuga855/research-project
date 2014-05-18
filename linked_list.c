@@ -151,8 +151,8 @@ void LlistNodePrint(LlistNode* node, void* dataprint)
       printf("\n\nThe node is the head");
    if(node->root == 0)
       printf("\n\nThe node is not the head");
-   printf("\nThe next pointer points to %p",node->next);
-   printf("\nThe previous pointer points to %p",node->prev);
+   //printf("\nThe next pointer points to %p",node->next);
+   //printf("\nThe previous pointer points to %p",node->prev);
    if(node->root == 1)
       return;
    
@@ -735,7 +735,7 @@ void LlistPrint(Llist* list, void* printNode)
    int i = 0;
    LlistNode* traverse = NULL;
    traverse = list->head;
-   printf("\nstarting at the head\n");
+   //printf("\nstarting at the head\n");
    LlistNodePrint(traverse, printNode);
    while(i < list->length && list->used != 0 && list->used > i)
    { 
@@ -926,4 +926,13 @@ void* LlistRetFirst(Llist* list)
 
    else
       return list->head->next->data;
+}
+
+int LlistAtLeastOne(Llist* list)
+	{
+   if(list->head->next->data == NULL)
+      return 0;
+
+   else
+      return 1;
 }

@@ -18,14 +18,14 @@ void LHN_HashNodeInit(LHN_hashNode*);					X
 LH_hashTable Section						        Check
 LH_hashTable* LH_HashTableAlloc();					X
 LH_hashTable* LH_HashTableAllocBuff(void*);				X
-LH_hashTable* LH_HashTableAllocSetBuff(int, void*);			
+LH_hashTable* LH_HashTableAllocSetBuff(int, void*);			X
 void LH_HashTableInit(LH_hashTable*);					X
 int LH_HashTableDel(LH_hashTable*);					X
 int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);		
 long int LH_hash(LHN_hashNode*,LH_hashTable*);				
-void LH_HashSet(LH_hashTable*, void*, void*, void*);			
+void LH_HashSet(LH_hashTable*, void*, void*, void*);			X
 int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);		
-void LH_HashTablePrint(LH_hashTable*, void*);				
+void LH_HashTablePrint(LH_hashTable*, void*);				X
 typedef int(*LH_keyGenerate)(LH_hashTable*, void*);			X
 
 */
@@ -68,9 +68,11 @@ int myhashfunc(LH_hashTable* table, void * data)
 
    printf("\nAttempting to hash %c\n",p->garbage);
 
-   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
-      return slot;
-
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list) || LlistAtLeastOne(table->LH_table[slot].LHN_list))
+   {
+      if(((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id)
+         return slot;
+   }
    else
    {
       rslot = (p->id) % (kprimehash2(table->LH_primenums));
@@ -180,13 +182,43 @@ int main()
    else
       printf("Failure at HasTableDel()--------------------------\n");
    
+   printf("Testing LH_HashTableAllocBuff() Test\n");
    testTable = NULL;
    testTable = LH_HashTableAllocBuff(dummyAlloc);
    if(testTable != NULL)
       printf("Success at LH_HashTableAllocBuff()++++++++++++++++++++++++++\n");
    else
       printf("Failure at LH_HashTableAllocBuff()--------------------------\n");
+   printf("Printing the hashTable out\n");
+   LH_HashTablePrint(testTable, printDummy);
+
+   i = 0;
+   curID = 0;
+   curGarbage = '!';
+   void* arrpayload[93];
    
+   while(i < 93)
+   {
+      arrpayload[i] = malloc(sizeof(dummyStruct));
+      ((dummyStruct*)arrpayload[i])->id = curID;
+      ((dummyStruct*)arrpayload[i])->garbage = curGarbage;
+      curID++;
+      curGarbage++;
+      i++;
+   }
+
+   i = 0;
+   while(i < 93)
+   {
+      if(LH_hashFunc(testTable, arrpayload[i],myhashfunc,dummyCpy,dummyAlloc))
+         printf("Successful hash\n");
+      else
+         printf("ERROR hashing\n");
+      i++;
+   }
+
+   LH_HashTablePrint(testTable, printDummy);
+ 
 //int LH_HashTableDel(LH_hashTable*);					
 }
 
