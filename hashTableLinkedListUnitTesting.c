@@ -2,7 +2,33 @@
 #include<stdio.h>
 #include<string.h>
 #include"linked_list.h"
+#include "hashTableLinkedList.h"
+/*
+LHN_hashNode Section							Check
+LHN_hashNode * LHN_HashNodeAlloc();
+LHN_hashNode * LHN_HashNodeDataAlloc(int, void*);
+LHN_hashNode * LHN_HashNodeSelfAlloc(void*, void**, int);
+int HashNodeFail(LHN_hashNode*);
+int LHN_HashNodeDel(LHN_hashNode*);
+int LHN_HashNodeIns(LHN_hashNode*,void*);
+int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);
+void LHN_HashNodePrint(LHN_hashNode*,void*);
+void LHN_HashNodeInit(LHN_hashNode*);
 
+LH_hashTable Section							Check
+LH_hashTable* LH_HashTableAlloc();
+LH_hashTable* LH_HashTableAllocBuff(void*);
+LH_hashTable* LH_HashTableAllocSetBuff(int, void*);
+void LH_HashTableInit(LH_hashTable*);
+int LH_HashTableDel(LH_hashTable*);
+int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);
+long int LH_hash(LHN_hashNode*,LH_hashTable*);
+void LH_HashSet(LH_hashTable*, void*, void*, void*);
+int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);
+void LH_HashTablePrint(LH_hashTable*, void*);
+typedef int(*LH_keyGenerate)(LH_hashTable*, void*);
+
+*/
 typedef struct _dummyStruct
 {
    int id;
@@ -37,10 +63,10 @@ int myhashfunc(LH_hashTable* table, void * data)
    int slot = 0;
    int rslot = 0;
    int i = 1;
-   person* p = (person*) data;
+   dummyStruct* p = (dummyStruct*) data;
    slot = (p->id) % (kprimeCap(table->LH_primenums));
 
-   printf("\nAttempting to hash %s\n",p->name);
+   printf("\nAttempting to hash %c\n",p->garbage);
 
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
       return slot;
@@ -49,7 +75,7 @@ int myhashfunc(LH_hashTable* table, void * data)
    {
       rslot = (p->id) % (kprimehash2(table->LH_primenums));
       if(rslot == 0 && slot == 0)
-          rslot = (p->id + 13) % (kprimehash2(table->primenums));
+          rslot = (p->id + 13) % (kprimehash2(table->LH_primenums));
   
       do
       {
@@ -62,5 +88,13 @@ int myhashfunc(LH_hashTable* table, void * data)
 
 int main()
 {
+   LHN_hashNode* tmp = NULL;
+   printf("Success at HashNodeAlloc() Test\n");
+   tmp = LHN_HashNodeAlloc();
+   if(tmp != NULL)
+      printf("Success at HashNodeAlloc()++++++++++++++++++++++++++\n");
+   else
+      printf("Failure at HashNodeAlloc()--------------------------\n");
 
+   
 }

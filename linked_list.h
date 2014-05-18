@@ -120,7 +120,7 @@ int LlistDelNodeTargetN(LlistNode *,Llist*);
 int LlistDelNodeTarget(Llist*,int);
 void* LlistDelNodeTargetQ(LlistNode ,Llist *);
 //nullying all values of all data within the list
-int LlistDelDAta(Llist*, void*);
+int LlistDelData(Llist*, void*);
 //copy size
 int LlistCpySize(Llist *, Llist *, void*);
 //copies entire list
