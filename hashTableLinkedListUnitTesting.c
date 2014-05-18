@@ -5,28 +5,28 @@
 #include "hashTableLinkedList.h"
 /*
 LHN_hashNode Section							Check
-LHN_hashNode * LHN_HashNodeAlloc();
-LHN_hashNode * LHN_HashNodeDataAlloc(int, void*);
-LHN_hashNode * LHN_HashNodeSelfAlloc(void*, void**, int);
-int HashNodeFail(LHN_hashNode*);
-int LHN_HashNodeDel(LHN_hashNode*);
+LHN_hashNode * LHN_HashNodeAlloc();					X
+LHN_hashNode * LHN_HashNodeDataAlloc(int, void*);			X
+LHN_hashNode * LHN_HashNodeSelfAlloc(void*, void**, int);		
+int HashNodeFail(LHN_hashNode*);					
+int LHN_HashNodeDel(LHN_hashNode*);					X
 int LHN_HashNodeIns(LHN_hashNode*,void*);
-int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);
-void LHN_HashNodePrint(LHN_hashNode*,void*);
-void LHN_HashNodeInit(LHN_hashNode*);
+int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	
+void LHN_HashNodePrint(LHN_hashNode*,void*);				X
+void LHN_HashNodeInit(LHN_hashNode*);					
 
 LH_hashTable Section							Check
-LH_hashTable* LH_HashTableAlloc();
-LH_hashTable* LH_HashTableAllocBuff(void*);
-LH_hashTable* LH_HashTableAllocSetBuff(int, void*);
-void LH_HashTableInit(LH_hashTable*);
-int LH_HashTableDel(LH_hashTable*);
-int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);
-long int LH_hash(LHN_hashNode*,LH_hashTable*);
-void LH_HashSet(LH_hashTable*, void*, void*, void*);
-int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);
-void LH_HashTablePrint(LH_hashTable*, void*);
-typedef int(*LH_keyGenerate)(LH_hashTable*, void*);
+LH_hashTable* LH_HashTableAlloc();					
+LH_hashTable* LH_HashTableAllocBuff(void*);				
+LH_hashTable* LH_HashTableAllocSetBuff(int, void*);			
+void LH_HashTableInit(LH_hashTable*);					
+int LH_HashTableDel(LH_hashTable*);					
+int LH_HashTableRehash(LH_hashTable**, void*, void*,void*);		
+long int LH_hash(LHN_hashNode*,LH_hashTable*);				
+void LH_HashSet(LH_hashTable*, void*, void*, void*);			
+int LH_hashFunc(LH_hashTable*, void *, void *,void *,void *);		
+void LH_HashTablePrint(LH_hashTable*, void*);				
+typedef int(*LH_keyGenerate)(LH_hashTable*, void*);			
 
 */
 typedef struct _dummyStruct
@@ -88,6 +88,11 @@ int myhashfunc(LH_hashTable* table, void * data)
 
 int main()
 {
+   int curID = 0;
+   char curGarbage = '!';
+   int i = 0;
+   void * payloadArr[10];
+
    LHN_hashNode* tmp = NULL;
    printf("Success at HashNodeAlloc() Test\n");
    tmp = LHN_HashNodeAlloc();
@@ -96,5 +101,45 @@ int main()
    else
       printf("Failure at HashNodeAlloc()--------------------------\n");
 
+   printf("Success at HashNodeDel() Test\n");
+   if(LHN_HashNodeDel(tmp))
+   {  
+      tmp = NULL;
+      printf("Success at HashNodeDel()++++++++++++++++++++++++++\n");
+   }
+
+   else
+      printf("Failure at HashNodeDel()--------------------------\n");
+   
+   tmp = LHN_HashNodeDataAlloc(10, dummyAlloc);
+   if(tmp != NULL)
+      printf("Success at HashNodeDataAlloc()++++++++++++++++++++++++++\n");
+
+   else
+      printf("Failure at HashNodeDataAlloc()--------------------------\n");
+  
+   printf("LHN_HashNodePrint() Test\n");
+   LHN_HashNodePrint(tmp, printDummy);
+   printf("\nIf show properly, success at LHN_HashNodePrint() Test\n");
+   printf("LHN_HashNodeSelfAlloc Test\n");
+   LHN_HashNodeDel(tmp);
+   tmp = NULL;
+   while(i < 10)
+   {
+      payloadArr[i] = malloc(sizeof(dummyStruct));
+      ((dummyStruct*)payloadArr[i])->id = curID;
+      ((dummyStruct*)payloadArr[i])->garbage = curGarbage;
+      curID++;
+      curGarbage++;
+      i++;
+   }
+   
+   tmp = LHN_HashNodeSelfAlloc(dummyAlloc, payloadArr, 10);
+   LHN_HashNodePrint(tmp, printDummy);
+   printf("\nIf show properly, success at LHN_HashNodeSelfAlloc() Test\n");
    
 }
+
+
+
+
