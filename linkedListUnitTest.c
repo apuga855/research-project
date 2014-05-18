@@ -226,7 +226,6 @@ int main()
    
    
    printf("\nLlistInsNodeTarget test ***************************************\n");
-   free(ins);
    ins = NULL;
    dummyStruct* insHead = malloc(sizeof(dummyStruct));
    dummyStruct* insTail = malloc(sizeof(dummyStruct));
