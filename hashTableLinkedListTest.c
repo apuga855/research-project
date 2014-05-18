@@ -93,10 +93,12 @@ int myhashfunc(LH_hashTable* table, void * data)
    
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
       return slot;
-   
+ 
    else
    {
       rslot = (p->id) % (kprimehash2(table->LH_primenums));
+      if(rslot == 0 && slot == 0)
+          rslot = (p->id + 13) % (kprimehash2(table->primenums));
       do
       {
          slot = (slot + (i * rslot)) % (table->LH_capacity);   

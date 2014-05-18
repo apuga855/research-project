@@ -28,21 +28,20 @@ Llist:
 15 int LlistInsNode(Llist *, void *);					X
 16 int LlistInsData(Llist*, void*);					X
 17 int LlistDelNode(Llist*, void*,void*,void*, int);			X
-18 int LlistDelNodeTargetN(LlistNode *,Llist*);				
-19 int LlistDelNodeTarget(Llist*,int);
-20 void* LlistDelNodeTargetQ(LlistNode ,Llist *);
-21 int LlistDelDAta(Llist*, void*);
-22 int LlistCpySize(Llist *, Llist *, void*);				X
-23 int LlistCpy(Llist *, Llist *, void *,void*);			X
-24 int LlistFail(Llist *);						X
-25 LlistNode * LlistSearchNode(Llist*,void*, void*, int);
-26 int LlistIsEmpty(Llist*);						X
-27 void * LlistRetFirst(Llist*);
-28 void LlistPrint(Llist *, void*);					X
-29 typedef void(*LlistSortIns)(Llist*);					
-30 typedef void(*LlistSort)(Llist*);					
-31 typedef LlistNode*(*LlistSearch)(Llist*, void*);			
-32 typedef int(*LlistUsrDataDel)(void*);				
+18 int LlistDelNodeTargetN(LlistNode *,Llist*);			        X
+19 int LlistDelNodeTarget(Llist*,int);					X
+20 int LlistDelData(Llist*, void*);					X
+21 int LlistCpySize(Llist *, Llist *, void*);				X
+22 int LlistCpy(Llist *, Llist *, void *,void*);			X
+23 int LlistFail(Llist *);						X
+24 LlistNode * LlistSearchNode(Llist*,void*, void*, int);		
+25 int LlistIsEmpty(Llist*);						X
+26 void * LlistRetFirst(Llist*);					X
+27 void LlistPrint(Llist *, void*);					X
+28 typedef void(*LlistSortIns)(Llist*);					
+29 typedef void(*LlistSort)(Llist*);					
+30 typedef LlistNode*(*LlistSearch)(Llist*, void*);			
+31 typedef int(*LlistUsrDataDel)(void*);				
 */
 
 typedef struct _dummyStruct
@@ -307,4 +306,8 @@ int main()
    }
    else
       printf("LlistCpy error or LlistCpySize error -----------------------------------\n");       
+
+   
+//20 void* LlistDelNodeTargetQ(LlistNode ,Llist *);			
+//21 int LlistDelDAta(Llist*, void*);					
 }

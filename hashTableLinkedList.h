@@ -2,8 +2,8 @@
 #include<stdio.h>
 #include"linked_list.h"
 #include"primeArr.h"
-#define HASH_LENGTH 607
-#define BUFF_SIZE 20
+#define HASH_LENGTH 7//607
+#define BUFF_SIZE 1
 //Node structure, will hold our sensor ready packets
 typedef struct _LHN_hashNode
 {

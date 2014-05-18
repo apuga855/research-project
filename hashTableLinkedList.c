@@ -327,6 +327,7 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 //is then used to copy the hashnode 
 int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void * keygen)
 {
+   //double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
    double result = (double)((*hash)->LH_counter / (*hash)->LH_capacity); 
    if(result > (*hash)->LH_loadFactor)
    {
@@ -394,7 +395,7 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
    else {
        LH_keyGenerate func = keygen;
        int key = func(hash,data);
-
+       hash->LH_counter++;
        return LlistInsData(hash->LH_table[key].LHN_list, data);
    }
 }
@@ -410,6 +411,7 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
    int i = 0;
    while(i < table->LH_capacity)
    {
+      printf("\n\nPrinting node %d",i);
       LHN_HashNodePrint(&(table->LH_table[i]), dataprint);
       i++;
    }
