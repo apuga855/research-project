@@ -328,7 +328,7 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void * keygen)
 {
    //double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
-   double result = (double)((*hash)->LH_counter / (*hash)->LH_capacity); 
+   double result = ((double)((*hash)->LH_counter) / (*hash)->LH_capacity); 
    if(result > (*hash)->LH_loadFactor)
    {
       int i = 0;
@@ -342,7 +342,7 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
          else       
          {
             LH_keyGenerate func = keygen;
-            int key = func(*hash, LlistRetFirst((*hash)->LH_table[i].LHN_list));
+            int key = func(nhash, LlistRetFirst((*hash)->LH_table[i].LHN_list));
 //          if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
             if(LHN_HashNodeCpy((&((*hash)->LH_table[i])), (&(nhash->LH_table[key])), datacp, dataalloc))
                printf("\nSuccessful mapping\n");
@@ -380,7 +380,7 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
 //if needing to rehash it rehashes.
 int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, void * dataalloc)
 {
-   double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
+   double result = ((double)((hash->LH_counter + 1))/ hash->LH_capacity);
    if(result > hash->LH_loadFactor)
    {
       printf("\nRehashing\n");
@@ -388,16 +388,16 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
          printf("\nRehashing SUCCESSFUL\n");
       else
       {
-         printf("\nERROR IN REHASHING UNSUCCESSFUL\n");
+         //printf("\nERROR IN REHASHING UNSUCCESSFUL\n");
          return -1;
       }
    }
-   else {
+   //else {
        LH_keyGenerate func = keygen;
        int key = func(hash,data);
        hash->LH_counter++;
        return LlistInsData(hash->LH_table[key].LHN_list, data);
-   }
+  // }
 }
 
 void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
