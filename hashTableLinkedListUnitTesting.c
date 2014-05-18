@@ -7,13 +7,13 @@
 LHN_hashNode Section							Check
 LHN_hashNode * LHN_HashNodeAlloc();					X
 LHN_hashNode * LHN_HashNodeDataAlloc(int, void*);			X
-LHN_hashNode * LHN_HashNodeSelfAlloc(void*, void**, int);		
-int HashNodeFail(LHN_hashNode*);					
+LHN_hashNode * LHN_HashNodeSelfAlloc(void*, void**, int);		X
+int HashNodeFail(LHN_hashNode*);					X
 int LHN_HashNodeDel(LHN_hashNode*);					X
-int LHN_HashNodeIns(LHN_hashNode*,void*);
-int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	
+int LHN_HashNodeIns(LHN_hashNode*,void*);				X
+int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	X
 void LHN_HashNodePrint(LHN_hashNode*,void*);				X
-void LHN_HashNodeInit(LHN_hashNode*);					
+void LHN_HashNodeInit(LHN_hashNode*);					X
 
 LH_hashTable Section							Check
 LH_hashTable* LH_HashTableAlloc();					
@@ -137,6 +137,26 @@ int main()
    tmp = LHN_HashNodeSelfAlloc(dummyAlloc, payloadArr, 10);
    LHN_HashNodePrint(tmp, printDummy);
    printf("\nIf show properly, success at LHN_HashNodeSelfAlloc() Test\n");
+   printf("\nLHN_HashNodeIns()\n");
+   dummyStruct * ins =(dummyStruct*) dummyAlloc();
+   ins->id = curID;
+   ins->garbage = curGarbage;
+   curID++;
+   curGarbage++;
+   LHN_HashNodeIns(tmp,(void*) ins);
+   LHN_HashNodePrint(tmp, printDummy);
+   printf("\nIf show properly, success at LHN_HashNodeIns worked\n");
+   printf("\nIf show properly, success at LHN_HashNodeCpy() Test\n");
+   LHN_hashNode* cpy = LHN_HashNodeAlloc();
+   if(LHN_HashNodeCpy(tmp, cpy, dummyCpy,dummyAlloc))
+      printf("Success LHN_HashNodeCpy\n");
+   else
+      printf("Failure LHN_HashNodeCpy\n");
+   printf("\nPrinting original\n");
+   LHN_HashNodePrint(tmp, printDummy);
+   printf("\nPrinting copy\n");
+   LHN_HashNodePrint(cpy, printDummy);
+//int LHN_HashNodeCpy(LHN_hashNode*, LHN_hashNode*, void*, void*);	
    
 }
 
