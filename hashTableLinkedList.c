@@ -327,8 +327,10 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 //is then used to copy the hashnode 
 int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void * keygen)
 {
+   printf("capacity:========================= %lu\n", (*hash)->LH_capacity);
+   double result = ((double)((*hash)->LH_counter+1) / (*hash)->LH_capacity); 
+   
    //double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
-   double result = ((double)((*hash)->LH_counter) / (*hash)->LH_capacity); 
    if(result > (*hash)->LH_loadFactor)
    {
       int i = 0;
@@ -351,7 +353,8 @@ int LH_HashTableRehash(LH_hashTable** hash, void* datacp, void* dataalloc, void 
                printf("\nERROR UNSUCCESSFUL MAPPING\n");
                return 0;
             }
-         }   
+         } 
+         i++;  
       }
 
       nhash->LH_counter = (*hash)->LH_counter;
@@ -388,7 +391,7 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
          printf("\nRehashing SUCCESSFUL\n");
       else
       {
-         //printf("\nERROR IN REHASHING UNSUCCESSFUL\n");
+         printf("\nERROR IN REHASHING UNSUCCESSFUL\n");
          return -1;
       }
    }

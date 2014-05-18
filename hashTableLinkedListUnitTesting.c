@@ -217,7 +217,7 @@ int main()
       i++;
    }
 
-   LH_HashTablePrint(testTable, printDummy);
+   //LH_HashTablePrint(testTable, printDummy);
  
 //int LH_HashTableDel(LH_hashTable*);					
 }
