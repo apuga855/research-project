@@ -737,7 +737,7 @@ void LlistPrint(Llist* list, void* printNode)
    traverse = list->head;
    printf("\nstarting at the head\n");
    LlistNodePrint(traverse, printNode);
-   while(i < list->length && list->used != 0 && list->used > 0 && list->used > i)
+   while(i < list->length && list->used != 0 && list->used > i)
    { 
       traverse = traverse->next;
       LlistNodePrint(traverse, printNode);

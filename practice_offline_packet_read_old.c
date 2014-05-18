@@ -329,11 +329,10 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
         fngPntPrint(SRD_pckt);
      }
 
-    printf("Finished with the first packet from file, would you like to continue? (y/n)\n");
-    scanf("%c", &contnue);
+    //printf("Finished with the first packet from file, would you like to continue? (y/n)\n");
+    //scanf("%c", &contnue);
 
-    if(contnue == 'n'){exit(0);}
-    return;
+    //if(contnue == 'n'){exit(0);}
 
 }
 
@@ -751,7 +750,7 @@ int myhashfunc(LH_hashTable* table, void * data)
       {
          slot = (slot + (i * rslot)) % (table->LH_capacity);
          i++;
-      }while(LlistIsEmpty(table->LH_table[slot].LHN_list));
+      }while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
    }
    return slot;
 }

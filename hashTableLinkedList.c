@@ -391,16 +391,11 @@ int LH_hashFunc(LH_hashTable* hash, void* data, void* keygen, void * datacp, voi
          return 0;
       }
    }
-   
-   else
-   {
-      LH_keyGenerate func = keygen;
-      int key = func(hash,data);
-   
-      if(LlistInsData(hash->LH_table[key].LHN_list, data))
-         return 1;
-      else
-         return 0;   
+   else {
+       LH_keyGenerate func = keygen;
+       int key = func(hash,data);
+
+       return LlistInsData(hash->LH_table[key].LHN_list, data);
    }
 }
 
