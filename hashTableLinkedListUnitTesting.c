@@ -210,7 +210,7 @@ int main()
    i = 0;
    while(i < 93)
    {
-      if(LH_hashFunc(testTable, arrpayload[i],myhashfunc,dummyCpy,dummyAlloc))
+      if(LH_hashFunc((&testTable), arrpayload[i],myhashfunc,dummyCpy,dummyAlloc))
          printf("Successful hash\n");
       else
          printf("ERROR hashing\n");
