@@ -64,14 +64,12 @@ int myhashfunc(LH_hashTable* table, void * data)
    int rslot = 0;
    int i = 1;
    dummyStruct* p = (dummyStruct*) data;
-   slot = (p->id) % (kprimeCap(table->LH_primenums));
+   slot = (p->id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
 
    printf("\nAttempting to hash %c\n",p->garbage);
 
-   if(LlistIsEmpty(table->LH_table[slot].LHN_list) || 
-      (LlistAtLeastOne(table->LH_table[slot].LHN_list) && 
-      ((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id))
-         return slot;
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
+      return slot;
    
    else
    {
@@ -87,7 +85,7 @@ int myhashfunc(LH_hashTable* table, void * data)
            (((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id))
             return slot;
          i++;
-      }while(LlistAtLeastOne(table->LH_table[slot].LHN_list));//while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
+      }while(!LlistAtLeastOne(table->LH_table[slot].LHN_list));//while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
    }
    return slot;
 }
