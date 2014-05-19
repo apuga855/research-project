@@ -414,10 +414,17 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
       printf("\nError passing the printing function\n");
       return;
    }
+
    
    int i = 0;
    while(i < table->LH_capacity)
    {
+      if(!LlistAtLeastOne(table->LH_table[i].LHN_list))
+      {
+         i++;
+         continue;
+      }
+
       printf("\n\nPrinting node %d",i);
       LHN_HashNodePrint(&(table->LH_table[i]), dataprint);
       i++;

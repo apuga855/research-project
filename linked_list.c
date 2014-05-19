@@ -929,8 +929,8 @@ void* LlistRetFirst(Llist* list)
 }
 
 int LlistAtLeastOne(Llist* list)
-	{
-   if(list->head->next->data == NULL)
+{
+   if(list->head->next->data == NULL || list->used == 0)
       return 0;
 
    else

@@ -48,14 +48,14 @@ void dummyCpy(void* src, void* dst)
    dstC->garbage = srcC->garbage;
 
 }
-void printDummy(dummyStruct* src)
+void printDummy(void* src)
 {
    if(src == NULL)
    {
       printf("The struct was empty\n\n");
       return;
    }
-   printf("\nPrinting dummy struct:\n id = %d, garbage = %c", src->id, src->garbage);
+   printf("\nPrinting dummy struct:\n id = %d, garbage = %c", ((dummyStruct*)src)->id, ((dummyStruct*)src)->garbage);
 }
 
 int myhashfunc(LH_hashTable* table, void * data)
@@ -81,9 +81,13 @@ int myhashfunc(LH_hashTable* table, void * data)
   
       do
       {
-         slot = (slot + (i * rslot)) % (table->LH_capacity);
+         printf("\nIn the do while hash2 \n");
+         slot = ((slot + (i * rslot)) % (table->LH_capacity));
+         if(LlistAtLeastOne(table->LH_table[slot].LHN_list) && 
+           (((dummyStruct*)LlistRetFirst(table->LH_table[slot].LHN_list))->id == ((dummyStruct*)data)->id))
+            return slot;
          i++;
-      }while(LlistIsEmpty(table->LH_table[slot].LHN_list));
+      }while(LlistAtLeastOne(table->LH_table[slot].LHN_list));//while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
    }
    return slot;
 }
@@ -211,13 +215,14 @@ int main()
    while(i < 93)
    {
       if(LH_hashFunc((&testTable), arrpayload[i],myhashfunc,dummyCpy,dummyAlloc))
-         printf("Successful hash\n");
+         ; 
+//        printf("Successful hash\n");
       else
          printf("ERROR hashing\n");
       i++;
    }
 
-   //LH_HashTablePrint(testTable, printDummy);
+   LH_HashTablePrint(testTable, printDummy);
  
 //int LH_HashTableDel(LH_hashTable*);					
 }
