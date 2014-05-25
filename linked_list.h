@@ -20,8 +20,11 @@ typedef struct _LlistNode
   int root;
   struct _LlistNode * next;
   struct _LlistNode * prev;
-  void * data; 
+  void * data;
+  int status; 		//-1 == node is empty and never been used, 0 node is empty previously used, 1 in use, 2 is head node
 }LlistNode;
+
+
 
 //list contains a length, useful for user defined callback functions
 //keeps track of head only, rest is available by coursing through 
@@ -148,3 +151,4 @@ typedef LlistNode*(*LlistSearch)(Llist*, void*);
 //if they want to delete the data in a special way this will be used
 typedef int(*LlistUsrDataDel)(void*);
 int LlistInsNodeTarget(Llist *list, void * nData, int target);
+LlistNode* LlistRetFirstNode(Llist*);

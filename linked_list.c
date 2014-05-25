@@ -77,6 +77,7 @@ void LlistNodeInit (LlistNode *node)
    node->next = NULL;
    node->prev = NULL;
    node->data = NULL;
+   node->status = -1;
    return;
 }
 
@@ -129,7 +130,8 @@ int LlistNodeCpy(LlistNode *src, LlistNode *dst, void *datacp)
       printf("\none of the nodes did not have their data properly allocated\n");
       return 0;
    }
-
+   
+   dst->status = src->status;
    LlistNodeDataCpy func = datacp;
    func(src->data,dst->data);
    return 1; 
@@ -251,6 +253,7 @@ int LlistPopulate(Llist *list, void** dataArr, int arrLen)
    while(i < arrLen)
    {
       target->data = dataArr[i];
+      target->status = 1;
       i++;
       target = target->next;
    }
@@ -276,6 +279,7 @@ int LlistInit(Llist *list)
    list->head->next = list->head;
    list->head->prev = list->head;
    list->head->root = 1;
+   list->head->status = 2;
    list->length = 0;
    list->used = 0;
    return 1; 
@@ -355,6 +359,7 @@ int LlistInsNode(Llist *list, void * nData)
       }
 
       LlistNodeInit(nNode);
+      nNode->status = 1;
       nNode->data = nData;
       nNode->next = cur->next;
       nNode->prev = cur;
@@ -364,7 +369,10 @@ int LlistInsNode(Llist *list, void * nData)
    }
    
    else
+   {
       cur->next->data = nData;
+      cur->next->status = 1;
+   }
 
    list->used++;
    return 1;
@@ -414,6 +422,7 @@ int LlistInsNodeTarget(Llist *list, void * nData, int target)
    }
    
    LlistNodeInit(nNode);
+   nNode->status = 1;
    nNode->data = nData;
 
    nNode->prev = current;
@@ -525,6 +534,7 @@ int LlistInsData(Llist* list, void* data)
    }
 
    ptr->data = data;
+   ptr->status = 1;
    list->used++;
    return 1;
 }
@@ -545,7 +555,10 @@ int LlistDelData(Llist* list, void* nullify)
    while(ptr != list->head)
    {
       if(func(ptr->data))
+      {
+         ptr->status = 0;
          continue;
+      }
       else 
       {
          printf("\nerror nullying data\n");
@@ -625,7 +638,7 @@ int LlistCpySize(Llist *src, Llist *dst, void* dataalloc)
 //we exit failure
 int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
 {
-   printf("starting LlistCpy\n");
+   printf("starting LlistCpy\nsrc used =%d src length=%d dst used = %d dst length = %d\n",src->used, src->length,dst->used,dst->length);
    if(LlistFail(src)|| LlistFail(dst))   
       return 0;
    
@@ -638,6 +651,7 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
       while(srcC != src->head)
       {
          //printf("src pointer is %p dst pointer is %p",srcC,dstC);
+         
          LlistNodeCpy(srcC, dstC, datacp);
          srcC = srcC->next;
          dstC = dstC->next;
@@ -646,6 +660,7 @@ int LlistCpy(Llist *src, Llist *dst, void *datacp, void *dataalloc)
       dst->length = src->length;
       dst->used = src->used;
       printf("finishing LlistCpy\n");
+      printf("Final used and length\nsrc used =%d src length=%d dst used = %d dst length = %d\n",src->used, src->length,dst->used,dst->length);
      
       return 1;
    }
@@ -921,7 +936,8 @@ int LlistIsEmpty(Llist* list)
 //returns the first element in the list, for rehashing purposes
 void* LlistRetFirst(Llist* list)
 {
-   if(list->head->next == list->head)
+     
+   if(list->head->next == list->head || list->used == 0)
       return NULL;
 
    else
@@ -930,9 +946,24 @@ void* LlistRetFirst(Llist* list)
 
 int LlistAtLeastOne(Llist* list)
 {
-   if(list->head->next->data == NULL || list->used == 0)
+   if(list->head->next->data == NULL)
+   {
+      printf("List had no data in next\n"); 
       return 0;
-
+   }
+   else if(list->used == 0)
+   {
+      printf("List had nothing in use\n"); 
+      return 0;
+   }
    else
       return 1;
+}
+
+LlistNode* LlistRetFirstNode(Llist* list)
+{
+   if(list->head->next == list->head || list->used == 0)
+      return NULL;
+   else
+      return list->head->next;   
 }

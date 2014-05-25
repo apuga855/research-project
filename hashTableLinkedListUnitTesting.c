@@ -50,6 +50,7 @@ void dummyCpy(void* src, void* dst)
 }
 void printDummy(void* src)
 {
+   printf("\nUsing the print function********************************-------------------\n");
    if(src == NULL)
    {
       printf("The struct was empty\n\n");
@@ -60,19 +61,27 @@ void printDummy(void* src)
 
 int myhashfunc(LH_hashTable* table, void * data)
 {
+   if(data == NULL)
+      return -1;
+
    int slot = 0;
    int rslot = 0;
    int i = 1;
    dummyStruct* p = (dummyStruct*) data;
    slot = (p->id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
 
-   printf("\nAttempting to hash %c\n",p->garbage);
 
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
+   {
+      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
+      printf("List is empty\n");
       return slot;
-   
+   }
    else
    {
+      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
+      printf("List is not empty\n");
+      
       rslot = (p->id) % (kprimehash2(table->LH_primenums));
       if(rslot == 0 && slot == 0)
           rslot = (p->id + 13) % (kprimehash2(table->LH_primenums));
@@ -212,7 +221,7 @@ int main()
    i = 0;
    while(i < 93)
    {
-      if(LH_hashFunc((&testTable), arrpayload[i],myhashfunc,dummyCpy,dummyAlloc))
+      if(LH_hashFunc((&testTable), arrpayload[i],myhashfunc,dummyCpy,dummyAlloc,printDummy))
          ; 
 //        printf("Successful hash\n");
       else
@@ -220,6 +229,7 @@ int main()
       i++;
    }
 
+   printf("Finished hashing everything, attempting to print ||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
    LH_HashTablePrint(testTable, printDummy);
  
 //int LH_HashTableDel(LH_hashTable*);					

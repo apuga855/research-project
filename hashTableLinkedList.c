@@ -325,9 +325,9 @@ LH_hashTable* LH_HashTableAllocSetBuff(int cap, void* dataalloc)
 //Then the function loops from the first node to the last node rehashing every single element
 //using the keygen user defined function pointer. The function returns a slot, the slot
 //is then used to copy the hashnode 
-LH_hashTable* LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc, void * keygen)
+LH_hashTable* LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataalloc, void * keygen,void* print)
 {
-   printf("capacity:========================= %lu\n", hash->LH_capacity);
+   printf("IN REHASH capacity:========================= %lu\n", hash->LH_capacity);
   // double result = ((double)((*hash)->LH_counter+1) / (*hash)->LH_capacity); 
    
    //double result = (double)((hash->LH_counter + 1)/ hash->LH_capacity);
@@ -340,26 +340,49 @@ LH_hashTable* LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataall
       {
          //printf("doing stuff\n");
          if(LlistIsEmpty(hash->LH_table[i].LHN_list))
-         {  
+         { 
+            printf("The list was empty at node %d\n",i); 
             i++;
             continue;
          }
 
          else       
          {
+            printf("The list was not empty at node %d\n",i); 
             LH_keyGenerate func = keygen;
+            LlistNode* temp = LlistRetFirstNode(hash->LH_table[i].LHN_list);
+            //if(temp->status > 0)
+            //{
+            //   printf("The node was technically empty\n");
+            //   i++;
+            //   continue;
+            //}
             int key = func(nhash, LlistRetFirst(hash->LH_table[i].LHN_list));
 //          if(LlistCpy(hash->LH_table[i].LHN_list, nhash->LH_table[key].LHN_list, datacp, dataalloc))
+            if(key == -1)
+            {
+               i++;
+               continue;
+            }
+
             if(LHN_HashNodeCpy((&(hash->LH_table[i])), (&(nhash->LH_table[key])), datacp, dataalloc))
+            {
+               LHN_HashNodePrint(&(nhash->LH_table[key]),print);
                printf("\nSuccessful mapping\n");
+               printf("\nThe list info: list used=%d list length=%d\n", hash->LH_table[i].LHN_list->used, hash->LH_table[i].LHN_list->length);
+               LlistPrint(hash->LH_table[i].LHN_list, print);
+            }
             else
             {
                printf("\nERROR UNSUCCESSFUL MAPPING\n");
                return NULL;
             }
             i++;  
-         } 
+         }
       }
+         printf("printing from the rehash\n");
+         LH_HashTablePrint(nhash,print); 
+         printf("printing from the rehash\n");
 
       if(LH_HashTableDel(hash))
          printf("\nSUCCESS DELETING OLD HASH TABLE\n");
@@ -384,13 +407,13 @@ LH_hashTable* LH_HashTableRehash(LH_hashTable* hash, void* datacp, void* dataall
 //this function is in charge of calling the hashing function created by the user and then
 //inserting data in the correct slot using the slot obtained by the keygen function
 //if needing to rehash it rehashes.
-int LH_hashFunc(LH_hashTable** hash, void* data, void* keygen, void * datacp, void * dataalloc)
+int LH_hashFunc(LH_hashTable** hash, void* data, void* keygen, void * datacp, void * dataalloc, void* print)
 {
    double result = ((double)(((*hash)->LH_counter + 1))/ ((*hash)->LH_capacity));
    if(result > (*hash)->LH_loadFactor)
    {
       printf("\nRehashing\n");
-      *hash = LH_HashTableRehash((*hash),datacp,dataalloc,keygen);
+      *hash = LH_HashTableRehash((*hash),datacp,dataalloc,keygen,print);
       if((*hash) != NULL)
          printf("\nRehashing SUCCESSFUL\n");
       else
@@ -403,7 +426,10 @@ int LH_hashFunc(LH_hashTable** hash, void* data, void* keygen, void * datacp, vo
        LH_keyGenerate func = keygen;
        int key = func((*hash),data);
        (*hash)->LH_counter++;
-       return LlistInsData((*hash)->LH_table[key].LHN_list, data);
+       int x = LlistInsNode((*hash)->LH_table[key].LHN_list, data);
+       printf("Printing after hashing\n");
+       LH_HashTablePrint(*hash,print);
+       return x;
   // }
 }
 
@@ -415,12 +441,14 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
       return;
    }
 
-   
+   printf("inside of the hash table print function\n"); 
    int i = 0;
    while(i < table->LH_capacity)
    {
+      printf("In the loop for hash print %d\n",i); 
       if(!LlistAtLeastOne(table->LH_table[i].LHN_list))
       {
+         printf("Nothing in the list?\n"); 
          i++;
          continue;
       }
@@ -432,3 +460,4 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
    
    return;
 }
+
