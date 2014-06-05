@@ -218,7 +218,7 @@ int myhashfunc(LH_hashTable* table, void * data)
          printf("\nIn the do while hash2 \n");
          slot = ((slot + (i * rslot)) % (table->LH_capacity));
          if(LlistAtLeastOne(table->LH_table[slot].LHN_list) &&
-           ((((sensorRdyPckt*)(LlistRetFirst(table->LH_table[slot].LHN_list)))->ip.id) == (((sensorRdyPckt)(data))->ip.id)))
+           ((((sensorRdyPckt*)(LlistRetFirst(table->LH_table[slot].LHN_list)))->ip.id) == (((sensorRdyPckt*)(data))->ip.id)))
          {
             int i = 0;
             LlistNode* current = LlistRetFirstNode(table->LH_table[slot].LHN_list);
