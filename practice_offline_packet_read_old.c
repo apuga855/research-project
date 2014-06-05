@@ -10,17 +10,22 @@
 #include<pthread.h>
 #include<string.h>
 #include"hashTableLinkedList.h"
-#define P_BUFF 100
-#define THREAD_ARRAY_SIZE 10
-#define THREAD_DEFAULT_TIMEOUT 1000
-#define INPUT_NAME_SIZE 20
-#define PAYLOAD_BUF_SIZE 1024
-#define SENSOR_ARRAY_PACKET_LENGTH 20
-#define ETHERLEN 14
-#define fngPntLen 13
-#define INET4_ADDRSTRLEN 16
-#define HTTP_PORT 8000
+#define P_BUFF                          100
+#define THREAD_ARRAY_SIZE               10
+#define THREAD_DEFAULT_TIMEOUT          1000
+#define INPUT_NAME_SIZE                 20
+#define PAYLOAD_BUF_SIZE                1024
+#define SENSOR_ARRAY_PACKET_LENGTH      20
+#define ETHERLEN                        14
+#define fngPntLen                       13
+#define INET4_ADDRSTRLEN                16
+#define HTTP_PORT                       8000
 
+#define CLASS_UNKNOWN                   0x0
+#define CLASS_ETHER                     0x1
+#define CLASS_IP                        0x2
+#define CLASS_TCP                       0x4
+#define CLASS_HTTP                      0x8
 
 //Fragmentation notes:
 //this is assigning the address located at the target* address of the packet plust the size of the
@@ -34,34 +39,44 @@
 //packet capture without reasembly
 //need to typedef it knows its a type
 
-typedef struct _ipSensorData {
+typedef struct _etherData {
+   uint16_t type;
+} etherData;
 
-} ipSensorData;
+typedef struct _ipData {
+    uint16_t hdrlen;			//header length
+    uint16_t pktlen;
+    uint16_t id;
+    uint8_t morefrag;
+    uint16_t fragoffset;	//fragment offset
+    uint8_t proto;
+    uint32_t src;		//source address	
+    uint32_t dst;		//destination address
+} ipData;
+
+
+typedef struct _tcpData {
+   uint16_t srcport;		//source port
+   uint16_t dstport;  		//destination port
+   uint32_t seq;		//sequence number
+   uint16_t offset;
+} tcpData;
+
+typedef struct _httpData {
+   uint8_t *headers;
+   uint8_t *body;
+   size_t bodylen;
+   size_t hdrlen;
+} httpData;
 
 typedef struct _sensorRdyPckt
 {
-   uint16_t ether_type;
-
-   uint16_t ip_hdrlen;			//header length
-   uint16_t ip_pktlen;
-   uint16_t ip_id;
-   uint8_t ip_morefrag;
-   uint16_t ip_fragoffset;	//fragment offset
-   uint8_t ip_proto;
-   uint32_t ip_src;		//source address	
-   uint32_t ip_dst;		//destination address
-
-   uint16_t tcp_srcport;		//source port
-   uint16_t tcp_dstport;  		//destination port
-   uint32_t tcp_seq;		//sequence number
-   uint16_t tcp_offset;
-
-   uint8_t *http_headers;
-   uint8_t *http_body;
-   size_t http_bodylen;
-   size_t http_hdrlen;
-					//since it is actually a single byte anyway
    int *fngPnt;				//fingerprint
+   signed char class;
+   etherData ether;
+   ipData ip;
+   tcpData tcp;
+   httpData http;
 
 /*FINGER PRINT EXPLANATION:
  * array of integers, each slot contains a specified number (integer) that represents the character count 
@@ -236,6 +251,107 @@ char *decodeIP(uint32_t ip) {
     return ipstr;
 }
 
+void parsePacket(sensorRdyPckt *parsed, const u_char *raw, size_t raw_len) {
+    const u_char* raw_begin = raw;
+    parsed->class |= CLASS_ETHER;
+    parsed->ether.type = ntohs(*(uint16_t*)(raw+12));
+    raw += 14;
+
+    if (parsed->ether.type != ETHERTYPE_IP) 	
+        return;
+
+    parsed->class |= CLASS_IP;
+    parsed->ip.hdrlen = (*raw & 0x0f) * 4;
+    parsed->ip.pktlen = ntohs(*(uint16_t*)(raw+2));
+    parsed->ip.id = ntohs(*(uint16_t*)(raw+4));
+    parsed->ip.morefrag = (*(raw+6) & 0x20) > 0;
+    parsed->ip.fragoffset = ntohs((*(uint16_t*)(raw+6)) & 0x1fff) << 3;
+    parsed->ip.proto = *(uint8_t*)(raw+9);
+    parsed->ip.src = *(uint32_t*)(raw+12);
+    parsed->ip.dst = *(uint32_t*)(raw+16);
+
+    raw += parsed->ip.hdrlen; //FIXME: validate length
+
+    if(parsed->ip.proto != IPPROTO_TCP) //checking if it has an tcp header
+        return;
+
+    parsed->class |= CLASS_TCP;
+    parsed->tcp.srcport = ntohs(*((uint16_t*)raw));
+    parsed->tcp.dstport = ntohs(*((uint16_t*)(raw+2)));
+    parsed->tcp.seq = ntohl(*((uint32_t*)(raw+4)));
+    parsed->tcp.offset = (*(raw+12)>>4)*4;
+
+    if (!(parsed->tcp.srcport == HTTP_PORT || parsed->tcp.dstport == HTTP_PORT))
+        return;
+
+    parsed->class |= CLASS_HTTP;
+    raw += parsed->tcp.offset; //get the data segment start from the packet 
+
+    const unsigned char *http_headers, *http_body;
+    http_headers = raw;
+    http_body = (uint8_t *)strstr((const char *)raw, "\r\n\r\n");
+    if (!http_body) {
+        /* FIXME: This does not work well because the TCP stream needs to be
+         * serialized before processing it. TCP data does not necessarily
+         * arrive all at once. */
+        puts((const char *)http_headers);
+        return;
+    }
+    parsed->http.hdrlen = (size_t)http_body - (size_t)http_headers;
+    http_body += 4;
+    parsed->http.bodylen = (size_t)(raw_begin+raw_len) - (size_t)http_body;
+    parsed->http.headers = malloc(parsed->http.hdrlen);
+    parsed->http.body = malloc(parsed->http.bodylen);
+    memcpy(parsed->http.headers, http_headers, parsed->http.hdrlen);
+    memcpy(parsed->http.body, http_body, parsed->http.bodylen);
+}
+
+void printPacket(sensorRdyPckt *pckt) {
+
+    if (!(pckt->class & CLASS_ETHER))
+        return;
+
+    puts("");
+    puts("|------ New Packet------|");
+
+    if (!(pckt->class & CLASS_IP))
+        return;
+
+    char *src_ip = decodeIP(pckt->ip.src);
+    char *dst_ip = decodeIP(pckt->ip.dst);
+    printf("IP Header Length: 0x%04x\n", pckt->ip.hdrlen);
+    printf("IP Packet Length: %hu\n", pckt->ip.pktlen);
+    printf("IP Identifier: 0x%04x (%u)\n", pckt->ip.id, pckt->ip.id);
+    printf("IP Fragmentation Bit: %s\n", pckt->ip.morefrag ? "set" : "not set");
+    printf("IP Frag Offset: 0x%04x\n", pckt->ip.fragoffset);
+    printf("IP Protocol: 0x%02x\n", pckt->ip.proto);
+    printf("IP Source Address: %s\n", src_ip);
+    printf("IP Destination Address: %s\n", dst_ip);
+    free(src_ip);
+    free(dst_ip);
+
+
+    if (!(pckt->class & CLASS_TCP))
+        return;
+
+    printf("TCP Source Port: %hu\n", pckt->tcp.srcport);
+    printf("TCP Destination Port: %hu\n", pckt->tcp.dstport);
+    printf("TCP Sequence Number: %u\n", pckt->tcp.seq);
+    printf("TCP Data Offset: %u\n", pckt->tcp.offset);
+
+    if (!(pckt->class & CLASS_HTTP) || pckt->http.hdrlen == 0)
+        return;
+
+    puts("*** HTTP Headers ***");
+    printf("%s\n\n", pckt->http.headers);
+
+    if (pckt->http.bodylen == 0)
+        return;
+
+    puts("*** HTTP Body ***");
+    printf("%s\n\n", pckt->http.body);
+}
+
 //packet handling function with the requirements given to us by libcap
 
 void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const u_char* pckt)
@@ -247,145 +363,22 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
     //char contnue = '\n';
     //constant structure pointer of type ip nicknamed ipHeader also predefined for us
     //constant structure pointer of type tcphdr nicknamed tcpHeader also predefined for us
-    const u_char* pckt_begin = pckt;
-    const u_char* data;	//data segment pointer of unsigned characters
-    int dataLength = 0;	//data length in bytes from the packet
-    u_char* dataStr = NULL;	//unsigned char pointer that we are going to use 
-    int iteration = 0;		//one of my counters
-    int pldC = 0;		//payload counter
-    int http_headersC = 0;	 	//header counter
-    //int unprint = 0;
-    int unprintCount = 0;
-    int slot = 0;
-    sensorRdyPckt *SRD_pckt = NULL;//this is the sensor ready packet info
+    //const u_char* data;	//data segment pointer of unsigned characters
+    //int dataLength = 0;	//data length in bytes from the packet
+    //int iteration = 0;		//one of my counters
     //pcktArray = malloc(SENSOR_ARRAY_PACKET_LENGTH * sizeof(sensorRdyPckt));
-    SRD_pckt = malloc(sizeof(sensorRdyPckt));	//allocating a SRD_pckt
-    packet_default(SRD_pckt);//initializing the new packet that was allocated    
-    //for(; i < SENSOR_ARRAY_PACKET_LENGTH; i++)
-    //   packet_default(&SRD_pckt);       
-    //i = 0;
+    sensorRdyPckt SRD_pckt;//this is the sensor ready packet info
+    packet_default(&SRD_pckt);//initializing the new packet that was allocated    
     //there are a lot of defines inside of the ethernet header, we are checking here if the ETHERTYPE is IP 
     //if it is, then we can start the parsing of the packet
     //the ntohs function changes the the byte orders to the current hosts byte ordering scheme, then we go in
     //and compare the ether type unsigned short char to the ETHERTYPE_IP define 
     
+    parsePacket(&SRD_pckt, pckt, pcktHeader->len);
+    printPacket(&SRD_pckt);
     // FIXME: validate lengths of things before using them as offsets
-    SRD_pckt->ether_type = ntohs(*(uint16_t*)(pckt+12));
-    pckt += 14;
-
-    puts("");
-    puts("|------ New Packet------|");
-
-    if (SRD_pckt->ether_type == ETHERTYPE_IP) 	
-    {  
-       puts("Ethernet Type: ETHERTYPE_IP");
-       SRD_pckt->ip_hdrlen = (*pckt & 0x0f) * 4;
-       SRD_pckt->ip_pktlen = ntohs(*(uint16_t*)(pckt+2));
-       SRD_pckt->ip_id = ntohs(*(uint16_t*)(pckt+4));
-       SRD_pckt->ip_morefrag = (*(pckt+6) & 0x20) > 0;
-       SRD_pckt->ip_fragoffset = ntohs((*(uint16_t*)(pckt+6)) & 0x1fff) << 3;
-       SRD_pckt->ip_proto = *(uint8_t*)(pckt+9);
-       SRD_pckt->ip_src = *(uint32_t*)(pckt+12);
-       SRD_pckt->ip_dst = *(uint32_t*)(pckt+16);
-
-       char *src_ip = decodeIP(SRD_pckt->ip_src);
-       char *dst_ip = decodeIP(SRD_pckt->ip_dst);
-       printf("IP Header Length: 0x%04x\n", SRD_pckt->ip_hdrlen);
-       printf("IP Packet Length: %hu\n", SRD_pckt->ip_pktlen);
-       printf("IP Identifier: 0x%04x (%u)\n", SRD_pckt->ip_id, SRD_pckt->ip_id);
-       printf("IP Fragmentation Bit: %s\n", SRD_pckt->ip_morefrag ? "set" : "not set");
-       printf("IP Frag Offset: 0x%04x\n", SRD_pckt->ip_fragoffset);
-       printf("IP Protocol: 0x%02x\n", SRD_pckt->ip_proto);
-       printf("IP Source Address: %s\n", src_ip);
-       printf("IP Destination Address: %s\n", dst_ip);
-       free(src_ip);
-       free(dst_ip);
-
-       pckt += SRD_pckt->ip_hdrlen; //FIXME: validate length
-        
-       if(SRD_pckt->ip_proto == IPPROTO_TCP) //checking if it has an tcp header
-       {
-           SRD_pckt->tcp_srcport = ntohs(*((uint16_t*)pckt));
-           SRD_pckt->tcp_dstport = ntohs(*((uint16_t*)(pckt+2)));
-           SRD_pckt->tcp_seq = ntohl(*((uint32_t*)(pckt+4)));
-           SRD_pckt->tcp_offset = (*(pckt+12)>>4)*4;
-           
-           printf("TCP Source Port: %hu\n", SRD_pckt->tcp_srcport);
-           printf("TCP Destination Port: %hu\n", SRD_pckt->tcp_dstport);
-           printf("TCP Sequence Number: %u\n", SRD_pckt->tcp_seq);
-           printf("TCP Data Offset: %u\n", SRD_pckt->tcp_offset);
-
-           if (!(SRD_pckt->tcp_srcport == HTTP_PORT || SRD_pckt->tcp_dstport == HTTP_PORT)) {
-               return;
-           }
-           puts("HTTP Packet Found\n");
-           pckt += SRD_pckt->tcp_offset; //get the data segment start from the packet 
-           
-           const unsigned char *http_headers, *http_body;
-           http_headers = pckt;
-           http_body = (uint8_t *)strstr((const char *)pckt, "\r\n\r\n");
-           if (!http_body) {
-               /* FIXME: This does not work because the TCP stream needs to be
-                * serialized before processing it. TCP data does not
-                * necessarily arrive all at once. */
-               puts("No HTTP Body found. Ignoring");
-               puts((const char *)http_headers);
-               return;
-           }
-           SRD_pckt->http_hdrlen = (size_t)http_body - (size_t)http_headers;
-           http_body += 4;
-           SRD_pckt->http_bodylen = (size_t)(pckt_begin+pcktHeader->len) - (size_t)http_body;
-           SRD_pckt->http_headers = malloc(SRD_pckt->http_hdrlen);
-           SRD_pckt->http_body = malloc(SRD_pckt->http_bodylen);
-           memcpy(SRD_pckt->http_headers, http_headers, SRD_pckt->http_hdrlen);
-           memcpy(SRD_pckt->http_body, http_body, SRD_pckt->http_bodylen);
-           puts("*** HTTP Headers ***");
-           printf("%s\n\n", SRD_pckt->http_headers);
-           puts("*** HTTP Body ***");
-           printf("%s\n\n", SRD_pckt->http_body);
-       }
-    }
+    
            /*
-           for(; iteration < dataLength; iteration++) 		     //parsing loop
-           {  
-               if((data[iteration] >= 32 && data[iteration] <= 126) || data[iteration] == 10 || data[iteration] == 11 || data[iteration] == 13) //printable characters are copied   
-               {
-                   dataStr[iteration - unprintCount] = (u_char)data[iteration];
-                   //unprint = 1;
-               }
-
-               else 
-                   unprintCount++;
-
-               if(!SRD_pckt->http_headers && data[iteration] == '\r' &&
-                       data[iteration + 1] == '\n' &&
-                       data[iteration + 2] == '\r' &&
-                       data[iteration + 3] == '\n')//this checks for when the http header ends
-               {
-                   slot = 0;
-                   iteration = iteration + 3;
-                   http_headersC += unprintCount;
-                   SRD_pckt->http_headers = malloc((iteration) * sizeof(u_char));//set the SRD packet header into the correct size
-                   for(; http_headersC < iteration; http_headersC++, slot++) //copy all characters from the packet header into the SRD packet header section
-                       SRD_pckt->http_headers[slot] = (u_char)dataStr[slot];
-                       SRD_pckt->http_hdrlen = http_headersC - unprintCount;					//setting packet header length
-               } 
-           }
-
-           if(http_headersC == dataLength)//if the packet length is the same as the packet header length then this does not have a payload
-               SRD_pckt->http_body = NULL;
-           else
-           {
-               SRD_pckt->http_body = malloc((dataLength - http_headersC) * sizeof(u_char)); //otherwise allocate the payload size and get the characters remaining	 
-               pldC = http_headersC + 1;							  //start after the http header 
-               slot = 0;
-               for(; pldC < iteration; pldC++, slot++)					  //passing copying  
-                   SRD_pckt->http_body[slot] = dataStr[slot];			
-               SRD_pckt->http_bodylen = pldC - http_headersC;//setting payload length
-           }
-       } 	  
-    }
-
     if (dataLength > 0)					//check if our packet was not empty, it could be, maybe 
     {
         if(LH_hashFunc(sharedMemSeg,(void*)SRD_pckt, myhashfunc,SRDPcktCpy, pcktAlloc) != -1)
@@ -419,8 +412,8 @@ void SRDPcktPrint(sensorRdyPckt *curPckt)
 {
     char src_addr[INET4_ADDRSTRLEN], dst_addr[INET4_ADDRSTRLEN];
     struct in_addr s, d;
-    s.s_addr = curPckt->ip_src;
-    d.s_addr = curPckt->ip_dst;
+    s.s_addr = curPckt->ip.src;
+    d.s_addr = curPckt->ip.dst;
     inet_ntop(AF_INET, &s, src_addr, sizeof(src_addr));
     inet_ntop(AF_INET, &d, dst_addr, sizeof(dst_addr));
 
@@ -429,9 +422,9 @@ void SRDPcktPrint(sensorRdyPckt *curPckt)
           "Destination Address: %s\n"
           "Source Port: %d\n"
           "Destination Port: %d\n",
-          curPckt->ip_id,
+          curPckt->ip.id,
           src_addr, dst_addr,
-          curPckt->tcp_srcport, curPckt->tcp_dstport);
+          curPckt->tcp.srcport, curPckt->tcp.dstport);
 }
 
 
@@ -439,15 +432,15 @@ void SRDPcktPrint(sensorRdyPckt *curPckt)
 //payload and header printer
 void SRDPcktHdrPldPrint(sensorRdyPckt *curPckt)
 {
-   if(curPckt->http_headers == NULL)
+   if(curPckt->http.headers == NULL)
       printf("Http header was empty, not printing it\n");
    else
-      printf("\nHttp Header\n%s\n",curPckt->http_headers);
+      printf("\nHttp Header\n%s\n",curPckt->http.headers);
 
-   if(curPckt->http_body == NULL)
+   if(curPckt->http.body == NULL)
       printf("Payload was empty, not printing it\n");
    else
-      printf("\nFull Payload:\n%s\n", curPckt->http_body);
+      printf("\nFull Payload:\n%s\n", curPckt->http.body);
 }
 
 
@@ -455,44 +448,46 @@ void SRDPcktHdrPldPrint(sensorRdyPckt *curPckt)
 //blanking function
 void packet_default(sensorRdyPckt *curPckt)
 {
-   curPckt->ip_fragoffset = 0;
-   curPckt->ip_pktlen = 0;
-   curPckt->ip_hdrlen = 0;
-   curPckt->ip_id = 0;
-   curPckt->ip_src = 0;	
-   curPckt->ip_dst = 0;
-   curPckt->tcp_seq = 0;
-   curPckt->tcp_srcport = 0 ;
-   curPckt->tcp_dstport = 0;
-   curPckt->http_headers = NULL;
-   curPckt->http_body = NULL;
-   curPckt->http_bodylen = 0;
+   curPckt->ip.fragoffset = 0;
+   curPckt->ip.pktlen = 0;
+   curPckt->ip.hdrlen = 0;
+   curPckt->ip.id = 0;
+   curPckt->ip.src = 0;	
+   curPckt->ip.dst = 0;
+   curPckt->tcp.seq = 0;
+   curPckt->tcp.srcport = 0 ;
+   curPckt->tcp.dstport = 0;
+   curPckt->http.headers = NULL;
+   curPckt->http.body = NULL;
+   curPckt->http.bodylen = 0;
    curPckt->fngPnt = NULL;
+   curPckt->class = CLASS_UNKNOWN;
 }
 
 
 void SRDPcktCpy(sensorRdyPckt *src, sensorRdyPckt *dst)
 {
-   dst->ip_fragoffset = src->ip_fragoffset;
-   dst->ip_pktlen = src->ip_pktlen;
-   dst->ip_hdrlen = src->ip_hdrlen;
-   dst->ip_id = src->ip_id;
-   dst->ip_src = src->ip_src;
-   dst->ip_dst = src->ip_dst;
-   dst->tcp_seq = src->tcp_seq;
-   dst->tcp_srcport = src->tcp_srcport;
-   dst->tcp_dstport = src->tcp_dstport;
-   dst->http_headers = src->http_headers;
-   dst->http_body = src->http_body; 
-   dst->http_bodylen = src->http_bodylen; 
+   dst->ip.fragoffset = src->ip.fragoffset;
+   dst->ip.pktlen = src->ip.pktlen;
+   dst->ip.hdrlen = src->ip.hdrlen;
+   dst->ip.id = src->ip.id;
+   dst->ip.src = src->ip.src;
+   dst->ip.dst = src->ip.dst;
+   dst->tcp.seq = src->tcp.seq;
+   dst->tcp.srcport = src->tcp.srcport;
+   dst->tcp.dstport = src->tcp.dstport;
+   dst->http.headers = src->http.headers;
+   dst->http.body = src->http.body; 
+   dst->http.bodylen = src->http.bodylen; 
    dst->fngPnt = src->fngPnt; 
+   dst->class = src->class;
 }
 
 //payload to file
 
 void SRDPcktPldToFile(sensorRdyPckt* curPckt)
 {
-  if(curPckt->http_body== NULL)
+  if(curPckt->http.body== NULL)
   {
       printf("\npayload is empty, not writting file\n");
       return;
@@ -505,7 +500,7 @@ void SRDPcktPldToFile(sensorRdyPckt* curPckt)
      return;
   }
 
-  fprintf(pldFile, "%s", curPckt->http_body);  
+  fprintf(pldFile, "%s", curPckt->http.body);  
   fclose(pldFile);  
 }
 
@@ -515,7 +510,7 @@ void SRDPcktPldToFile(sensorRdyPckt* curPckt)
 
 void SRDPcktHdrToFile(sensorRdyPckt* curPckt)
 {
-  if(curPckt->http_headers == NULL)
+  if(curPckt->http.headers == NULL)
   {
       printf("\nhttp header is empty, not writting file\n");
       return;
@@ -529,7 +524,7 @@ void SRDPcktHdrToFile(sensorRdyPckt* curPckt)
      return;
   }
 
-  fprintf(hdrFile, "%s", curPckt->http_headers);  
+  fprintf(hdrFile, "%s", curPckt->http.headers);  
   fclose(hdrFile);    
 }
 
@@ -538,13 +533,13 @@ void SRDPcktHdrToFile(sensorRdyPckt* curPckt)
 //fingerprints and calls the printing function for the finger print
 void fngPntPrint(sensorRdyPckt *curPckt)
 {
-   if(curPckt->http_headers == NULL || curPckt->http_hdrlen== 0)
+   if(curPckt->http.headers == NULL || curPckt->http.hdrlen== 0)
    {
       printf("\nThere was no packet header, skipping printing fingerprint\n");
       return;
    }
 
-   curPckt->fngPnt = SRDPcktFngrPnt(curPckt->http_headers, curPckt->http_hdrlen);
+   curPckt->fngPnt = SRDPcktFngrPnt(curPckt->http.headers, curPckt->http.hdrlen);
    if(curPckt->fngPnt[0] == 8 && curPckt->fngPnt[1] == 8)
    {
       printf("\nCurrent packet was not structured properly \n");
@@ -809,13 +804,13 @@ int * SRDPcktFngrPnt(unsigned char* curPcktData, int dataLen)
 //calls the trimmer for the header
 void SRDTrimHdr(sensorRdyPckt* curPckt)
 {
-   curPckt->http_headers = SRDTrim(curPckt->http_headers, curPckt->http_hdrlen);   
+   curPckt->http.headers = SRDTrim(curPckt->http.headers, curPckt->http.hdrlen);   
 }
 
 //call the trimmer for the payload
 void SRDTrimPld(sensorRdyPckt* curPckt)
 {
-   curPckt->http_headers = SRDTrim(curPckt->http_body, curPckt->http_bodylen);
+   curPckt->http.headers = SRDTrim(curPckt->http.body, curPckt->http.bodylen);
 }
 
 //The hash function
@@ -825,19 +820,19 @@ int myhashfunc(LH_hashTable* table, void * data)
    int rslot = 0;
    int i = 1;
    sensorRdyPckt* p = (sensorRdyPckt*) data;
-   slot = (p->ip_id) % (kprimeCap(table->LH_primenums));
+   slot = (p->ip.id) % (kprimeCap(table->LH_primenums));
 
-   printf("\nAttempting to hash %u\n",p->ip_id);
+   printf("\nAttempting to hash %u\n",p->ip.id);
 
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
       return slot;
 
    else
    {
-      rslot = (p->SRD_id) % (kprimehash2(table->LH_primenums));
+      rslot = (p->ip.id) % (kprimehash2(table->LH_primenums));
 
       if(rslot == 0 && slot == 0)
-          rslot = (p->id + 13) % (kprimehash2(table->primenums));  
+          rslot = (p->ip.id + 13) % (kprimehash2(table->LH_primenums)); 
       do
       {
          slot = (slot + (i * rslot)) % (table->LH_capacity);
