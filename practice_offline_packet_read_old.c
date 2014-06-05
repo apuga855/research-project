@@ -33,6 +33,7 @@ sensorRdyPckt* pcktBuffer = NULL;
 
 int h = 0;							//counter
 int thrdCnt = 0;
+int fd;
 
 //this structure is going to hold all information
 //required for the reassembly
@@ -53,8 +54,10 @@ int main(int argc, char **argv)
    for(;h < P_BUFF; h++)				//defaulting all the packets
       packet_init(&pcktBuffer[h]);
 
+   char* connectPipe = "tmp/connectPipi";
+   mkfifo(connectPipe,066);
+   fd = open(connectPipe,O_WRONLY);
    sharedMemSeg = LH_HashTableAllocSetBuff(300, pcktAlloc);
-   
    thrdCnt = 0;
 
 
