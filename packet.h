@@ -32,6 +32,8 @@ typedef struct _ipData {
     uint8_t proto;
     uint32_t src;		//source address	
     uint32_t dst;		//destination address
+    u_char *data;
+    uint16_t datalen;
 } ipData;
 
 typedef struct _tcpData {
@@ -39,11 +41,13 @@ typedef struct _tcpData {
    uint16_t dstport;  		//destination port
    uint32_t seq;		//sequence number
    uint16_t offset;
+   const u_char *data;
+   uint16_t datalen;
 } tcpData;
 
 typedef struct _httpData {
-   uint8_t *headers;
-   uint8_t *body;
+   const u_char *headers;
+   const u_char *body;
    size_t bodylen;
    size_t hdrlen;
 } httpData;
@@ -89,15 +93,9 @@ void SRDPcktPldToFile(sensorRdyPckt*);
 //payload to file
 void SRDPcktHdrToFile(sensorRdyPckt*);
 //create the firnger print
-int *SRDPcktFngrPnt(unsigned char *, int);
+int *SRDPcktFngrPnt(const u_char*, int);
 //print fingerprint
 void fngPntPrint(sensorRdyPckt*);
-//trim function
-unsigned char* SRDTrim(unsigned char *, int);
-//trim header
-void SRDTrimHdr(sensorRdyPckt*);
-//trim payload
-void SRDTrimPld(sensorRdyPckt*);
 //formater for the fingerprint
 void formatFngPntPrint(int*);
 void* pcktAlloc();

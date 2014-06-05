@@ -165,20 +165,21 @@ char* reassemblyAlg(Llist* list, uint16_t size)
       printf("The list was empty, exiting with an error\n");
       return NULL;
    }
-
+   
    printf("After if statement\n");
    printf("The list length is %d\n", list->length);
    //uint16_t runningCount = size;
    char* dataReady = malloc(sizeof(char) * ((int) size));
    LlistNode * current = list->head->next;
-   dummyPack* curPack = NULL;
+   sensorRdyPckt* curPack = NULL;
    int i = 0;
    printf("before the while\n");
    while(current != list->head)
    {
    //   printf("Current loop = %d",i);
-      curPack = (dummyPack*)(current->data);
-      memcpy((dataReady + curPack->derpFragOff), curPack->data, curPack->dataSize);
+      curPack = (sensorRdyPckt*)(current->data);
+
+      memcpy((dataReady + curPack->ip.fragoffset), curPack->ip.data, curPack->ip.datalen);
       current = current->next;
       i++;
    }

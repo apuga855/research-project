@@ -3,6 +3,7 @@
 #include<string.h>
 #include<arpa/inet.h>
 #include<net/ethernet.h>
+#include<unistd.h>
 #include<pcap.h>
 #include"packet.h"
 
@@ -32,8 +33,14 @@ void parsePacket(sensorRdyPckt *parsed, const u_char *raw, size_t raw_len) {
     parsed->ip.proto = *(uint8_t*)(raw+9);
     parsed->ip.src = *(uint32_t*)(raw+12);
     parsed->ip.dst = *(uint32_t*)(raw+16);
-
+    parsed->ip.datalen = parsed->ip.pktlen - parsed->ip.hdrlen;
+    parsed->ip.data = malloc(parsed->ip.datalen);
+    if (!parsed->ip.data) {
+        fprintf(stderr, "Failed to parse data");
+        return;
+    }
     raw += parsed->ip.hdrlen; //FIXME: validate length
+    memcpy(parsed->ip.data, raw, parsed->ip.datalen);
 
     if(parsed->ip.proto != IPPROTO_TCP) //checking if it has an tcp header
         return;
@@ -43,30 +50,27 @@ void parsePacket(sensorRdyPckt *parsed, const u_char *raw, size_t raw_len) {
     parsed->tcp.dstport = ntohs(*((uint16_t*)(raw+2)));
     parsed->tcp.seq = ntohl(*((uint32_t*)(raw+4)));
     parsed->tcp.offset = (*(raw+12)>>4)*4;
+    parsed->tcp.datalen = parsed->ip.pktlen - parsed->ip.hdrlen - parsed->tcp.offset;
+    raw += parsed->tcp.offset; //get the data segment start from the packet 
+    parsed->tcp.data = raw;
 
     if (!(parsed->tcp.srcport == HTTP_PORT || parsed->tcp.dstport == HTTP_PORT))
         return;
 
-    parsed->class |= CLASS_HTTP;
-    raw += parsed->tcp.offset; //get the data segment start from the packet 
-
-    const unsigned char *http_headers, *http_body;
-    http_headers = raw;
+    const unsigned char *http_body;
     http_body = (uint8_t *)strstr((const char *)raw, "\r\n\r\n");
     if (!http_body) {
         /* FIXME: This does not work well because the TCP stream needs to be
          * serialized before processing it. TCP data does not necessarily
          * arrive all at once. */
-        puts((const char *)http_headers);
         return;
     }
-    parsed->http.hdrlen = (size_t)http_body - (size_t)http_headers;
+    parsed->class |= CLASS_HTTP;
+    parsed->http.headers = parsed->tcp.data;
+    parsed->http.hdrlen = (size_t)http_body - (size_t)parsed->http.headers;
     http_body += 4;
+    parsed->http.body = http_body;
     parsed->http.bodylen = (size_t)(raw_begin+raw_len) - (size_t)http_body;
-    parsed->http.headers = malloc(parsed->http.hdrlen);
-    parsed->http.body = malloc(parsed->http.bodylen);
-    memcpy(parsed->http.headers, http_headers, parsed->http.hdrlen);
-    memcpy(parsed->http.body, http_body, parsed->http.bodylen);
 }
 
 void printPacket(sensorRdyPckt *pckt) {
@@ -90,6 +94,7 @@ void printPacket(sensorRdyPckt *pckt) {
     printf("IP Protocol: 0x%02x\n", pckt->ip.proto);
     printf("IP Source Address: %s\n", src_ip);
     printf("IP Destination Address: %s\n", dst_ip);
+    printf("IP Data Len: %hu\n", pckt->ip.datalen);
     free(src_ip);
     free(dst_ip);
 
@@ -100,63 +105,33 @@ void printPacket(sensorRdyPckt *pckt) {
     printf("TCP Destination Port: %hu\n", pckt->tcp.dstport);
     printf("TCP Sequence Number: %u\n", pckt->tcp.seq);
     printf("TCP Data Offset: %u\n", pckt->tcp.offset);
+    printf("TCP Data Len: %u\n", pckt->tcp.datalen);
 
-    if (!(pckt->class & CLASS_HTTP) || pckt->http.hdrlen == 0)
-        return;
+    if (pckt->class & CLASS_HTTP) {
 
-    puts("*** HTTP Headers ***");
-    printf("%s\n\n", pckt->http.headers);
+        if (pckt->http.hdrlen > 0) {
+            puts("*** HTTP Headers ***");
+            write(fileno(stdout), pckt->http.headers, pckt->http.hdrlen);
+            puts("");
+        }
 
-    if (pckt->http.bodylen == 0)
-        return;
-
-    puts("*** HTTP Body ***");
-    printf("%s\n\n", pckt->http.body);
-}
-
-//calls the trimmer for the header
-void SRDTrimHdr(sensorRdyPckt* curPckt)
-{
-   curPckt->http.headers = SRDTrim(curPckt->http.headers, curPckt->http.hdrlen);   
-}
-
-//call the trimmer for the payload
-void SRDTrimPld(sensorRdyPckt* curPckt)
-{
-   curPckt->http.headers = SRDTrim(curPckt->http.body, curPckt->http.bodylen);
+        if (pckt->http.bodylen > 0) {
+            puts("*** HTTP Body ***");
+            write(fileno(stdout), pckt->http.body, pckt->http.bodylen);
+            puts("");
+        }
+    }
+    else {
+        puts("*** TCP Data ***");
+        write(fileno(stdout), pckt->tcp.data, pckt->tcp.datalen);
+        puts("");
+    }
 }
 
 void* pcktAlloc()
 {
    sensorRdyPckt* tmp = malloc(sizeof(sensorRdyPckt));
    return (void*) tmp;
-}
-
-//trimmer
-unsigned char * SRDTrim(unsigned char *array, int arraySize)
-{
-   if(array == NULL || arraySize <= 0)
-      return NULL;
-
-   int NLCounter = 0;
-   int slot = 0;
-   unsigned char * tmp = array;
-
-   while(*tmp == '\n' || *tmp =='\r' || *tmp == ' ')
-   {
-      tmp++;
-      NLCounter++;
-   }
-
-   tmp = NULL;
-   tmp = malloc((arraySize - NLCounter)* sizeof(unsigned char));
-
-   for(; slot < arraySize - NLCounter; slot++)
-      tmp[slot] = array[slot + NLCounter];
-
-   free(array);
-   array = NULL;
-   return tmp;
 }
 
 //fingerprint print function
@@ -171,7 +146,7 @@ void formatFngPntPrint(int *fngP)
 }
 
 //fingerprinting function
-int * SRDPcktFngrPnt(unsigned char* curPcktData, int dataLen)
+int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
 {
     if(curPcktData == NULL || dataLen == 0 )
     {
@@ -197,7 +172,7 @@ int * SRDPcktFngrPnt(unsigned char* curPcktData, int dataLen)
     int lt = 0;
     int gt = 0;
     int qstnmrk = 0;
-    unsigned char *target = curPcktData;
+    const u_char *target = curPcktData;
     int *fngPnt = calloc(fngPntLen, sizeof(int));
 
     for(;*target != '\n' && i < len; i++)
