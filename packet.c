@@ -126,6 +126,10 @@ void printPacket(sensorRdyPckt *pckt) {
         write(fileno(stdout), pckt->tcp.data, pckt->tcp.datalen);
         puts("");
     }
+    
+    pckt->fngPnt = SRDPcktFngrPnt(pckt);
+    formatFngPntPrint(pckt->fngPnt);
+      
 }
 
 void* pcktAlloc()
@@ -137,6 +141,8 @@ void* pcktAlloc()
 //fingerprint print function
 void formatFngPntPrint(int *fngP)
 {
+   if(fngP == NULL)
+      return;
    printf("Printing the finger print\nHTTP COMMAND: %d\nHTTP PROTOCOL: %d\n"
 	   ,fngP[0], fngP[1]);
    printf("LENGTH: %d\nVARIABLES: %d\nPERCENT#: %d\nAPOS#: %d\nPLUS#: %d\n"
@@ -146,9 +152,11 @@ void formatFngPntPrint(int *fngP)
 }
 
 //fingerprinting function
-int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
+//int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
+int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
 {
-    if(curPcktData == NULL || dataLen == 0 )
+    
+    if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class != CLASS_HTTP)
     {
         printf("There was not header to parse\n");
         return NULL;
@@ -159,7 +167,7 @@ int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
     int cmdSet = 0;
     int proto = 8;
     int protoSet = 0;
-    int len = dataLen;	//calculated during parsing
+    int len = pckt->http.hdrlen;	//calculated during parsing
     int var = 0;
     int pcnt = 0;
     int apos = 0;
@@ -172,11 +180,12 @@ int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
     int lt = 0;
     int gt = 0;
     int qstnmrk = 0;
-    const u_char *target = curPcktData;
+    const u_char *target = pckt->http.headers;
     int *fngPnt = calloc(fngPntLen, sizeof(int));
-
+    printf("fingerprinting\n");
     for(;*target != '\n' && i < len; i++)
     {
+        printf("loop %d\n",i);
         if(protoSet == 0 && (*target == 48 || *target == 49))		//proto
         {
             target++;
@@ -346,7 +355,7 @@ int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
         target++;
     }
 
-    fngPnt[0] = cmd;
+   fngPnt[0] = cmd;
    fngPnt[1] = proto;
    fngPnt[2] = len;
    fngPnt[3] = var;
@@ -446,7 +455,7 @@ void SRDPcktPldToFile(sensorRdyPckt* curPckt)
 
 
 //fingerprints and calls the printing function for the finger print
-void fngPntPrint(sensorRdyPckt *curPckt)
+/*void fngPntPrint(sensorRdyPckt *curPckt)
 {
    if(curPckt->http.headers == NULL || curPckt->http.hdrlen== 0)
    {
@@ -463,6 +472,7 @@ void fngPntPrint(sensorRdyPckt *curPckt)
 
    formatFngPntPrint(curPckt->fngPnt);
 }
+*/
 /*FINGER PRINT EXPLANATION:
  * array of integers, each slot contains a specified number (integer) that represents the character count 
 
