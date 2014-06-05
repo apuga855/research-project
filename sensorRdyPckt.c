@@ -380,7 +380,7 @@ void SRD_trimPld(sensorRdyPckt*)
 }
 
 //formater for the fingerprint
-void SRD_frmtFngPntPrint(int*)
+void SRD_formatFngPntPrint(int*)
 {
    printf("Printing the finger print\nHTTP COMMAND: %d\nHTTP PROTOCOL: %d\n"
            ,fngP[0], fngP[1]);
