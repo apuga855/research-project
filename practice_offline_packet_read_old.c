@@ -149,6 +149,101 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
 //payload to file
 
 //The hash function
+char* reassemblyAlg(Llist* list, uint16_t size)
+{
+   printf("Inside of ReassemblyAlg\n");
+   if(LlistIsEmpty(list))
+   {
+      printf("The list was empty, exiting with an error\n");
+      return NULL;
+   }
+
+   printf("After if statement\n");
+   printf("The list length is %d\n", list->length);
+   //uint16_t runningCount = size;
+   char* dataReady = malloc(sizeof(char) * ((int) size));
+   LlistNode * current = list->head->next;
+   dummyPack* curPack = NULL;
+   int i = 0;
+   printf("before the while\n");
+   while(current != list->head)
+   {
+   //   printf("Current loop = %d",i);
+      curPack = (dummyPack*)(current->data);
+      memcpy((dataReady + curPack->derpFragOff), curPack->data, curPack->dataSize);
+      current = current->next;
+      i++;
+   }
+   printf("After while\n");
+
+   return dataReady;
+}
+
+
+int myhashfunc(LH_hashTable* table, void * data)
+{
+   if(data == NULL)
+      return -1;
+
+   int slot = 0;
+   int rslot = 0;
+   int i = 1;
+   dummyStruct* p = (dummyStruct*) data;
+   slot = (p->id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
+
+
+   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
+   {
+      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
+      printf("List is empty\n");
+      return slot;
+   }
+   else
+   {
+      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
+      printf("List is not empty\n");
+
+      rslot = (p->id) % (kprimehash2(table->LH_primenums));
+      if(rslot == 0 && slot == 0)
+          rslot = (p->id + 13) % (kprimehash2(table->LH_primenums));
+
+      do
+      {
+         printf("\nIn the do while hash2 \n");
+         slot = ((slot + (i * rslot)) % (table->LH_capacity));
+         if(LlistAtLeastOne(table->LH_table[slot].LHN_list) &&
+           (((sensorRdyPckt*)LlistRetFirst(table->LH_table[slot].LHN_list))->ip.id == ((sensorRdyPckt)data)->ip.id))
+         {
+            int i = 0;
+            LlistNode* current = (dummyStruct*)LlistRetFirstNode(table->LH_table[slot].list);
+            uint16_t runningLength = 0;
+            while(i < table->LH_table[slot].LHN_list->used)
+            {
+               runningLength += current->ip.fragoffset;
+               current= current->next;
+               i++;
+            }
+
+            current = (dummyStruct*)LlistRetFirstNode(table->LH_table[slot].list);
+            if(current->ip.pktlen - 20 == runningLength)
+            {
+               char* payload =  reassemblyAlg(table->LH_table[slot].LHN_list, current->ip.pktlen);
+               if(LlistDel(table->LH_table[slot].list))
+               {
+                  table->LH_table[slot].list = LlistAlloc(10,dummyAlloc);
+                  table->LH_table[slot].list->head->used = 0;
+               }
+            }
+
+            return slot;
+         }
+         i++;
+      }while(!LlistAtLeastOne(table->LH_table[slot].LHN_list));//while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
+   }
+   return slot;
+}
+
+
 int myhashfunc(LH_hashTable* table, void * data)
 {
    int slot = 0;
