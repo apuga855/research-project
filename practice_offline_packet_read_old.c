@@ -93,7 +93,7 @@ int main(int argc, char **argv)
       printf("Successful delete of everything\n");
    else
       printf("Problem deallocating\n");
-
+   close(fd);
    return 0;
 
 }
@@ -191,24 +191,22 @@ int myhashfunc(LH_hashTable* table, void * data)
    int slot = 0;
    int rslot = 0;
    int i = 1;
-   dummyStruct* p = (dummyStruct*) data;
-   slot = (p->id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
+   sensorRdyPckt* p = (sensorRdyPck*) data;
+   slot = (p->ip.id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
 
 
    if(LlistIsEmpty(table->LH_table[slot].LHN_list))
    {
-      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
       printf("List is empty\n");
       return slot;
    }
    else
    {
-      printf("\nAttempting to hash %c, the id is %d the slot is:%d \n",p->garbage,p->id, slot);
       printf("List is not empty\n");
 
-      rslot = (p->id) % (kprimehash2(table->LH_primenums));
+      rslot = (p->ip.id) % (kprimehash2(table->LH_primenums));
       if(rslot == 0 && slot == 0)
-          rslot = (p->id + 13) % (kprimehash2(table->LH_primenums));
+          rslot = (p->ip.id + 13) % (kprimehash2(table->LH_primenums));
 
       do
       {
@@ -231,13 +229,14 @@ int myhashfunc(LH_hashTable* table, void * data)
             if(current->ip.pktlen - 20 == runningLength)
             {
                char* payload =  reassemblyAlg(table->LH_table[slot].LHN_list, current->ip.pktlen);
+               write(fd, payload,sizeof(payload));
                if(LlistDel(table->LH_table[slot].list))
                {
                   table->LH_table[slot].list = LlistAlloc(10,dummyAlloc);
                   table->LH_table[slot].list->head->used = 0;
+                  return -1;
                }
             }
-
             return slot;
          }
          i++;
@@ -245,33 +244,3 @@ int myhashfunc(LH_hashTable* table, void * data)
    }
    return slot;
 }
-
-
-int myhashfunc(LH_hashTable* table, void * data)
-{
-   int slot = 0;
-   int rslot = 0;
-   int i = 1;
-   sensorRdyPckt* p = (sensorRdyPckt*) data;
-   slot = (p->ip.id) % (kprimeCap(table->LH_primenums));
-
-   printf("\nAttempting to hash %u\n",p->ip.id);
-
-   if(LlistIsEmpty(table->LH_table[slot].LHN_list))
-      return slot;
-
-   else
-   {
-      rslot = (p->ip.id) % (kprimehash2(table->LH_primenums));
-
-      if(rslot == 0 && slot == 0)
-          rslot = (p->ip.id + 13) % (kprimehash2(table->LH_primenums)); 
-      do
-      {
-         slot = (slot + (i * rslot)) % (table->LH_capacity);
-         i++;
-      }while(!LlistIsEmpty(table->LH_table[slot].LHN_list));
-   }
-   return slot;
-}
-
