@@ -10,8 +10,10 @@
 #include<string.h>
 #include"hashTableLinkedList.h"
 #include"packet.h" 
-
-
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 //Fragmentation notes:
 //this is assigning the address located at the target* address of the packet plust the size of the
 //structure that contained the ethernet header, since the packet is basivally just a gigantic
@@ -25,6 +27,8 @@
 //need to typedef it knows its a type
 
 int myhashfunc(LH_hashTable*, void *);
+int myhashfunc(LH_hashTable*, void *);
+char* reassemblyAlg(Llist*, uint16_t);
 //end of packet capture without reassembly--------------------------------------
 
 
@@ -94,6 +98,7 @@ int main(int argc, char **argv)
    else
       printf("Problem deallocating\n");
    close(fd);
+   unlink(connectPipe);
    return 0;
 
 }
@@ -191,7 +196,7 @@ int myhashfunc(LH_hashTable* table, void * data)
    int slot = 0;
    int rslot = 0;
    int i = 1;
-   sensorRdyPckt* p = (sensorRdyPck*) data;
+   sensorRdyPckt* p = (sensorRdyPckt*) data;
    slot = (p->ip.id) % table->LH_capacity;//(kprimeCap(table->LH_primenums));
 
 
@@ -213,27 +218,27 @@ int myhashfunc(LH_hashTable* table, void * data)
          printf("\nIn the do while hash2 \n");
          slot = ((slot + (i * rslot)) % (table->LH_capacity));
          if(LlistAtLeastOne(table->LH_table[slot].LHN_list) &&
-           (((sensorRdyPckt*)LlistRetFirst(table->LH_table[slot].LHN_list))->ip.id == ((sensorRdyPckt)data)->ip.id))
+           ((((sensorRdyPckt*)(LlistRetFirst(table->LH_table[slot].LHN_list)))->ip.id) == (((sensorRdyPckt)(data))->ip.id)))
          {
             int i = 0;
-            LlistNode* current = (dummyStruct*)LlistRetFirstNode(table->LH_table[slot].list);
+            LlistNode* current = LlistRetFirstNode(table->LH_table[slot].LHN_list);
             uint16_t runningLength = 0;
             while(i < table->LH_table[slot].LHN_list->used)
             {
-               runningLength += current->ip.fragoffset;
+               runningLength += ((sensorRdyPckt*)(current->data))->ip.fragoffset;
                current= current->next;
                i++;
             }
 
-            current = (dummyStruct*)LlistRetFirstNode(table->LH_table[slot].list);
-            if(current->ip.pktlen - 20 == runningLength)
+            current = LlistRetFirstNode(table->LH_table[slot].LHN_list);
+            if(((sensorRdyPckt*)(current->data))->ip.pktlen - 20 == runningLength)
             {
-               char* payload =  reassemblyAlg(table->LH_table[slot].LHN_list, current->ip.pktlen);
+               char* payload =  reassemblyAlg(table->LH_table[slot].LHN_list, ((sensorRdyPckt*)(current->data))->ip.pktlen);
                write(fd, payload,sizeof(payload));
-               if(LlistDel(table->LH_table[slot].list))
+               if(LlistDel(table->LH_table[slot].LHN_list))
                {
-                  table->LH_table[slot].list = LlistAlloc(10,dummyAlloc);
-                  table->LH_table[slot].list->head->used = 0;
+                  table->LH_table[slot].LHN_list = LlistAlloc(10,pcktAlloc);
+                  table->LH_table[slot].LHN_list->head->status = 0;
                   return -1;
                }
             }
