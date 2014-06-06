@@ -58,7 +58,7 @@ void parsePacket(sensorRdyPckt *parsed, const u_char *raw, size_t raw_len) {
         return;
 
     const unsigned char *http_body;
-    http_body = (uint8_t *)strstr((const char *)raw, "\r\n\r\n");
+    http_body = (u_char *)strstr((const char*)raw, "\r\n\r\n");
     if (!http_body) {
         /* FIXME: This does not work well because the TCP stream needs to be
          * serialized before processing it. TCP data does not necessarily
@@ -111,19 +111,19 @@ void printPacket(sensorRdyPckt *pckt) {
 
         if (pckt->http.hdrlen > 0) {
             puts("*** HTTP Headers ***");
-            write(fileno(stdout), pckt->http.headers, pckt->http.hdrlen);
+            fwrite(pckt->http.headers, 1, pckt->http.hdrlen, stdout);
             puts("");
         }
 
         if (pckt->http.bodylen > 0) {
             puts("*** HTTP Body ***");
-            write(fileno(stdout), pckt->http.body, pckt->http.bodylen);
+            fwrite(pckt->http.body, 1, pckt->http.bodylen, stdout);
             puts("");
         }
     }
     else {
         puts("*** TCP Data ***");
-        write(fileno(stdout), pckt->tcp.data, pckt->tcp.datalen);
+        fwrite(pckt->tcp.data, 1, pckt->tcp.datalen, stdout);
         puts("");
     }
     
