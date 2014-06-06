@@ -58,7 +58,7 @@ int main(int argc, char **argv)
    for(;h < P_BUFF; h++)				//defaulting all the packets
       packet_init(&pcktBuffer[h]);
 
-   char* connectPipe = "tmp/connectPipi";
+   char* connectPipe = "tmp/connectPipe";
    mkfifo(connectPipe,066);
    fd = open(connectPipe,O_WRONLY);
    sharedMemSeg = LH_HashTableAllocSetBuff(300, pcktAlloc);
@@ -119,7 +119,7 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
     //int dataLength = 0;	//data length in bytes from the packet
     //int iteration = 0;		//one of my counters
     //pcktArray = malloc(SENSOR_ARRAY_PACKET_LENGTH * sizeof(sensorRdyPckt));
-    scanf("%d",&xaxa);
+//    scanf("%d",&xaxa);
     sensorRdyPckt SRD_pckt;//this is the sensor ready packet info
     packet_init(&SRD_pckt);//initializing the new packet that was allocated    
     //there are a lot of defines inside of the ethernet header, we are checking here if the ETHERTYPE is IP 
