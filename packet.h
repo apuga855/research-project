@@ -81,7 +81,6 @@ typedef struct _sensorRdyPckt
 
 }sensorRdyPckt;
 
-
 //function for printing out only packet header and payload
 void SRDPcktHdrPldPrint(sensorRdyPckt *);
 //callback function
@@ -93,7 +92,7 @@ void SRDPcktPldToFile(sensorRdyPckt*);
 //payload to file
 void SRDPcktHdrToFile(sensorRdyPckt*);
 //create the firnger print
-int *SRDPcktFngrPnt(const u_char*, int);
+int *SRDPcktFngrPnt(sensorRdyPckt*);
 //print fingerprint
 void fngPntPrint(sensorRdyPckt*);
 //formater for the fingerprint

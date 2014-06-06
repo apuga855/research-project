@@ -156,7 +156,8 @@ void formatFngPntPrint(int *fngP)
 int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
 {
     
-    if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class != CLASS_HTTP)
+    //if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class != CLASS_HTTP)
+    if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->http.headers == NULL)
     {
         printf("There was not header to parse\n");
         return NULL;
