@@ -182,28 +182,28 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
     int gt = 0;
     int qstnmrk = 0;
     const u_char *target = pckt->http.headers;
-    int * fngPnt = malloc(fngPntLen *sizeof(int));
+    int * fngPnt = malloc(fngPntLen * sizeof(int));
     printf("Fingerprint:\n");
-    for(;*target != '\n' && i < len; i++)
+    for(;/**target != '\n' && */i < len; i++)
     {
         //printf("loop %d\n",i);
-        if(protoSet == 0 && (*target == 48 || *target == 49))		//proto
+        if(protoSet == 0 && (*target == '0' || *target == '1'))		//proto
         {
             target++;
-            if(*target == 46)				//http version 
+            if(*target == '.')				//http version 
             {
                 target++;
-                if(*target == 48)
+                if(*target == '1')
                 {
                     proto = 2;
                     protoSet = 1;
                 }
-                else if(*target == 57)
+                else if(*target == '9')
                 {
                     proto = 1;
                     protoSet = 1;
                 }
-                else if(*target == 49)
+                else if(*target == '1')
                 {
                     proto = 4;
                     protoSet = 1;
@@ -219,13 +219,13 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
                 target--;
         }
 
-        if(cmdSet == 0 && *target == 71)			//cmd get
+        if(cmdSet == 0 && *target == 'G')			//cmd get
         {
             target++;
-            if(*target == 69)
+            if(*target == 'E')
             {
                 target++;
-                if(*target == 84)
+                if(*target == 'T')
                 {
                     cmd = 1;
                     cmdSet = 1;	
@@ -238,16 +238,16 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
                 target--;
         }
 
-        if(*target == 72 && cmdSet == 0)                  //cmd head
+        if(*target == 'H' && cmdSet == 0)                  //cmd head
         {
             target++;
-            if(*target == 69)
+            if(*target == 'E')
             {
                 target++;
-                if(*target == 65)
+                if(*target == 'A')
                 {
                     target++;
-                    if(*target == 68)
+                    if(*target == 'D')
                     {
                         cmd = 4;
                         cmdSet = 1;
@@ -262,16 +262,16 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
                 target--;
         }
 
-        if(*target == 80 && cmdSet == 0)                  //cmd post
+        if(*target == 'P' && cmdSet == 0)                  //cmd post
         {
             target++;
-            if(*target == 79)
+            if(*target == 'O')
             {  
                 target++;
-                if(*target == 83)
+                if(*target == 'S')
                 {
                     target++;
-                    if(*target == 84)
+                    if(*target == 'T')
                     {
                         cmd = 2;
                         cmdSet = 1;
@@ -286,69 +286,75 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
                 target--;
         }
 
-        if(*target == 46)			//.. counter
+        if(*target == '.')			//.. counter
         {
             target++;
-            if(*target == 46)
+            if(*target == '.')
+            {
                 cdot++;
+                continue;
+            }
             else
                 target--;	     
         }
 
-        if(*target == 47){			// // counter
+        if(*target == '/'){			// // counter
             target++;
-            if(*target == 47)
+            if(*target == '/')
+            {
                 fwrd++;
+                continue;
+            }
             else
                 target--;	     
         }
 
-        if(*target == 63){			//conditional for variables
+        if(*target == '?'){			//conditional for variables
             qstnmrk = 1;
             continue;
         }
 
-        if(*target == 37){			//percent counter
+        if(*target == '%'){			//percent counter
             pcnt++;
             continue;
         }
 
-        if (qstnmrk == 1 && *target == 38){	//variable counter
+        if (qstnmrk == 1 && *target == '&'){	//variable counter
             var++; 
             continue;
         }
 
-        if(*target == 39){			//apostrophe counter
+        if(*target == '\''){			//apostrophe counter
             apos++;
             continue;
         }
 
-        if(*target == 43){			//addition counter
+        if(*target == '+'){			//addition counter
             plus++;
             continue;
         }
 
-        if(*target == 40){			//open parentheses counter
+        if(*target == ')'){			//open parentheses counter
             oparen++;
             continue;
         }
 
-        if(*target == 41){			//close parentheses counter
+        if(*target == '('){			//close parentheses counter
             cparen++;
             continue;
         }
 
-        if(*target == 60){			//less than counter
+        if(*target == '<'){			//less than counter
             lt++;
             continue;
         }
 
-        if(*target == 62){			//greater than counter
+        if(*target == '>'){			//greater than counter
             gt++;
             continue;
         } 
 
-        if(*target == 92){			//backslash counter
+        if(*target == '\\'){			//backslash counter
             bckslsh++;
             continue;
         }

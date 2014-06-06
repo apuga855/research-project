@@ -1,0 +1,2286 @@
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0xfb99 (64409)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306476
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x0000 (0)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742540
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfb9a (64410)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306477
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 130
+IP Identifier: 0xfb9b (64411)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 110
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306477
+TCP Data Offset: 32
+TCP Data Len: 78
+*** TCP Data ***
+GET / HTTP/1.1
+User-Agent: curl/7.27.0
+Host: localhost:8080
+Accept: */*
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x66f8 (26360)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742541
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 69
+IP Identifier: 0x66f9 (26361)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 49
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742541
+TCP Data Offset: 32
+TCP Data Len: 17
+*** TCP Data ***
+HTTP/1.0 200 OK
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfb9c (64412)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0x66fa (26362)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742558
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Server: SimpleHTTP/0.6 Python/2.7.3
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfb9d (64413)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0x66fb (26363)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742595
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Date: Fri, 06 Jun 2014 02:02:47 GMT
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfb9e (64414)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 92
+IP Identifier: 0x66fc (26364)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 72
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742632
+TCP Data Offset: 32
+TCP Data Len: 40
+*** TCP Data ***
+Content-type: text/html; charset=UTF-8
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfb9f (64415)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 74
+IP Identifier: 0x66fd (26365)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 54
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742672
+TCP Data Offset: 32
+TCP Data Len: 22
+*** TCP Data ***
+Content-Length: 3422
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfba0 (64416)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0x66fe (26366)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742694
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfba1 (64417)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 3474
+IP Identifier: 0x66ff (26367)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 3454
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693742696
+TCP Data Offset: 32
+TCP Data Len: 3422
+*** TCP Data ***
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"><html>
+<title>Directory listing for /</title>
+<body>
+<h2>Directory listing for /</h2>
+<hr>
+<ul>
+<li><a href=".git/">.git/</a>
+<li><a href=".tags">.tags</a>
+<li><a href="a.out">a.out</a>
+<li><a href="callgrind.out.5012">callgrind.out.5012</a>
+<li><a href="callgrind.out.5324">callgrind.out.5324</a>
+<li><a href="capture.pcap">capture.pcap</a>
+<li><a href="cleanup.log">cleanup.log</a>
+<li><a href="cscope.out">cscope.out</a>
+<li><a href="fingerprint.cpp">fingerprint.cpp</a>
+<li><a href="fingerprint.h">fingerprint.h</a>
+<li><a href="first_capture">first_capture</a>
+<li><a href="fragmented.pcap">fragmented.pcap</a>
+<li><a href="hashTable.c">hashTable.c</a>
+<li><a href="hashTable.h">hashTable.h</a>
+<li><a href="hashTableLinkedList.c">hashTableLinkedList.c</a>
+<li><a href="hashTableLinkedList.h">hashTableLinkedList.h</a>
+<li><a href="hashTableLinkedList.h.gch">hashTableLinkedList.h.gch</a>
+<li><a href="hashTableLinkedListTest.c">hashTableLinkedListTest.c</a>
+<li><a href="hashTableLinkedListUnitTesting.c">hashTableLinkedListUnitTesting.c</a>
+<li><a href="http.pcap">http.pcap</a>
+<li><a href="http_headers">http_headers</a>
+<li><a href="httpHdr">httpHdr</a>
+<li><a href="libpcap-1.3.0.tar.gz">libpcap-1.3.0.tar.gz</a>
+<li><a href="linked_list.c">linked_list.c</a>
+<li><a href="linked_list.h">linked_list.h</a>
+<li><a href="linked_list.h.gch">linked_list.h.gch</a>
+<li><a href="linked_list_test.c">linked_list_test.c</a>
+<li><a href="linkedListUnitTest.c">linkedListUnitTest.c</a>
+<li><a href="main.log">main.log</a>
+<li><a href="Makefile">Makefile</a>
+<li><a href="makefile2">makefile2</a>
+<li><a href="out">out</a>
+<li><a href="output">output</a>
+<li><a href="overlord.c">overlord.c</a>
+<li><a href="overlord.log">overlord.log</a>
+<li><a href="overlord_improved.c">overlord_improved.c</a>
+<li><a href="overlordThread.h">overlordThread.h</a>
+<li><a href="packet.c">packet.c</a>
+<li><a href="packet.h">packet.h</a>
+<li><a href="packet_captuer">packet_captuer</a>
+<li><a href="packet_capture">packet_capture</a>
+<li><a href="packetReasssemblyAlgo.c">packetReasssemblyAlgo.c</a>
+<li><a href="packing.log">packing.log</a>
+<li><a href="payload">payload</a>
+<li><a href="practice_offline_packet_read.c">practice_offline_packet_read.c</a>
+<li><a href="practice_offline_packet_read_old.c">practice_offline_packet_read_old.c</a>
+<li><a href="practice_packet_capture.c">practice_packet_capture.c</a>
+<li><a href="primeArr.c">primeArr.c</a>
+<li><a href="primeArr.h">primeArr.h</a>
+<li><a href="queueLinkedList.c">queueLinkedList.c</a>
+<li><a href="queueLinkedList.h">queueLinkedList.h</a>
+<li><a href="queueLinkedListTest.c">queueLinkedListTest.c</a>
+<li><a href="README">README</a>
+<li><a href="README.md">README.md</a>
+<li><a href="receiving.c">receiving.c</a>
+<li><a href="sensorRdyPckt.c">sensorRdyPckt.c</a>
+<li><a href="sensorRdyPckt.cpp">sensorRdyPckt.cpp</a>
+<li><a href="sensorRdyPckt.h">sensorRdyPckt.h</a>
+<li><a href="tcpdump-4.3.0.tar.gz">tcpdump-4.3.0.tar.gz</a>
+<li><a href="test">test</a>
+<li><a href="test.c">test.c</a>
+<li><a href="test.pcap">test.pcap</a>
+<li><a href="tmp.cpp">tmp.cpp</a>
+<li><a href="tmpfile">tmpfile</a>
+<li><a href="TODO">TODO</a>
+<li><a href="unfragmented.pcap">unfragmented.pcap</a>
+<li><a href="wcis_fingerprint_parser.pl">wcis_fingerprint_parser.pl</a>
+<li><a href="workerThread.c">workerThread.c</a>
+</ul>
+<hr>
+</body>
+</html>
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfba2 (64418)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x6700 (26368)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693746118
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfba3 (64419)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52259
+TCP Destination Port: 8080
+TCP Sequence Number: 4142306555
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x6701 (26369)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52259
+TCP Sequence Number: 3693746119
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x7ef8 (32504)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493437917
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x0000 (0)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155908924
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7ef9 (32505)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493437918
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 148
+IP Identifier: 0x7efa (32506)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 128
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493437918
+TCP Data Offset: 32
+TCP Data Len: 96
+*** TCP Data ***
+GET /foooooooooobizzzle HTTP/1.1
+User-Agent: curl/7.27.0
+Host: localhost:8080
+Accept: */*
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfc18 (64536)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155908925
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 81
+IP Identifier: 0xfc19 (64537)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 61
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155908925
+TCP Data Offset: 32
+TCP Data Len: 29
+*** TCP Data ***
+HTTP/1.0 404 File not found
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7efb (32507)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xfc1a (64538)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155908954
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Server: SimpleHTTP/0.6 Python/2.7.3
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7efc (32508)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xfc1b (64539)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155908991
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Date: Fri, 06 Jun 2014 02:02:51 GMT
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7efd (32509)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 77
+IP Identifier: 0xfc1c (64540)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 57
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909028
+TCP Data Offset: 32
+TCP Data Len: 25
+*** TCP Data ***
+Content-Type: text/html
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7efe (32510)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 71
+IP Identifier: 0xfc1d (64541)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 51
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909053
+TCP Data Offset: 32
+TCP Data Len: 19
+*** TCP Data ***
+Connection: close
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7eff (32511)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0xfc1e (64542)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909072
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7f00 (32512)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 247
+IP Identifier: 0xfc1f (64543)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 227
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909074
+TCP Data Offset: 32
+TCP Data Len: 195
+*** TCP Data ***
+<head>
+<title>Error response</title>
+</head>
+<body>
+<h1>Error response</h1>
+<p>Error code 404.
+<p>Message: File not found.
+<p>Error code explanation: 404 = Nothing matches the given URI.
+</body>
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7f01 (32513)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfc20 (64544)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909269
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x7f02 (32514)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52260
+TCP Destination Port: 8080
+TCP Sequence Number: 1493438014
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xfc21 (64545)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52260
+TCP Sequence Number: 2155909270
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x4607 (17927)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410809
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x0000 (0)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859235931
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x4608 (17928)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410810
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 161
+IP Identifier: 0x4609 (17929)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 141
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410810
+TCP Data Offset: 32
+TCP Data Len: 109
+*** TCP Data ***
+GET /whateverz.php?bizz=bazz&foo=bar HTTP/1.1
+User-Agent: curl/7.27.0
+Host: localhost:8080
+Accept: */*
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xe322 (58146)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859235932
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 81
+IP Identifier: 0xe323 (58147)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 61
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859235932
+TCP Data Offset: 32
+TCP Data Len: 29
+*** TCP Data ***
+HTTP/1.0 404 File not found
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460a (17930)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xe324 (58148)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859235961
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Server: SimpleHTTP/0.6 Python/2.7.3
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460b (17931)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xe325 (58149)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859235998
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Date: Fri, 06 Jun 2014 02:03:30 GMT
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460c (17932)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 77
+IP Identifier: 0xe326 (58150)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 57
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236035
+TCP Data Offset: 32
+TCP Data Len: 25
+*** TCP Data ***
+Content-Type: text/html
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460d (17933)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 71
+IP Identifier: 0xe327 (58151)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 51
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236060
+TCP Data Offset: 32
+TCP Data Len: 19
+*** TCP Data ***
+Connection: close
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460e (17934)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0xe328 (58152)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236079
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x460f (17935)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 247
+IP Identifier: 0xe329 (58153)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 227
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236081
+TCP Data Offset: 32
+TCP Data Len: 195
+*** TCP Data ***
+<head>
+<title>Error response</title>
+</head>
+<body>
+<h1>Error response</h1>
+<p>Error code 404.
+<p>Message: File not found.
+<p>Error code explanation: 404 = Nothing matches the given URI.
+</body>
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x4610 (17936)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xe32a (58154)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236276
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x4611 (17937)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52261
+TCP Destination Port: 8080
+TCP Sequence Number: 2259410919
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xe32b (58155)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52261
+TCP Sequence Number: 2859236277
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0xc811 (51217)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774743
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x0000 (0)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108874
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc812 (51218)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774744
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 236
+IP Identifier: 0xc813 (51219)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 216
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774744
+TCP Data Offset: 32
+TCP Data Len: 184
+*** TCP Data ***
+POST /whateverz.php?bizz=bazz&foo=bar HTTP/1.1
+User-Agent: curl/7.27.0
+Host: localhost:8080
+Accept: */*
+Content-Length: 6
+Content-Type: application/x-www-form-urlencoded
+
+wizzle
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xec8d (60557)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108875
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 94
+IP Identifier: 0xec8e (60558)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 74
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108875
+TCP Data Offset: 32
+TCP Data Len: 42
+*** TCP Data ***
+HTTP/1.0 501 Unsupported method ('POST')
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc814 (51220)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xec8f (60559)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108917
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Server: SimpleHTTP/0.6 Python/2.7.3
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc815 (51221)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0xec90 (60560)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108954
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Date: Fri, 06 Jun 2014 02:04:06 GMT
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc816 (51222)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 77
+IP Identifier: 0xec91 (60561)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 57
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923108991
+TCP Data Offset: 32
+TCP Data Len: 25
+*** TCP Data ***
+Content-Type: text/html
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc817 (51223)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 71
+IP Identifier: 0xec92 (60562)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 51
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923109016
+TCP Data Offset: 32
+TCP Data Len: 19
+*** TCP Data ***
+Connection: close
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc818 (51224)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0xec93 (60563)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923109035
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc819 (51225)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 269
+IP Identifier: 0xec94 (60564)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 249
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923109037
+TCP Data Offset: 32
+TCP Data Len: 217
+*** TCP Data ***
+<head>
+<title>Error response</title>
+</head>
+<body>
+<h1>Error response</h1>
+<p>Error code 501.
+<p>Message: Unsupported method ('POST').
+<p>Error code explanation: 501 = Server does not support this operation.
+</body>
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc81a (51226)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xec95 (60565)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923109254
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xc81b (51227)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52269
+TCP Destination Port: 8080
+TCP Sequence Number: 385774928
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0xec96 (60566)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52269
+TCP Sequence Number: 1923109255
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x3b52 (15186)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009255
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 60
+IP Identifier: 0x0000 (0)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 40
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199806
+TCP Data Offset: 40
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b53 (15187)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009256
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 117
+IP Identifier: 0x3b54 (15188)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 97
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009256
+TCP Data Offset: 32
+TCP Data Len: 65
+*** TCP Data ***
+CONNECT 88.83.59.212:443 HTTP/1.0
+Proxy-Connection: keep-alive
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x068a (1674)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199807
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0x3b55 (15189)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009321
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x068b (1675)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199807
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 97
+IP Identifier: 0x068c (1676)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 77
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199807
+TCP Data Offset: 32
+TCP Data Len: 45
+*** TCP Data ***
+HTTP/1.0 501 Unsupported method ('CONNECT')
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b56 (15190)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0x068d (1677)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199852
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Server: SimpleHTTP/0.6 Python/2.7.3
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b57 (15191)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 89
+IP Identifier: 0x068e (1678)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 69
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199889
+TCP Data Offset: 32
+TCP Data Len: 37
+*** TCP Data ***
+Date: Fri, 06 Jun 2014 02:04:08 GMT
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b58 (15192)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 77
+IP Identifier: 0x068f (1679)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 57
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199926
+TCP Data Offset: 32
+TCP Data Len: 25
+*** TCP Data ***
+Content-Type: text/html
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b59 (15193)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 71
+IP Identifier: 0x0690 (1680)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 51
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199951
+TCP Data Offset: 32
+TCP Data Len: 19
+*** TCP Data ***
+Connection: close
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b5a (15194)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 54
+IP Identifier: 0x0691 (1681)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 34
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199970
+TCP Data Offset: 32
+TCP Data Len: 2
+*** TCP Data ***
+
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b5b (15195)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 272
+IP Identifier: 0x0692 (1682)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 252
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352199972
+TCP Data Offset: 32
+TCP Data Len: 220
+*** TCP Data ***
+<head>
+<title>Error response</title>
+</head>
+<body>
+<h1>Error response</h1>
+<p>Error code 501.
+<p>Message: Unsupported method ('CONNECT').
+<p>Error code explanation: 501 = Server does not support this operation.
+</body>
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b5c (15196)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x0693 (1683)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 8080
+TCP Destination Port: 52273
+TCP Sequence Number: 2352200192
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+
+|------ New Packet------|
+IP Header Length: 0x0014
+IP Packet Length: 52
+IP Identifier: 0x3b5d (15197)
+IP Fragmentation Bit: not set
+IP Frag Offset: 0x0000
+IP Protocol: 0x06
+IP Source Address: 127.0.0.1
+IP Destination Address: 127.0.0.1
+IP Data Len: 32
+TCP Source Port: 52273
+TCP Destination Port: 8080
+TCP Sequence Number: 3286009323
+TCP Data Offset: 32
+TCP Data Len: 0
+*** TCP Data ***
+
+There was not header to parse
+Done with main loop
+
+Freeing the table
+
+Freeing the primenums struct
+
+Freeing the structure
+Successful delete of everything
