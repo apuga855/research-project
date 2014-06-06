@@ -445,10 +445,10 @@ void LH_HashTablePrint(LH_hashTable* table, void* dataprint)
    int i = 0;
    while(i < table->LH_capacity)
    {
-      printf("In the loop for hash print %d\n",i); 
+      //printf("In the loop for hash print %d\n",i); 
       if(!LlistAtLeastOne(table->LH_table[i].LHN_list))
       {
-         printf("Nothing in the list?\n"); 
+         //printf("Nothing in the list?\n"); 
          i++;
          continue;
       }

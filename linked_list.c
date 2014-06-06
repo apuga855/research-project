@@ -759,8 +759,8 @@ void LlistPrint(Llist* list, void* printNode)
       i++;
    }
    traverse = traverse->next;
-   if(traverse->root == 1)
-      printf("\n\nBack at the head node\n");
+   //if(traverse->root == 1)
+   //   printf("\n\nBack at the head node\n");
 
    return;
 }
@@ -948,12 +948,12 @@ int LlistAtLeastOne(Llist* list)
 {
    if(list->head->next->data == NULL)
    {
-      printf("List had no data in next\n"); 
+      //printf("List had no data in next\n"); 
       return 0;
    }
    else if(list->used == 0)
    {
-      printf("List had nothing in use\n"); 
+      //printf("List had nothing in use\n"); 
       return 0;
    }
    else

@@ -127,7 +127,7 @@ void printPacket(sensorRdyPckt *pckt) {
         puts("");
     }
     
-    pckt->fngPnt = SRDPcktFngrPnt(pckt);
+    SRDPcktFngrPnt(pckt);
     formatFngPntPrint(pckt->fngPnt);
       
 }
@@ -153,14 +153,14 @@ void formatFngPntPrint(int *fngP)
 
 //fingerprinting function
 //int * SRDPcktFngrPnt(const u_char * curPcktData, int dataLen)
-int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
+void SRDPcktFngrPnt(sensorRdyPckt* pckt)
 {
     
     //if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class == CLASS_HTTP)
     if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->http.headers == NULL)
     {
         printf("There was not header to parse\n");
-        return NULL;
+        return;
     }
 
     int i = 0;
@@ -186,7 +186,9 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
     printf("Fingerprint:\n");
     for(;/**target != '\n' && */i < len; i++)
     {
-        //printf("loop %d\n",i);
+   
+        //printf("loop %c\n",*target);
+
         if(protoSet == 0 && (*target == '0' || *target == '1'))		//proto
         {
             target++;
@@ -219,7 +221,17 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
                 target--;
         }
 
-        if(cmdSet == 0 && *target == 'G')			//cmd get
+
+
+        if(cmdSet == 0 && !strncmp("GET", (const char*)(target),3))
+        {
+           cmd = 1;
+           cmdSet = 1;
+           target = target + 3;
+        }
+
+/*
+        if(protoSet == 0 && cmdSet == 0 && *target == 'G')			//cmd get
         {
             target++;
             if(*target == 'E')
@@ -237,8 +249,15 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
             else
                 target--;
         }
-
-        if(*target == 'H' && cmdSet == 0)                  //cmd head
+*/
+        if(cmdSet == 0 && !strncmp("HEAD",(const char*)(target),4))
+        {
+           cmd = 4;
+           cmdSet = 1;
+           target = target + 4;
+        }
+/*
+        if(protoSet == 0 &&*target == 'H' && cmdSet == 0)                  //cmd head
         {
             target++;
             if(*target == 'E')
@@ -261,7 +280,14 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
             else
                 target--;
         }
-
+*/
+        if(cmdSet == 0 && !strncmp("POST", (const char*)(target),3))
+        {
+           cmd = 2;
+           cmdSet = 1;
+           target = target + 4;
+        }
+/*
         if(*target == 'P' && cmdSet == 0)                  //cmd post
         {
             target++;
@@ -285,7 +311,15 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
             else
                 target--;
         }
+*/
 
+        if(!strncmp("..", (const char *)(target),2))
+        {
+           cdot++;
+           target = target + 1; 
+           continue;
+        }
+/*
         if(*target == '.')			//.. counter
         {
             target++;
@@ -297,7 +331,16 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
             else
                 target--;	     
         }
+*/
 
+
+        if(!strncmp("//", (const char*)(target),2))
+        {
+           fwrd++;
+           target = target + 1;
+           continue;
+        }
+/*
         if(*target == '/'){			// // counter
             target++;
             if(*target == '/')
@@ -308,58 +351,70 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
             else
                 target--;	     
         }
+*/
+
 
         if(*target == '?'){			//conditional for variables
+            target++;
             qstnmrk = 1;
             continue;
         }
 
         if(*target == '%'){			//percent counter
+            target++;
             pcnt++;
             continue;
         }
 
         if (qstnmrk == 1 && *target == '&'){	//variable counter
+            target++;
             var++; 
             continue;
         }
 
-        if(*target == '\''){			//apostrophe counter
+        if(*target == 39){			//apostrophe counter
+            target++;
             apos++;
             continue;
         }
 
         if(*target == '+'){			//addition counter
+            target++;
             plus++;
             continue;
         }
 
         if(*target == ')'){			//open parentheses counter
+            target++;
             oparen++;
             continue;
         }
 
         if(*target == '('){			//close parentheses counter
+            target++;
             cparen++;
             continue;
         }
 
         if(*target == '<'){			//less than counter
+            target++;
             lt++;
             continue;
         }
 
         if(*target == '>'){			//greater than counter
+            target++;
             gt++;
             continue;
         } 
 
-        if(*target == '\\'){			//backslash counter
+        if(*target == 92){			//backslash counter
+            target++;
             bckslsh++;
             continue;
         }
-
         target++;
+
     }
 
    fngPnt[0] = cmd;
@@ -377,7 +432,8 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
    fngPnt[12] = lt;
    fngPnt[13] = gt;
 
-   return fngPnt;
+   pckt->fngPnt = fngPnt;
+   return;
 }
 
 //header to file

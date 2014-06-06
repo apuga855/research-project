@@ -98,7 +98,7 @@ int myhashfunc(LH_hashTable* table, void * data)
    }
    return slot;
 }
-
+/*
 char* reassemblyAlg(Llist* list, uint16_t size)
 {
    printf("Inside of ReassemblyAlg\n");
@@ -129,7 +129,8 @@ char* reassemblyAlg(Llist* list, uint16_t size)
    return dataReady;
 }
 
-
+*/
+/*
 int myhashfunc(LH_hashTable* table, void * data)
 {
    if(data == NULL)
@@ -192,7 +193,7 @@ int myhashfunc(LH_hashTable* table, void * data)
    }
    return slot;
 }
-
+*/
 int main()
 {
    int curID = 0;
@@ -301,12 +302,16 @@ int main()
    curID = 0;
    curGarbage = '!';
    void* arrpayload[93];
+   void* arrpayload2[93];
    
    while(i < 93)
    {
       arrpayload[i] = malloc(sizeof(dummyStruct));
       ((dummyStruct*)arrpayload[i])->id = curID;
       ((dummyStruct*)arrpayload[i])->garbage = curGarbage;
+      arrpayload2[i] = malloc(sizeof(dummyStruct));
+      ((dummyStruct*)arrpayload2[i])->id = curID;
+      ((dummyStruct*)arrpayload2[i])->garbage = curGarbage;
       curID++;
       curGarbage++;
       i++;
@@ -320,8 +325,15 @@ int main()
 //        printf("Successful hash\n");
       else
          printf("ERROR hashing\n");
+      //if(LH_hashFunc((&testTable), arrpayload2[i],myhashfunc,dummyCpy,dummyAlloc,printDummy))
+      //   ; 
+//        printf("Successful hash\n");
+      //else
+      //   printf("ERROR hashing\n");
       i++;
    }
+   
+   
 
    printf("Finished hashing everything, attempting to print ||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
    LH_HashTablePrint(testTable, printDummy);

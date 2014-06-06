@@ -92,7 +92,7 @@ void SRDPcktPldToFile(sensorRdyPckt*);
 //payload to file
 void SRDPcktHdrToFile(sensorRdyPckt*);
 //create the firnger print
-int *SRDPcktFngrPnt(sensorRdyPckt*);
+void SRDPcktFngrPnt(sensorRdyPckt*);
 //print fingerprint
 void fngPntPrint(sensorRdyPckt*);
 //formater for the fingerprint
