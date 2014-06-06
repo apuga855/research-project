@@ -27,7 +27,7 @@
 //need to typedef it knows its a type
 
 int myhashfunc(LH_hashTable*, void *);
-int myhashfunc(LH_hashTable*, void *);
+//int myhashfunc(LH_hashTable*, void *);
 char* reassemblyAlg(Llist*, uint16_t);
 //end of packet capture without reassembly--------------------------------------
 
@@ -107,6 +107,7 @@ int main(int argc, char **argv)
 
 void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const u_char* pckt)
 {
+    int xaxa = 0;
     //holy crap this gets crazy really quickly
     //this is a constant structure pointer of type ether_header nicknamed ethernetHeader
     //this structure actually comes predefined, take a look at it for all the crazy crap 
@@ -118,13 +119,14 @@ void packet_handler(u_char* usrData,const struct pcap_pkthdr* pcktHeader, const 
     //int dataLength = 0;	//data length in bytes from the packet
     //int iteration = 0;		//one of my counters
     //pcktArray = malloc(SENSOR_ARRAY_PACKET_LENGTH * sizeof(sensorRdyPckt));
+    scanf("%d",&xaxa);
     sensorRdyPckt SRD_pckt;//this is the sensor ready packet info
     packet_init(&SRD_pckt);//initializing the new packet that was allocated    
     //there are a lot of defines inside of the ethernet header, we are checking here if the ETHERTYPE is IP 
     //if it is, then we can start the parsing of the packet
     //the ntohs function changes the the byte orders to the current hosts byte ordering scheme, then we go in
     //and compare the ether type unsigned short char to the ETHERTYPE_IP define 
-    
+     
     parsePacket(&SRD_pckt, pckt, pcktHeader->len);
     printPacket(&SRD_pckt);
     // FIXME: validate lengths of things before using them as offsets

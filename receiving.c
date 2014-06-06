@@ -1,9 +1,10 @@
-#include<cstdlib.h>
+#include<stdlib.h>
 #include<stdio.h>
 #include<fcntl.h>
 #include<sys/types.h>
 #include<unistd.h>
-#include"sensorRdyPckt.h"
+#include<stdint.h>
+#include"packet.h"
 
 int main()
 {
@@ -13,7 +14,9 @@ int main()
    sensorRdyPckt* pckt;
    printf("This program simulates the genetic algorithm\n");
    mkfifo(connectPipe,066);
-   fd = open(connectPipe, O_RONDLY);
+   fd = open(connectPipe, O_RDONLY);
+   
+
    
    while(check)
    { 
@@ -25,11 +28,11 @@ int main()
       }
       
       printf("Printing packet\n");
-      SRD_pcktPrint(pckt);
+      //SRD_pcktPrint(pckt);
       printf("Printing header\n");
-      SRD_pcktHdrPldPrint(pckt);
+      //SRD_pcktHdrPldPrint(pckt);
       printf("Printing fingerprint\n");
-      SRD_formatFngPntPrint(pckt->fngPnt);
+      //SRD_formatFngPntPrint(pckt->fngPnt);
    }
 
    printf("Finished Simulation\n");
