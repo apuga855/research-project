@@ -13,7 +13,7 @@
 #define ETHERLEN                        14
 #define fngPntLen                       13
 #define INET4_ADDRSTRLEN                16
-#define HTTP_PORT                       8080
+#define HTTP_PORT                       80
 #define THREAD_ARRAY_SIZE               10
 #define THREAD_DEFAULT_TIMEOUT          1000
 #define P_BUFF                          100

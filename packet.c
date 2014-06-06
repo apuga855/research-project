@@ -156,7 +156,7 @@ void formatFngPntPrint(int *fngP)
 int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
 {
     
-    //if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class != CLASS_HTTP)
+    //if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->class == CLASS_HTTP)
     if(pckt == NULL || pckt->http.hdrlen == 0 || pckt->http.headers == NULL)
     {
         printf("There was not header to parse\n");
@@ -182,11 +182,11 @@ int * SRDPcktFngrPnt(sensorRdyPckt* pckt)
     int gt = 0;
     int qstnmrk = 0;
     const u_char *target = pckt->http.headers;
-    int *fngPnt = calloc(fngPntLen, sizeof(int));
-    printf("fingerprinting\n");
+    int * fngPnt = malloc(fngPntLen *sizeof(int));
+    printf("Fingerprint:\n");
     for(;*target != '\n' && i < len; i++)
     {
-        printf("loop %d\n",i);
+        //printf("loop %d\n",i);
         if(protoSet == 0 && (*target == 48 || *target == 49))		//proto
         {
             target++;
